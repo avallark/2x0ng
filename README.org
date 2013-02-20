@@ -1,0 +1,22 @@
+#+TITLE: 2xong, reactopong, plong, plextopong
+
+* TODO trim and evolve the xong design
+* TODO return to the dark purple blue space
+* TODO simple arrows/spacebar controls
+* TODO digduggy tunneling with somewhat less open space
+* TODO better level gen
+* TODO unlimited puck supply, but returns to white if you lose it
+* TODO fatter chunky pixel world, atari 8-bit style
+* TODO larger scrolling levels
+* TODO tracers who leave killing wires
+* TODO color tracers who fill up the level with colored bricks!
+* TODO monitors!
+* TODO gate: opens for brief time, when hit with puck
+* TODO toggle gates
+* TODO color lock gates
+* TODO no chevrons, but still black holes
+* TODO trail sweep bounces enemies/bullets/ball into black holes/etc
+* TODO black holes still emit radiation when something falls in
+* TODO trail extend? 
+* TODO limited time trail kill upgrade
+* TODO catch particles that are heating up
