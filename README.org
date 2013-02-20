@@ -1,5 +1,11 @@
 
-* 2x0ng: a colorful puzzle game 
+* 2x0ng: a colorful puzzle game
+
+** TODO import things.lisp 
+** TODO import system
+** TODO plong guy
+** TODO 
+ 
 
  - TODO trim and evolve the xong design
  - TODO return to the dark purple blue space
