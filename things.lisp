@@ -31,9 +31,6 @@
   :collision-type :passive
   :color "red")
 
-(defmacro defbrick (name &body forms)
-  `(define-block (,name :super "2X0NG:BRICK") ,@forms))
-
 (define-method damage brick (points) (destroy self))
 
 (define-method initialize brick (&optional color)
@@ -73,7 +70,7 @@
 
 (defparameter *wall-color* "gray")
 
-(defbrick wall 
+(define-block (wall :super brick)
   (tags :initform '(:brick :wall))
   (color :initform  *wall-color*))
 

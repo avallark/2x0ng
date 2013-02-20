@@ -38,11 +38,11 @@
     (let ((brick (make-fat-brick color)))
       (drop-object (current-buffer) brick (+ x (* n *unit* *fat-brick-width*)) y))))
 
-(defun themed-row (x y length)
-  (let ((y0 y))
-    (dolist (color (theme-brick-colors))
-      (fat-brick-row x y0 length color)
-      (incf y0 (* *unit* *fat-brick-height*)))))
+;; (defun themed-row (x y length)
+;;   (let ((y0 y))
+;;     (dolist (color (theme-brick-colors))
+;;       (fat-brick-row x y0 length color)
+;;       (incf y0 (* *unit* *fat-brick-height*)))))
 
 (defparameter *sideline-width* 2) 
 
@@ -55,7 +55,7 @@
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold"))
 	(ball (new 'ball)))
-    (setf (%background-color buffer) (theme-background-color))
+    (setf (%background-color buffer) "gray20")
     (with-buffer buffer
       (bind-event buffer '(:r :control) :reset)
       ;; playfield border
@@ -68,9 +68,9 @@
       (setf *ball* ball)
       (follow-with-camera (current-buffer) *ball*)
       ;; rows of multicolored bricks
-      (themed-row (units 4) (units 15) 13)
-      (themed-row (units 8) (units 35) 5)
-      (themed-row (units 4) (units 50) 13)
+      ;; (themed-row (units 4) (units 15) 13)
+      ;; (themed-row (units 8) (units 35) 5)
+      ;; (themed-row (units 4) (units 50) 13)
       ;;
       (drop-object buffer robot (units 10) (units 6))
       (drop-object buffer (new 'robot "dark orchid") (units 20) (units 46))

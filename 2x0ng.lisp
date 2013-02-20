@@ -1,6 +1,6 @@
-;;; 2x0ng.lisp --- the further evolution of XONG
+;;; 2x0ng.lisp --- the further evolution of dto puzzle games
 
-;; Copyright (C) 2010, 2011, 2012  David O'Toole
+;; Copyright (C) 2010, 2011, 2012, 2013  David O'Toole
 
 ;; Author: David O'Toole <dto@ioforms.org>
 ;; Keywords: games
