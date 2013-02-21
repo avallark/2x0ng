@@ -73,6 +73,7 @@
   (when color (setf %color color)))
 
 (define-method draw brick ()
+  (set-blending-mode :alpha)
   (draw-box %x %y %width %height :color %color))
 
 (defun slap (thing)
