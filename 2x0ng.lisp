@@ -36,9 +36,7 @@
 
 (disable-key-repeat) 
 
-(setf *default-font* "sans-mono-bold-16") 
-
-(define-buffer 2x0ng)
+(setf *font* "sans-mono-bold-16") 
 
 (defun begin-game ()
   (with-buffer (2x0ng-level)
@@ -46,8 +44,10 @@
 
 (defun 2x0ng ()
   (with-session (begin-game)
-    (load-project "2x0ng")
+    (load-project "2x0ng") 
     (start-session)))
+
+(define-buffer 2x0ng)
 
 (define-method reset 2x0ng ()
   (begin-game))

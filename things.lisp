@@ -24,12 +24,10 @@
 
 ;; Breakable colored bricks
 
-(defparameter *particle-colors* '("red" "blue")) 
-
 (define-block brick 
   :tags '(:brick :colored)
   :collision-type :passive
-  :color "red")
+  :color "gray50")
 
 (define-method damage brick (points) (destroy self))
 
@@ -38,7 +36,10 @@
   (resize self *unit* *unit*)
   (when color (setf %color color)))
 
-(defun slam (thing)
+(define-method draw brick ()
+  (draw-box %x %y %width %height :color %color))
+
+(defun slap (thing)
   (when (and (blockyp thing)
 	     (has-method :damage thing))
     (damage thing 1)))
@@ -63,12 +64,9 @@
 (defun same-color (a b)
   (string= (color-of a) (color-of b)))
 
-(define-method draw brick ()
-  (draw-box %x %y %width %height :color %color))
-
 ;;; A non-breakable brick
 
-(defparameter *wall-color* "gray")
+(defparameter *wall-color* "gray50")
 
 (define-block (wall :super brick)
   (tags :initform '(:brick :wall))
@@ -86,11 +84,13 @@
 
 (defvar *ball* nil)
 
+(defparameter *ball-size* (truncate (units 0.8)))
+
 (defun ballp (thing)
   (and (blockyp thing)
        (has-tag thing :ball)))
 
-(defparameter *ball-normal-speed* (units 0.58))
+(defparameter *ball-normal-speed* (units 0.88))
 
 (defparameter *ball-kick-speed* (units 0.85))
 
@@ -99,11 +99,19 @@
 (define-block ball 
   :kicker nil
   :seeking nil
-  :height 12 :width 12
+  :height *ball-size* :width *ball-size*
   :color "white"
   :speed 0
   :kick-clock 0 :tags '(:ball :colored)
   :direction :right)
+
+(define-method initialize ball (&optional color)
+  (initialize%super self)
+  (resize self *ball-size* *ball-size*)
+  (when color (setf %color color)))
+
+(defun make-ball (&optional (color "white"))
+  (setf *ball* (new 'ball color)))
 
 (defresource "bounce.wav" :volume 10)
 
@@ -119,13 +127,13 @@
   (when (plusp %kick-clock)
     (decf %kick-clock))
   (with-fields (seeking direction speed kicker) self
-    ;; move and decelerate
+    ;; move 
     (if (plusp speed)
 	(progn 
 	  (if seeking
 	      (move self (heading-to-thing self kicker) speed)
-	      (move-toward self direction speed))
-	  (decf speed *ball-deceleration*))
+	      (move-toward self direction speed)))
+	  ;(decf speed *ball-deceleration*))
 	(setf %seeking nil))))
 
 (define-method recently-kicked-by ball (cursor)
@@ -137,11 +145,15 @@
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((robotp thing)
-     (unless (recently-kicked-by self thing)
-       (setf %speed 0)))
+     ;; possibly catch ball
+     (paint thing (color-of *ball*))
+     (destroy *ball*)
+     (setf *ball* nil))
     ;; bounce off bricks
     ((brickp thing)
-     (slam thing)
+     (when (coloredp thing)
+       (paint self (color-of thing)))
+     (slap thing)
      (bounce self))))
 
 (defparameter *ball-kicker-collision-delay* 8)

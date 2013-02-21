@@ -4,6 +4,7 @@
 
 (define-block robot 
   (alive :initform t)
+  (body-color :initform "white")
   (color :initform "white")
   (tags :initform '(:robot :colored))
   (direction :initform :up)
@@ -19,7 +20,7 @@
 
 (define-method initialize robot (&optional color)
   (initialize%super self)
-  (when color (setf %color color)))
+  (when color (setf %body-color color)))
 
 (defvar *ball-carrier* nil)
 
@@ -27,7 +28,7 @@
 
 (defparameter *robot-step-frames* 2)
 
-(defparameter *robot-empty-color* "gray40")
+(defparameter *robot-empty-color* "white")
 
 (defparameter *robot-speed* (truncate (/ *unit* 2)))
 
@@ -81,10 +82,27 @@
 	    "robot-right.png"
 	    "robot-up.png"))))
 
+(define-method serve-location robot ()
+  (with-fields (direction) self
+    (multiple-value-bind (cx cy) (center-point self)
+      (multiple-value-bind (tx ty) 
+	  (step-in-direction cx cy direction (units 1.2))
+	(values (- tx (* *ball-size* 0.5))
+		(- ty (* *ball-size* 0.5)))))))
+
 (define-method draw robot ()
   (let ((image (or (robot-image %direction %walk-clock) "robot-up.png")))
     (draw-textured-rectangle %x %y %z %width %height (find-texture image) 
-			     :vertex-color (color-of self))))
+			     :vertex-color %body-color)
+    ;; possibly draw held ball 
+    (when (null *ball*)
+      (multiple-value-bind (x y) (serve-location self)
+	(draw-box x y *ball-size* *ball-size* :color %color)))))
+
+(define-method serve robot ()
+  (multiple-value-bind (x y) (serve-location self)
+    (make-ball)
+    (drop-object (current-buffer) *ball* x y)))
 
 ;;; Cool vintage footstep and kick sounds
 
@@ -101,13 +119,13 @@
 
 (defparameter *footstep-sound-range* 300)
 
-(define-method make-footstep-sounds robot ()
-  (let ((sound (footstep-sound self)))
-    (when (and *ball* sound 
-	       (> *footstep-sound-range* 
-		  ;; only make sound near the ball
-		  (distance-between self *ball*)))
-      (play-sound self sound))))
+(define-method make-footstep-sounds robot ())
+  ;; (let ((sound (footstep-sound self)))
+  ;;   (when (and *ball* sound 
+  ;; 	       (> *footstep-sound-range* 
+  ;; 		  ;; only make sound near the ball
+  ;; 		  (distance-between self *ball*)))
+  ;;     (play-sound self sound))))
 
 (defresource "kick.wav" :volume 15)
 (defresource "serve.wav" :volume 15)
@@ -116,10 +134,6 @@
 
 ;;; Default AI methods. 
 
-(define-method collide robot (thing)
-  (when (brickp thing)
-    (restore-location self)))
-
 (define-method movement-direction robot ()
   (or (percent-of-time 5 (setf %direction (random-choose *directions*)))
       %direction))
@@ -127,11 +141,15 @@
 (define-method can-reach-ball robot ()
   (and *ball* (colliding-with self *ball*)))
 
+(define-method collide robot (thing)
+  (when (brickp thing)
+    (restore-location self)))
+
 (define-method strong-kick-p robot () t)
 
 (define-method kick robot (&optional direction strong)
-  (when (and (zerop %kick-clock)
-	     (can-reach-ball self))
+  (when (and (null *ball*) (zerop %kick-clock))
+    (serve self)
     (impel *ball* (or direction %direction) strong self)
     (setf *ball-carrier* self)
     (play-sound self "serve.wav")
@@ -171,14 +189,14 @@
 	  (decf kick-clock))
 	;; ready to kick?
 	(when (zerop kick-clock)
-	  ;; don't kick when standing still and not pressing button
-	  (when (or direction kick-button)
+	  (when (and (null *ball*) kick-button)
+	    ;; yes, do it
 	    (kick self direction kick-button)))))))
 
 ;;; Player 1 drives the logic with the arrows/numpad and spacebar
 
 (define-block (player-1-robot :super robot)
-  (color :initform "gold"))
+  (body-color :initform "gold"))
 
 (defun holding-space ()
   (keyboard-down-p :space))     
