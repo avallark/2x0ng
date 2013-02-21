@@ -1,5 +1,53 @@
 (in-package :2x0ng)
 
+;;; Positronic death filament
+
+(defun is-trail (thing)
+  (has-tag thing :trail))
+
+(define-block trail
+  (tags :initform '(:trail))
+  (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
+  (collision-type :initform :passive)
+  (height :initform 5)
+  (width :initform 5))
+
+(define-method draw trail ()
+  (draw-box %x %y %width %height :color %color))
+
+(define-method initialize trail ()
+  (later 320 (destroy self)))
+
+(define-method collide trail (thing)
+  (when (robotp thing)
+    (destroy thing)))
+
+;; Nasty tracers 
+
+(defresource "tracer.png")
+
+(define-block tracer
+  (speed :initform 1.5)
+  (image :initform "tracer.png")
+  (direction :initform (random-direction))
+  (energy :initform 0))
+
+(define-method lay-trail tracer ()
+  (decf %energy)
+  (unless (plusp %energy)
+    (drop self (new 'trail) 6 6)
+    (setf %energy 4)))
+
+(define-method update tracer ()
+  (move-toward self %direction %speed)
+  (lay-trail self))
+
+(define-method collide tracer (thing)
+  (when (brickp thing)
+    (restore-location self)
+    (setf %energy 6)
+    (setf %direction (random-direction))))
+
 ;;; Radioactive corruption glitches that creep after you
 
 (defun is-glitch (thing)
@@ -64,7 +112,7 @@
   (move self (heading-to-cursor self) %speed)
   (when (< (distance-to-cursor self) 460)
     (percent-of-time 2 
-      (play-sound self "munch1.wav")
+;      (play-sound self "munch1.wav")
       (let ((size (* %height 1.3)))
 	(resize self size size))
       (incf %speed 0.3))))

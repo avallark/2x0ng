@@ -142,6 +142,7 @@
   (and *ball* (colliding-with self *ball*)))
 
 (define-method collide robot (thing)
+  ;; (when (enemyp thing)
   (when (brickp thing)
     (restore-location self)))
 
@@ -163,35 +164,34 @@
 (define-method update robot ()
   (resize self (* 2 *unit*) (* 2 *unit*))
   (with-fields (step-clock kick-clock) self
-    (when %alive
-      ;; don't move on every frame
-      (when (plusp step-clock)
-	(decf step-clock))
-      ;; find out what direction the AI or human wants to go
-      (let ((direction (movement-direction self))
-	    (kick-button (strong-kick-p self)))
-	(if direction
-	    ;; controller is pushing in a direction
-	    ;; don't move on every frame
-	    (when (zerop step-clock)
-	      (setf step-clock *robot-step-frames*)
-	      ;; possibly make footstep sounds
-	      (make-footstep-sounds self)
-	      ;; move in the movement direction
-	      (move-toward self direction *robot-speed*)
-	      (setf %direction direction))
-	    ;; not pushing. allow movement immediately
-	    (setf step-clock 0 %walk-clock 0))
-	;; update animation
-	(animate-walk self)
-	;; delay between kicks
-	(when (plusp kick-clock)
-	  (decf kick-clock))
-	;; ready to kick?
-	(when (zerop kick-clock)
-	  (when (and (null *ball*) kick-button)
-	    ;; yes, do it
-	    (kick self direction kick-button)))))))
+    ;; don't move on every frame
+    (when (plusp step-clock)
+      (decf step-clock))
+    ;; find out what direction the AI or human wants to go
+    (let ((direction (movement-direction self))
+	  (kick-button (strong-kick-p self)))
+      (if direction
+	  ;; controller is pushing in a direction
+	  ;; don't move on every frame
+	  (when (zerop step-clock)
+	    (setf step-clock *robot-step-frames*)
+	    ;; possibly make footstep sounds
+	    (make-footstep-sounds self)
+	    ;; move in the movement direction
+	    (move-toward self direction *robot-speed*)
+	    (setf %direction direction))
+	  ;; not pushing. allow movement immediately
+	  (setf step-clock 0 %walk-clock 0))
+      ;; update animation
+      (animate-walk self)
+      ;; delay between kicks
+      (when (plusp kick-clock)
+	(decf kick-clock))
+      ;; ready to kick?
+      (when (zerop kick-clock)
+	(when (and (null *ball*) kick-button)
+	  ;; yes, do it
+	  (kick self direction kick-button))))))
 
 ;;; Player 1 drives the logic with the arrows/numpad and spacebar
 

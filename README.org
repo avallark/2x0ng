@@ -1,25 +1,78 @@
 
 * 2x0ng: a colorful puzzle game
 
-** DONE import plong code/assets
-   CLOSED: [2013-02-20 Wed 12:23]
+** DONE tracers who leave killing wires at 8 angles
+   CLOSED: [2013-02-21 Thu 04:17]
 
-** TODO fatter chunky pixel world, atari 8-bit style
-** TODO fatblocks in various colors
-*** TODO use Xalcyon themes during generation
-** TODO larger scrolling level
+** TODO level 1: destroy all enemies
+** TODO level 2: destroy all enemies, some are locked
+
+** TODO generators 
+** TODO no chevrons, but still black holes
+
+** TODO black holes still emit radiation when something falls in
 
 ** TODO method to broadcast a message to all objects in local world (such as "loadout/generate")
 
-** TODO plong guy
-** TODO simple arrows/spacebar controls
-** TODO tracers who leave killing wires
-  return to the dark purple blue space
-** TODO digduggy tunneling with somewhat less open space
-** TODO better level gen
 ** TODO unlimited puck supply, but returns to white if you lose it
-** TODO color tracers who fill up the level with colored bricks!
-** TODO monitors!
-** TODO no chevrons, but still black holes
-** TODO trail sweep bounces enemies/bullets/ball into black holes/etc
-** TODO black holes still emit radiation when something falls in
+
+* Archived Entries
+** DONE simple arrows/spacebar controls
+   CLOSED: [2013-02-21 Thu 03:19]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: TODO
+   :END:
+
+
+** DONE plong guy
+   CLOSED: [2013-02-21 Thu 03:16]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE import plong code/assets
+   CLOSED: [2013-02-20 Wed 12:23]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE fatter chunky pixel world, atari 8-bit style
+   CLOSED: [2013-02-21 Thu 02:39]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE fatblocks in various colors
+   CLOSED: [2013-02-21 Thu 02:39]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+*** DONE use Xalcyon themes during generation
+    CLOSED: [2013-02-21 Thu 02:39]
+** DONE larger scrolling level
+   CLOSED: [2013-02-21 Thu 02:39]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-21 Thu 03:19
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+
