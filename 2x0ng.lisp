@@ -29,23 +29,19 @@
 
 (setf *scale-output-to-window* nil) 
 (setf *default-texture-filter* :nearest)
-(setf *use-antialiased-text* nil)
+(setf *use-antialiased-text* t)
 
 (setf *frame-rate* 30)
 (setf *dt* 33)
 
 (disable-key-repeat) 
 
-(setf *font* "sans-mono-bold-16") 
-
-(defun begin-game ()
-  (with-buffer (2x0ng-level)
-    (start (current-buffer))))
+(setf *font* "sans-mono-bold-12") 
 
 (defun 2x0ng ()
   (with-session 
       (load-project "2x0ng") 
-    (begin-game)
+    (switch-to-buffer (2x0ng-level))
     (start-session)))
 
 (define-buffer 2x0ng)

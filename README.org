@@ -1,3 +1,5 @@
+** TODO key to put prompt above modeline
+
 
 * 2x0ng: a colorful puzzle game
 
