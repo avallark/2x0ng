@@ -1,41 +1,11 @@
 (in-package :2x0ng)
 
-(defparameter *themes* 
-  '((:dec "DarkSlateBlue" "SlateBlue" "magenta" "yellow")
-    (:vcs "black" "red" "pink" "orange")
-    (:tandy "DarkBlue" "red" "yellow" "orange")
-    (:vax "gray12" "orange" "goldenrod" "cyan")
-    (:command "black" "DarkGoldenrod" "red" "blue")
-    (:surround "DarkOliveGreen" "GreenYellow" "yellow" "tomato")
-    (:maynard "saddle brown" "DarkOrange" "yellow" "DeepSkyBlue")
-    (:zerk "black" "maroon2" "cyan" "salmon")
-    (:wizard "midnight blue" "slate blue" "dark orange" "orange" "gold")))
-
-(defun find-theme (name)
-  (assoc name *themes*))
-
-(defparameter *theme* (find-theme :wizard))
-
-(defun theme-colors (&optional (theme *theme*))
-  (rest (rest theme)))
-
-(defun random-theme () (random-choose (mapcar #'car *themes*)))
-
-(defun background-color ()
-  (when *theme* (first (theme-colors))))
-
-(defun wall-color ()
-  (when *theme* (second (theme-colors))))
-
-(defun brick-colors ()
-  (when *theme* (rest (rest (theme-colors)))))
-
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))
   (labels ((unit (&rest summands)
 	     (* *unit* (reduce #'+ summands :initial-value 0))))
-    (let ((wall (new thing)))
+    (let ((wall (new thing (wall-color))))
       (drop-object (current-buffer) wall (unit x) (unit y))
       (resize wall (unit width) (unit height)))))
 
@@ -74,6 +44,12 @@
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
+(defun super-fat-row (x y length color)
+  (let ((y0 y))
+    (dotimes (n 3)
+      (fat-brick-row x y0 length color)
+      (incf y0 (* *unit* *fat-brick-height*)))))
+
 (defparameter *sideline-width* 2) 
 
 (defun 2x0ng-level 
@@ -82,10 +58,12 @@
        (width *level-width*)
        (height *level-height*))
   (setf *ball* nil)
-  (setf *theme* '("black" "gray20" "dark orange" "orange" "gold"))
+  ;; (setf *theme* '("black" "gray20" "dark orange" "orange" "gold"))
+  ;; (setf *theme* '("red" "orange" "yellow" "blue" "green" "purple"))
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold")))
-    (setf (%background-color buffer) "gray20")
+    (set-random-theme)
+    (setf (%background-color buffer) (background-color))
     (prog1 buffer
       (with-buffer buffer
 	(bind-event buffer '(:r :control) :reset)
@@ -96,9 +74,16 @@
 	(set-cursor buffer robot)
 	(follow-with-camera (current-buffer) robot)
 	;; rows of multicolored bricks
-	(themed-row (units 4) (units 15) 13)
-	(themed-row (units 8) (units 35) 5)
-	(themed-row (units 4) (units 50) 13)
+	;; (themed-row (units 4) (units 15) 13)
+	;; (themed-row (units 8) (units 35) 5)
+	;; (themed-row (units 4) (units 50) 13)
+	
+	(dotimes (n 15)
+	  (super-fat-row (+ (units 10) (units (random 60)))
+			 (+ (units 10) (units (random 60)))
+			 (+ 3 (random 7))
+			 (random-choose (brick-colors))))
+
 	;;
 	(drop-object buffer robot (units 10) (units 6))
 	;;

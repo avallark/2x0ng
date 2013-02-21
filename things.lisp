@@ -1,5 +1,41 @@
 (in-package :2x0ng)
 
+;; Color themes
+
+(defparameter *themes* 
+  '((:dec "DarkSlateBlue" "orchid" "cyan" "magenta" "yellow")
+    (:zerk "black" "maroon2" "green" "yellow" "orange")
+    (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
+    (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")
+    (:vax "gray12" "orange" "cyan" "deep pink" "orchid")
+    (:command "black" "DarkGoldenrod" "red" "magenta" "cyan")
+    (:surround "gray30" "goldenrod" "yellow" "yellow green" "red")
+    (:wizard "midnight blue" "slate blue" "dark orange" "orange" "gold")))
+
+(defun find-theme (name)
+  (rest (assoc name *themes*)))
+
+(defparameter *theme* (find-theme :wizard))
+
+(defun theme-colors (&optional (theme *theme*))
+  (rest (rest theme)))
+
+(defun set-theme (&optional (theme :wizard))
+  (setf *theme* (find-theme theme)))
+
+(defun random-theme () (random-choose (mapcar #'car *themes*)))
+
+(defun set-random-theme () (set-theme (random-theme)))
+
+(defun background-color ()
+  (when *theme* (first *theme*)))
+
+(defun wall-color ()
+  (when *theme* (second *theme*)))
+
+(defun brick-colors ()
+  (when *theme* (rest (rest *theme*))))
+
 ;; Standard gamebuffer grid measurement
 
 (defparameter *unit* 14)
@@ -8,9 +44,9 @@
 
 ;; Level dimensions, in units
 
-(defparameter *level-height* 70)
+(defparameter *level-height* 100)
 
-(defparameter *level-width* 50)
+(defparameter *level-width* 100)
 
 (defparameter *level-screen-height* 35)
 
@@ -156,7 +192,7 @@
      (slap thing)
      (bounce self))))
 
-(defparameter *ball-kicker-collision-delay* 8)
+(defparameter *ball-kicker-collision-delay* 4)
 
 (define-method impel ball (direction strong &optional kicker)
   (assert (keywordp direction))

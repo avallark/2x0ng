@@ -32,7 +32,7 @@
 
 (defparameter *robot-speed* (truncate (/ *unit* 2)))
 
-(defparameter *robot-reload-frames* 20)
+(defparameter *robot-reload-frames* 10)
 
 (defparameter *walk-interval* 16)
 
@@ -101,7 +101,7 @@
 
 (define-method serve robot ()
   (multiple-value-bind (x y) (serve-location self)
-    (make-ball)
+    (make-ball %color)
     (drop-object (current-buffer) *ball* x y)))
 
 ;;; Cool vintage footstep and kick sounds
@@ -196,7 +196,7 @@
 ;;; Player 1 drives the logic with the arrows/numpad and spacebar
 
 (define-block (player-1-robot :super robot)
-  (body-color :initform "gold"))
+  (body-color :initform "white"))
 
 (defun holding-space ()
   (keyboard-down-p :space))     
