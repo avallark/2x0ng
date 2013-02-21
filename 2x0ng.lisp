@@ -43,8 +43,9 @@
     (start (current-buffer))))
 
 (defun 2x0ng ()
-  (with-session (begin-game)
-    (load-project "2x0ng") 
+  (with-session 
+      (load-project "2x0ng") 
+    (begin-game)
     (start-session)))
 
 (define-buffer 2x0ng)

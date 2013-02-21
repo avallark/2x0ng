@@ -78,7 +78,10 @@
 	;; (themed-row (units 8) (units 35) 5)
 	;; (themed-row (units 4) (units 50) 13)
 	
-	(dotimes (n 15)
+	(dotimes (n 20)
+	  (drop-object buffer (new 'glitch) 
+		       (units (+ 10 (random 70)))
+		       (units (+ 10 (random 70))))
 	  (super-fat-row (+ (units 10) (units (random 60)))
 			 (+ (units 10) (units (random 60)))
 			 (+ 3 (random 7))
