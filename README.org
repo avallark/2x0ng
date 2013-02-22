@@ -1,7 +1,9 @@
-** TODO key to put prompt above modeline
+** TODO key to put prompt just below modeline
+** TODO allow multiple pages in sidebar, with hotkey switch Alt-n Alt-p 
+** TODO show stack/status in sidebar as part of minibuffer? 
 
 
-* 2x0ng: a colorful puzzle game
+** TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
 
 ** DONE tracers who leave killing wires at 8 angles
    CLOSED: [2013-02-21 Thu 04:17]
@@ -12,11 +14,9 @@
 ** TODO generators 
 ** TODO no chevrons, but still black holes
 
-** TODO black holes still emit radiation when something falls in
+** TODO black holes grow and emit radiation when something falls in
 
 ** TODO method to broadcast a message to all objects in local world (such as "loadout/generate")
-
-** TODO unlimited puck supply, but returns to white if you lose it
 
 * Archived Entries
 ** DONE simple arrows/spacebar controls
@@ -28,8 +28,6 @@
    :ARCHIVE_CATEGORY: README
    :ARCHIVE_TODO: TODO
    :END:
-
-
 ** DONE plong guy
    CLOSED: [2013-02-21 Thu 03:16]
    :PROPERTIES:

@@ -36,12 +36,15 @@
 
 (disable-key-repeat) 
 
-(setf *font* "sans-mono-bold-12") 
+(setf *font* "sans-mono-bold-11") 
+
+(defun begin-game ()   
+  (switch-to-buffer (2x0ng-level)))
 
 (defun 2x0ng ()
   (with-session 
-      (load-project "2x0ng") 
-    (switch-to-buffer (2x0ng-level))
+      (load-project "2x0ng" '(:with-database t))
+    (begin-game)
     (start-session)))
 
 (define-buffer 2x0ng)
