@@ -69,7 +69,7 @@
 
 (define-method initialize brick (&optional color)
   (initialize%super self)
-  (resize self *unit* *unit*)
+  (resize self (units 3) (units 2))
   (when color (setf %color color)))
 
 (define-method draw brick ()

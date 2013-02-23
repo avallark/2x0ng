@@ -1,9 +1,52 @@
-** TODO key to put prompt just below modeline
+* TODO [#A] GET COMMAND PROMPT WORKING PROPERLY and USEFULLY
+** TODO integrate notifications into the mix.
+*** TODO review notifications code 
+*** TODO always notify in minibuffer
+*** TODO minibuffer scrollback
+*** TODO error notifications 
+**** TODO easy debug toggle
+**** TODO show backtrace?
+*** TODO serialized global input history via hotkeys
+*** TODO click commands to copy to minibuffer for modification/execution
+*** TODO (help)  (help "command")
+
+* SIDEBAR
 ** TODO allow multiple pages in sidebar, with hotkey switch Alt-n Alt-p 
+** TODO sidebar main menu: 
+
+*** TODO (selection)
+*** TODO (clear-selection)
+*** TODO (copy)
+*** TODO (cut)
+*** TODO (paste)
+*** TODO (paste-from "" 0 0)
+
+*** TODO (trim (current-buffer))
+
+*** TODO (rename (current-buffer) "")
+*** TODO (switch-to-buffer "")
+
+*** TODO (save-project) 
+*** TODO (load-project "")
+*** TODO (make-project "")
+*** TODO (quit-blocky)
+
+
+** TODO [#B] multi select
+** TODO [#B] group? 
+** TODO [#C] rectangle select using mouse+modkey
+** TODO [#C] halo/selection shown as blinking corners when not near pointer
+
 ** TODO show stack/status in sidebar as part of minibuffer? 
 
-
 ** TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
+** TODO for level gen, paste named buffers <---- "vaults"
+
+** TODO video
+ - making objects in place via Lisp commands
+ - rename buffer
+ - using handle to eval objects
+ - save project
 
 ** DONE tracers who leave killing wires at 8 angles
    CLOSED: [2013-02-21 Thu 04:17]
