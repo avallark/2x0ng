@@ -62,7 +62,7 @@
 
 (define-block brick 
   :tags '(:brick :colored)
-  :collision-type :passive
+  ;;  :collision-type :passive
   :color "gray50")
 
 (define-method damage brick (points) (destroy self))
@@ -144,6 +144,7 @@
 
 (define-method initialize ball (&optional color)
   (initialize%super self)
+  (setf *ball* self)
   (resize self *ball-size* *ball-size*)
   (when color (setf %color color)))
 

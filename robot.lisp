@@ -119,13 +119,9 @@
 
 (defparameter *footstep-sound-range* 300)
 
-(define-method make-footstep-sounds robot ())
-  ;; (let ((sound (footstep-sound self)))
-  ;;   (when (and *ball* sound 
-  ;; 	       (> *footstep-sound-range* 
-  ;; 		  ;; only make sound near the ball
-  ;; 		  (distance-between self *ball*)))
-  ;;     (play-sound self sound))))
+(define-method make-footstep-sounds robot ()
+  (let ((sound (footstep-sound self)))
+    (when sound (play-sound self sound))))
 
 (defresource "kick.wav" :volume 15)
 (defresource "serve.wav" :volume 15)

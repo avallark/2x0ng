@@ -1,3 +1,27 @@
+* TODO Fare's idea: release basic engine with a pack of sample remixable games
+
+*** TODO guide
+*** TODO docstrings
+
+** TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
+** TODO for level gen, paste named buffers <---- "vaults"
+** TODO level 1: destroy all enemies
+** TODO level 2: destroy all enemies, some are locked
+
+** TODO generators 
+** TODO no chevrons, but still black holes
+
+** TODO black holes grow and emit radiation when something falls in
+
+** TODO method to broadcast a message to all objects in local world (such as "loadout/generate")
+
+
+* TODO merge Minibuffer and sidebar into a xiki-style shell?
+** TODO buffer contents can be a shell, but sidebar is a shell
+** TODO shell defaults to window size, scroll with mousewheel
+** TODO minibuffer--> a small shell? Shell buffer in xiki style
+** TODO command completion
+
 * TODO [#A] GET COMMAND PROMPT WORKING PROPERLY and USEFULLY
 ** TODO integrate notifications into the mix.
 *** TODO review notifications code 
@@ -36,11 +60,9 @@
 ** TODO [#B] group? 
 ** TODO [#C] rectangle select using mouse+modkey
 ** TODO [#C] halo/selection shown as blinking corners when not near pointer
-
+,
 ** TODO show stack/status in sidebar as part of minibuffer? 
 
-** TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
-** TODO for level gen, paste named buffers <---- "vaults"
 
 ** TODO video
  - making objects in place via Lisp commands
@@ -51,15 +73,7 @@
 ** DONE tracers who leave killing wires at 8 angles
    CLOSED: [2013-02-21 Thu 04:17]
 
-** TODO level 1: destroy all enemies
-** TODO level 2: destroy all enemies, some are locked
 
-** TODO generators 
-** TODO no chevrons, but still black holes
-
-** TODO black holes grow and emit radiation when something falls in
-
-** TODO method to broadcast a message to all objects in local world (such as "loadout/generate")
 
 * Archived Entries
 ** DONE simple arrows/spacebar controls
