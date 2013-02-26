@@ -56,7 +56,7 @@
 
 (define-method draw paddle ()
   (let ((index (truncate (* 100 (sin %phase)))))
-    (when (< (distance-to-cursor self) 400)
+    (when (< (distance-to-cursor self) 300)
       (draw-box 0 (+ %y 5) 10000 2
 		:color (random-choose '("red" "yellow" "magenta"))))
     (draw-box %x %y %width %height :color (percent-gray index))))
@@ -64,17 +64,15 @@
 (define-method update paddle ()
   (let ((speed
 	  (if (< (distance-to-cursor self)
-		 200)
-	      10 5)))
+		 300)
+	      13 5)))
     (incf %phase (/ speed 100))
     (forward self speed)))
 
 (define-method collide paddle (thing)
   (when (brickp thing)
     (restore-location self)
-    (setf %heading (- %heading pi)))
-  (when (robotp thing)
-    (damage thing 1)))
+    (setf %heading (- %heading pi))))
 
 ;;; Radioactive corruption glitches that creep after you
 
