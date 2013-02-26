@@ -11,13 +11,14 @@
 (defresource 
     (:name "xplod"
      :type :sample :file "xplod.wav" 
-     :properties (:volume 90)))
+     :properties (:volume 30)))
 
-(defparameter *bounce-sounds*
-  (defresource 
+(defresource 
       (:name "boop1.wav" :type :sample :file "boop1.wav" :properties (:volume 20))
       (:name "boop2.wav" :type :sample :file "boop2.wav" :properties (:volume 20))
-    (:name "boop3.wav" :type :sample :file "boop3.wav" :properties (:volume 20))))
+    (:name "boop3.wav" :type :sample :file "boop3.wav" :properties (:volume 20)))
+
+(defparameter *bounce-sounds* '("boop1.wav" "boop2.wav" "boop3.wav"))
 
 (defparameter *doorbell-sounds*
   (defresource 
@@ -31,12 +32,19 @@
       (:name "slam2.wav" :type :sample :file "slam2.wav" :properties (:volume 52))
     (:name "slam3.wav" :type :sample :file "slam3.wav" :properties (:volume 52))))
 
-  (defresource 
-      (:name "whack1.wav" :type :sample :file "whack1.wav" :properties (:volume 82))
-      (:name "whack2.wav" :type :sample :file "whack2.wav" :properties (:volume 82))
-    (:name "whack3.wav" :type :sample :file "whack3.wav" :properties (:volume 82)))
+(defresource 
+    (:name "whack1.wav" :type :sample :file "whack1.wav" :properties (:volume 82))
+    (:name "whack2.wav" :type :sample :file "whack2.wav" :properties (:volume 82))
+  (:name "whack3.wav" :type :sample :file "whack3.wav" :properties (:volume 82)))
 
 (defparameter *whack-sounds* '("whack1.wav" "whack2.wav" "whack3.wav"))
+
+(defresource 
+    (:name "color1.wav" :type :sample :file "color1.wav" :properties (:volume 12))
+    (:name "color2.wav" :type :sample :file "color2.wav" :properties (:volume 12))
+  (:name "color3.wav" :type :sample :file "color3.wav" :properties (:volume 12)))
+
+(defparameter *color-sounds* '("color1.wav" "color2.wav" "color3.wav"))
 
 (defparameter *bonux-sounds*
   (defresource 
@@ -52,18 +60,17 @@
 
 (define-method initialize spark (color)
   (setf %color color)
-  (later 1.2 (exit self)))
+  (later 0.3 (destroy self)))
 
 (define-method draw spark ()
   (set-blending-mode :additive)
   (with-field-values (x y color) self
     (dotimes (n 8)
-      (let ((z (+ 1 (random 5))))
+      (let ((z (+ 2 (random 4))))
 	(draw-box (+ x (- 20 (random 40)))
 		  (+ y (- 20 (random 40)))
 		  z z
-		  :color (or (percent-of-time 93 color)
-			     (random-choose '("cyan" "magenta")))))))
+		  :color (random-choose '("cyan" "magenta"))))))
   (set-blending-mode :alpha))
 
 (define-method update spark ()
@@ -90,7 +97,7 @@
 
 (define-block bullet 
   :radius 3
-  :speed 4.2
+  :speed 7.2
   :timer 60
   :blend :alpha
   :growth-rate nil
@@ -264,6 +271,8 @@
 
 (defun paint (thing color)
   (when (coloredp thing)
+    (when (not (string= (%color thing) color))
+      (play-sample (random-choose *color-sounds*)))
     (setf (%color thing) color)))
 
 (defun same-color (a b)
@@ -289,7 +298,7 @@
 
 (defvar *ball* nil)
 
-(defparameter *ball-size* (truncate (units 0.8)))
+(defparameter *ball-size* (truncate (units 1.0)))
 
 (defun ballp (thing)
   (and (blockyp thing)
@@ -307,8 +316,7 @@
   :height *ball-size* :width *ball-size*
   :color "white"
   :speed 0
-  :kick-clock 0 :tags '(:ball :colored)
-  :direction :right)
+  :kick-clock 0 :tags '(:ball :colored))
 
 (define-method initialize ball (&optional color)
   (initialize%super self)
@@ -326,24 +334,25 @@
 (defresource "bounce.wav" :volume 10)
 
 (define-method bounce ball ()
-  (play-sound self "bounce.wav")
+  (play-sound self (random-choose *bounce-sounds*))
   (restore-location self)
-  (setf %direction (opposite-direction %direction))
-  (move-toward self %direction 1.5)
+  (setf %heading 
+	(if %seeking
+	    (opposite-heading (heading-to-cursor self))
+	    (opposite-heading %heading)))
+  (move self %heading 2)
   (setf %kick-clock 0)
-  (setf %seeking (if %seeking nil t))) 
+  (setf %seeking (if %seeking nil t)))
 
 (define-method update ball ()
   (when (plusp %kick-clock)
     (decf %kick-clock))
-  (with-fields (seeking direction speed kicker) self
+  (with-fields (seeking heading speed kicker) self
     ;; move 
     (if (plusp speed)
-	(progn 
-	  (if seeking
-	      (move self (heading-to-thing self kicker) speed)
-	      (move-toward self direction speed)))
-	  ;(decf speed *ball-deceleration*))
+	(if seeking
+	    (move self (heading-to-thing self kicker) speed)
+	    (move self heading speed))
 	(setf %seeking nil))))
 
 (define-method recently-kicked-by ball (cursor)
@@ -359,11 +368,12 @@
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((robotp thing)
-     ;; possibly catch ball
-     (paint thing (color-of *ball*))
-     (destroy self)
-     (setf *ball* nil))
-    ;; bounce off bricks
+     (unless (recently-kicked-by self thing)
+       ;; possibly catch ball
+       (paint thing (color-of *ball*))
+       (destroy self)
+       (setf *ball* nil)))
+     ;; bounce off bricks
     ((brickp thing)
      (when (coloredp thing)
        (paint self (color-of thing)))
@@ -372,17 +382,17 @@
 
 (defparameter *ball-kicker-collision-delay* 4)
 
-(define-method impel ball (direction strong &optional kicker)
-  (assert (keywordp direction))
+(define-method impel ball (heading strong &optional kicker)
   (setf %kicker kicker)
   (setf %kick-clock *ball-kicker-collision-delay*)
   (setf %seeking nil)
   (setf %speed (if strong *ball-kick-speed* *ball-normal-speed*))
-  (setf %direction direction))
+  (setf %heading heading))
 
 (define-method draw ball ()
   (with-field-values (x y width height color) self
-    (draw-box x y width height :color color)))
+    (draw-box x y width height :color "white")
+    (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color color)))
 
 ;;; Black holes 
 

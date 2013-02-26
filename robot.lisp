@@ -30,7 +30,7 @@
 
 (defparameter *robot-empty-color* "white")
 
-(defparameter *robot-speed* (truncate (/ *unit* 2)))
+(defparameter *robot-speed* (truncate (/ *unit* 1.3)))
 
 (defparameter *robot-reload-frames* 10)
 
@@ -100,8 +100,11 @@
     ;; possibly draw held ball 
     (when (and %alive (null *ball*))
       (multiple-value-bind (x y) (serve-location self)
-	(draw-box x y *ball-size* *ball-size* :color %color)))))
-
+	(let ((width *ball-size*)
+	      (height *ball-size*))
+	  (draw-box x y width height :color "white")
+	  (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color %color))))))
+	  
 (define-method serve robot ()
   (multiple-value-bind (x y) (serve-location self)
     (make-ball %color)
@@ -109,8 +112,8 @@
 
 ;;; Cool vintage footstep and kick sounds
 
-(defresource "left-foot.wav" :volume 60)
-(defresource "right-foot.wav" :volume 60)
+(defresource "left-foot.wav" :volume 70)
+(defresource "right-foot.wav" :volume 70)
 
 (define-method footstep-sound robot ()
   (case %walk-clock
@@ -126,8 +129,8 @@
   (let ((sound (footstep-sound self)))
     (when sound (play-sound self sound))))
 
-(defresource "kick.wav" :volume 15)
-(defresource "serve.wav" :volume 15)
+(defresource "kick.wav" :volume 20)
+(defresource "serve.wav" :volume 20)
 
 (defparameter *kick-sound* "kick.wav")
 
@@ -144,6 +147,7 @@
   (when (enemyp thing)
     (die self))
   (when (brickp thing)
+    (paint self (color-of thing))
     (restore-location self)))
 
 (defresource "skull.png")
@@ -163,7 +167,9 @@
   (when %alive
     (when (and (null *ball*) (zerop %kick-clock))
       (serve self)
-      (impel *ball* (or direction %direction) strong self)
+      (impel *ball* 
+	     (direction-heading (or direction %direction))
+	     strong self)
       (setf *ball-carrier* self)
       (play-sound self "serve.wav")
       (setf %kick-clock *robot-reload-frames*))))

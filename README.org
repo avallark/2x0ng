@@ -1,4 +1,7 @@
-** TODO tiny swooping monitors
+** TODO monitor in red/purple state simply grows and kamikazes 
+** TODO puck can bounce between N multiple enemies before returning, or perhaps release spacebar to return?
+
+
 ** TODO bricks and anti-bricks, which block when colored properly, but not otherwise
 ** TODO barriers kill you unless YOU are properly colored, and block the ball unless properly colored
 

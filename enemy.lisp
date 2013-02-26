@@ -168,6 +168,20 @@
   (tags :initform '(:monitor :enemy))
   (image :initform "monitor2"))
 
+(defparameter *monitor-scaling-speed* 1.2)
+
+(define-method grow monitor ()
+  (let ((size (+ %width *monitor-scaling-speed*)))
+    (when (< size 160)
+      (resize self size size)
+      (move-toward self :upleft *monitor-scaling-speed*))))
+
+(define-method shrink monitor ()
+  (let ((size (- %width *monitor-scaling-speed*)))
+    (when (> size 42)
+      (resize self size size)
+      (move-toward self :downright *monitor-scaling-speed*))))
+
 (define-method choose-new-direction monitor ()
   (setf %direction
 	(if (= 0 (random 20))
@@ -206,6 +220,9 @@
 	(progn (percent-of-time 2 (choose-new-direction self))
 	       (move-toward self %direction 2)))))
 
+(defresource "grow.wav" :volume 10)
+(defresource "grow2.wav" :volume 10)
+
 (define-method update monitor ()
   (setf %image 
 	(ecase %hp
@@ -213,9 +230,14 @@
   	  (2 (random-choose '("monitor" "monitor2")))
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
-  (if %fleeing 
-      (flee self)
-      (hunt self)))
+  (if (= %hp 1)
+      (progn (move self (heading-to-cursor self) 1)
+	     (percent-of-time 10
+	       (play-sample (random-choose '("grow.wav" "grow2.wav"))) 
+	       (grow self)))
+      (if %fleeing 
+	  (flee self)
+	  (hunt self))))
 
 (define-method collide monitor (thing)
   (when (not (enemyp thing))
