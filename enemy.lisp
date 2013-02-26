@@ -2,11 +2,12 @@
 
 ;;; Positronic death filament
 
-(defun is-trail (thing)
-  (has-tag thing :trail))
+(defun trailp (thing)
+  (and (blockyp thing)
+       (has-tag thing :trail)))
 
 (define-block trail
-  (tags :initform '(:trail))
+  (tags :initform '(:trail :enemy))
   (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
   (collision-type :initform :passive)
   (height :initform 5)
@@ -18,16 +19,13 @@
 (define-method initialize trail ()
   (later 320 (destroy self)))
 
-(define-method collide trail (thing)
-  (when (robotp thing)
-    (destroy thing)))
-
 ;; Nasty tracers 
 
 (defresource "tracer.png")
 
 (define-block tracer
   (speed :initform 1.5)
+  (tags :initform '(:enemy))
   (image :initform "tracer.png")
   (direction :initform (random-direction))
   (energy :initform 0))
@@ -47,6 +45,36 @@
     (restore-location self)
     (setf %energy 6)
     (setf %direction (random-direction))))
+
+;;; Electric death paddles!
+
+(define-block paddle :tags '(:enemy :paddle) :phase (random pi) :heading 0.0)
+
+(define-method initialize paddle ()
+  (initialize%super self)
+  (resize self 100 12))
+
+(define-method draw paddle ()
+  (let ((index (truncate (* 100 (sin %phase)))))
+    (when (< (distance-to-cursor self) 400)
+      (draw-box 0 (+ %y 5) 10000 2
+		:color (random-choose '("red" "yellow" "magenta"))))
+    (draw-box %x %y %width %height :color (percent-gray index))))
+
+(define-method update paddle ()
+  (let ((speed
+	  (if (< (distance-to-cursor self)
+		 200)
+	      10 5)))
+    (incf %phase (/ speed 100))
+    (forward self speed)))
+
+(define-method collide paddle (thing)
+  (when (brickp thing)
+    (restore-location self)
+    (setf %heading (- %heading pi)))
+  (when (robotp thing)
+    (damage thing 1)))
 
 ;;; Radioactive corruption glitches that creep after you
 

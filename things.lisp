@@ -1,5 +1,135 @@
 (in-package :2x0ng)
 
+(defun targetp (thing)
+  (and (blockyp thing)
+       (has-tag thing :target)))
+
+(defun enemyp (thing)
+  (and (blockyp thing)
+       (has-tag thing :enemy)))
+
+;;; Sparkle explosion cloud fx
+
+(define-block spark 
+  :width 3 :height 3 :color nil
+  :collision-type nil)
+
+(define-method initialize spark (color)
+  (setf %color color)
+  (later 1.2 (exit self)))
+
+(define-method draw spark ()
+  (set-blending-mode :additive)
+  (with-field-values (x y color) self
+    (dotimes (n 8)
+      (let ((z (+ 1 (random 5))))
+	(draw-box (+ x (- 20 (random 40)))
+		  (+ y (- 20 (random 40)))
+		  z z
+		  :color (or (percent-of-time 93 color)
+			     (random-choose '("cyan" "magenta")))))))
+  (set-blending-mode :alpha))
+
+(define-method update spark ()
+  (move-toward self (random-direction) (+ 8 (random 8))))
+
+(defun make-sparks (x y &optional color)
+  (dotimes (z 5)
+    (drop-object (current-buffer)
+		 (new 'spark color) 
+		 (+ x (random 30)) (+ y (random 30)))))
+
+;;; Versatile bullets
+
+(defun bulletp (thing)
+  (has-tag thing :bullet))
+
+(defun player-bullet-p (thing)
+  (and (bulletp thing)
+       (has-tag thing :player)))
+
+(defun enemy-bullet-p (thing)
+  (and (bulletp thing)
+       (not (player-bullet-p thing))))
+
+(define-block bullet 
+  :radius 3
+  :speed 4.2
+  :timer 60
+  :blend :alpha
+  :growth-rate nil
+  :tags '(:bullet))
+
+(define-method draw bullet ()
+  (draw-circle %x %y %radius 
+	       :color (random-choose 
+		       (if (player-bullet-p self)
+			   '("green" "yellow")
+			   '("yellow" "red")))
+	       :type :solid))
+	      
+(define-method update bullet ()
+  (decf %timer)
+  (if (zerop %timer) 
+      (destroy self)
+      (forward self %speed)))
+
+(define-method collide bullet (thing)
+  (cond 
+    ;; let bullets pass through clouds
+    ((has-tag thing :cloud)
+     nil)
+    ;; let enemy bullets pass through barriers
+    ((and (is-barrier thing)
+	  (enemy-bullet-p self))
+     nil)
+    ;; don't get hung up on collectibles
+    ((or (is-powerup thing)
+	 (is-chip thing))
+     nil)
+    ;; hit enemies with player bullets
+    ((and (player-bullet-p self)
+	  (is-enemy thing))
+     (damage thing 1)
+     (destroy self))
+    ;; allow player bullets to pass through trail
+    ;; (and through the player)
+    ((and (player-bullet-p self)
+	  (or (is-trail thing)
+	      (is-shield thing)
+	      (player-bullet-p thing)
+	      (is-robot thing)))
+     nil)
+    ;; enemy bullets don't hurt enemies
+    ;; or other enemy bullets
+    ((or (is-enemy thing)
+	 (enemy-bullet-p thing))
+     nil)
+    ;; player bullets do not hurt enemy bullets
+    ((or 
+      (and (player-bullet-p self)
+	   (enemy-bullet-p thing))
+      (and (enemy-bullet-p self)
+	   (player-bullet-p thing)))
+     nil)
+    ;; by default, just damage whatever it is
+    (t (when (has-method :damage thing)
+	 (damage thing 1)
+	 (destroy self)))))
+
+(define-method initialize bullet (heading &key tags speed radius timer)
+  (initialize%super self)
+  (setf %heading heading)
+  (when speed (setf %speed speed))
+  (when timer (setf %timer timer))
+  (when radius (setf %radius radius))
+  (setf %height 
+	(setf %width
+	      (* 1.8 %radius)))
+  (when tags
+    (dolist (tag tags)
+      (add-tag self tag))))
+
 ;; Color themes
 
 (defparameter *themes* 
@@ -65,7 +195,10 @@
   ;;  :collision-type :passive
   :color "gray50")
 
-(define-method damage brick (points) (destroy self))
+(define-method damage brick (points) 
+  (multiple-value-bind (x y) (center-point self)
+    (make-sparks x y %color)
+    (destroy self)))
 
 (define-method initialize brick (&optional color)
   (initialize%super self)
@@ -129,7 +262,7 @@
 
 (defparameter *ball-normal-speed* (units 0.88))
 
-(defparameter *ball-kick-speed* (units 0.85))
+(defparameter *ball-kick-speed* (units 1.2))
 
 (defparameter *ball-deceleration* (units 0.0))
 

@@ -78,14 +78,14 @@
 	;; (themed-row (units 8) (units 35) 5)
 	;; (themed-row (units 4) (units 50) 13)
 	
-	;; (dotimes (n 5)
+	(dotimes (n 5)
 	;;   ;; (drop-object buffer (new 'tracer) 
 	;;   ;; 	       (units (+ 10 (random 70)))
 	;;   ;; 	       (units (+ 10 (random 70))))
-	;;   (super-fat-row (+ (units 10) (units (random 60)))
-	;; 		 (+ (units 10) (units (random 60)))
-	;; 		 (+ 3 (random 7))
-	;; 		 (random-choose (brick-colors))))
+	  (super-fat-row (+ (units 10) (units (random 60)))
+			 (+ (units 10) (units (random 60)))
+			 (+ 3 (random 7))
+			 (random-choose (brick-colors))))
 
 	;;
 	(drop-object buffer robot (units 10) (units 6))
