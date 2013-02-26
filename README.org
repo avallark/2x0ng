@@ -1,4 +1,9 @@
 
+** TODO better navigation of the entire scene
+
+** TODO select-all
+** TODO rectangle mouse select
+
 * TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
 ** TODO for level gen, paste named buffers <---- "vaults"
 ** TODO level 1: destroy all enemies
