@@ -1,9 +1,5 @@
-* TODO Fare's idea: release basic engine with a pack of sample remixable games
 
-*** TODO guide
-*** TODO docstrings
-
-** TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
+* TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
 ** TODO for level gen, paste named buffers <---- "vaults"
 ** TODO level 1: destroy all enemies
 ** TODO level 2: destroy all enemies, some are locked
@@ -15,12 +11,23 @@
 
 ** TODO method to broadcast a message to all objects in local world (such as "loadout/generate")
 
-
 * TODO merge Minibuffer and sidebar into a xiki-style shell?
 ** TODO buffer contents can be a shell, but sidebar is a shell
 ** TODO shell defaults to window size, scroll with mousewheel
 ** TODO minibuffer--> a small shell? Shell buffer in xiki style
 ** TODO command completion
+
+** TODO *command-string-handler-function* <------ type a word any word, anything-style completion
+
+*** TODO better error handling at prompt
+
+*** TODO guide
+*** TODO docstrings
+
+*** TODO what i really want to do is run through with M-x checkdoc
+
+* TODO Fare's idea: release basic engine with a pack of sample remixable games
+
 
 * TODO [#A] GET COMMAND PROMPT WORKING PROPERLY and USEFULLY
 ** TODO integrate notifications into the mix.
