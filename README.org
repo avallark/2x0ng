@@ -1,3 +1,8 @@
+** TODO tiny swooping monitors
+** TODO bricks and anti-bricks, which block when colored properly, but not otherwise
+** TODO barriers kill you unless YOU are properly colored, and block the ball unless properly colored
+
+** TODO brick guns fire colored bricks which smash (they paint any hit objects)
 
 ** TODO better navigation of the entire scene
 
@@ -5,12 +10,14 @@
 ** TODO rectangle mouse select
 
 * TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
+
+** TODO tracer generators 
+** TODO no chevrons, but still black holes
+** TODO black hole floats on its own, can be kicked into the enemies
+
 ** TODO for level gen, paste named buffers <---- "vaults"
 ** TODO level 1: destroy all enemies
 ** TODO level 2: destroy all enemies, some are locked
-
-** TODO generators 
-** TODO no chevrons, but still black holes
 
 ** TODO black holes grow and emit radiation when something falls in
 

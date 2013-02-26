@@ -52,14 +52,10 @@
 
 (define-method initialize paddle ()
   (initialize%super self)
-  (resize self 100 12))
+  (resize self 60 12))
 
 (define-method draw paddle ()
-  (let ((index (truncate (* 100 (sin %phase)))))
-    (when (< (distance-to-cursor self) 300)
-      (draw-box 0 (+ %y 5) 10000 2
-		:color (random-choose '("red" "yellow" "magenta"))))
-    (draw-box %x %y %width %height :color (percent-gray index))))
+  (draw-box %x %y %width %height :color (random-choose '("magenta" "deep pink" "hot pink"))))
 
 (define-method update paddle ()
   (let ((speed
@@ -157,3 +153,89 @@
     (draw-box %x %y %width %height
      :alpha 0.2
      :color %overlay-color)))
+
+;;; The "monitor", a roving enemy that fires a spread of bullets then dashes away
+
+(defresource
+    (:name "monitor" :type :image :file "monitor.png")
+    (:name "monitor2" :type :image :file "monitor2.png")
+    (:name "monitor3" :type :image :file "monitor3.png")
+    (:name "monitor4" :type :image :file "monitor4.png"))
+
+(define-block monitor 
+  (hp :initform 3) fleeing
+  (direction :initform (random-choose '(:up :down)))
+  (tags :initform '(:monitor :enemy))
+  (image :initform "monitor2"))
+
+(define-method choose-new-direction monitor ()
+  (setf %direction
+	(if (= 0 (random 20))
+	    ;; occasionally choose a random dir
+	    (nth (random 3)
+		 '(:up :down :right :left))
+	    ;; otherwise turn left
+	    (getf '(:up :left :left :down :down :right :right :up)
+		  (or %direction :up)))))
+
+(define-method flee monitor ()
+  (setf %heading (+ pi (heading-to-cursor self)))
+  (forward self 3.2))
+
+(define-method stop-fleeing monitor ()
+  (setf %fleeing nil))
+
+(defresource (:name "magenta-alert.wav"
+	      :type :sample :file "magenta-alert.wav" 
+	      :properties (:volume 60)))
+
+(define-method hunt monitor ()
+  (let ((dist (distance-to-cursor self)))
+    ;; hunt for player
+    (if (< dist 250)
+	(progn 
+	  (setf %heading (heading-to-cursor self))
+	  (forward self 2)
+	  ;; if close enough, fire and run away 
+	  (when (< dist 190)
+	    (fire self (heading-to-cursor self))
+	    (setf %fleeing t)
+	    (later 1.4 (stop-fleeing self))
+	    (play-sound self "magenta-alert.wav")))
+	;; patrol
+	(progn (percent-of-time 2 (choose-new-direction self))
+	       (move-toward self %direction 2)))))
+
+(define-method update monitor ()
+  (setf %image 
+	(ecase %hp
+	  (3 "monitor2")
+  	  (2 (random-choose '("monitor" "monitor2")))
+	  (1 (random-choose '("monitor3" "monitor4")))
+	  (0 "monitor")))
+  (if %fleeing 
+      (flee self)
+      (hunt self)))
+
+(define-method collide monitor (thing)
+  (when (not (enemyp thing))
+    (restore-location self)
+    ;; (when %fleeing (setf %fleeing nil))
+    (choose-new-direction self)))
+
+(define-method damage monitor (points)
+  (decf %hp)
+  (play-sound self (random-choose *whack-sounds*))
+  (when (zerop %hp)
+    (make-sparks (- %x 16) (- %y 16) "yellow")
+    (play-sound self "xplod")
+    (destroy self)))
+
+(define-method fire monitor (direction)
+  (multiple-value-bind (x y) (center-point self)
+    (drop self (new 'bullet (heading-to-cursor self)))
+    (dotimes (n 3)
+      (drop self (new 'bullet 
+		      (+ (heading-to-cursor self) -1.5 (random 3.2))
+		      :timer 100)))))
+

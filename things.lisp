@@ -8,6 +8,42 @@
   (and (blockyp thing)
        (has-tag thing :enemy)))
 
+(defresource 
+    (:name "xplod"
+     :type :sample :file "xplod.wav" 
+     :properties (:volume 90)))
+
+(defparameter *bounce-sounds*
+  (defresource 
+      (:name "boop1.wav" :type :sample :file "boop1.wav" :properties (:volume 20))
+      (:name "boop2.wav" :type :sample :file "boop2.wav" :properties (:volume 20))
+    (:name "boop3.wav" :type :sample :file "boop3.wav" :properties (:volume 20))))
+
+(defparameter *doorbell-sounds*
+  (defresource 
+      (:name "doorbell.wav" :type :sample :file "doorbell.wav" :properties (:volume 20))
+      (:name "doorbell2.wav" :type :sample :file "doorbell2.wav" :properties (:volume 20))
+    (:name "doorbell3.wav" :type :sample :file "doorbell3.wav" :properties (:volume 20))))
+
+(defparameter *slam-sounds*
+  (defresource 
+      (:name "slam1.wav" :type :sample :file "slam1.wav" :properties (:volume 52))
+      (:name "slam2.wav" :type :sample :file "slam2.wav" :properties (:volume 52))
+    (:name "slam3.wav" :type :sample :file "slam3.wav" :properties (:volume 52))))
+
+  (defresource 
+      (:name "whack1.wav" :type :sample :file "whack1.wav" :properties (:volume 82))
+      (:name "whack2.wav" :type :sample :file "whack2.wav" :properties (:volume 82))
+    (:name "whack3.wav" :type :sample :file "whack3.wav" :properties (:volume 82)))
+
+(defparameter *whack-sounds* '("whack1.wav" "whack2.wav" "whack3.wav"))
+
+(defparameter *bonux-sounds*
+  (defresource 
+      (:name "bonux1.wav" :type :sample :file "bonux1.wav" :properties (:volume 12))
+      (:name "bonux2.wav" :type :sample :file "bonux2.wav" :properties (:volume 12))
+    (:name "bonux3.wav" :type :sample :file "bonux3.wav" :properties (:volume 12))))
+
 ;;; Sparkle explosion cloud fx
 
 (define-block spark 
@@ -65,7 +101,7 @@
 	       :color (random-choose 
 		       (if (player-bullet-p self)
 			   '("green" "yellow")
-			   '("yellow" "red")))
+			   '("cyan" "white" "deep sky blue")))
 	       :type :solid))
 	      
 (define-method update bullet ()
@@ -79,30 +115,29 @@
     ;; let bullets pass through clouds
     ((has-tag thing :cloud)
      nil)
-    ;; let enemy bullets pass through barriers
-    ((and (is-barrier thing)
-	  (enemy-bullet-p self))
-     nil)
+    ;; ;; let enemy bullets pass through barriers
+    ;; ((and (is-barrier thing)
+    ;; 	  (enemy-bullet-p self))
+    ;;  nil)
     ;; don't get hung up on collectibles
-    ((or (is-powerup thing)
-	 (is-chip thing))
-     nil)
+    ;; ((or (is-powerup thing)
+    ;; 	 (is-chip thing))
+    ;;  nil)
     ;; hit enemies with player bullets
     ((and (player-bullet-p self)
-	  (is-enemy thing))
+	  (enemyp thing))
      (damage thing 1)
      (destroy self))
     ;; allow player bullets to pass through trail
     ;; (and through the player)
     ((and (player-bullet-p self)
-	  (or (is-trail thing)
-	      (is-shield thing)
+	  (or (trailp thing)
 	      (player-bullet-p thing)
-	      (is-robot thing)))
+	      (robotp thing)))
      nil)
     ;; enemy bullets don't hurt enemies
     ;; or other enemy bullets
-    ((or (is-enemy thing)
+    ((or (enemyp thing)
 	 (enemy-bullet-p thing))
      nil)
     ;; player bullets do not hurt enemy bullets
@@ -284,6 +319,10 @@
 (defun make-ball (&optional (color "white"))
   (setf *ball* (new 'ball color)))
 
+(define-method after-deserialize ball ()
+  (after-deserialize%super self)
+  (setf *ball* self))
+
 (defresource "bounce.wav" :volume 10)
 
 (define-method bounce ball ()
@@ -313,12 +352,16 @@
     
 (define-method collide ball (thing)
   (cond 
+    ((enemyp thing)
+     (bounce self)
+     (when (has-method :damage thing)
+       (damage thing 1)))
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((robotp thing)
      ;; possibly catch ball
      (paint thing (color-of *ball*))
-     (destroy *ball*)
+     (destroy self)
      (setf *ball* nil))
     ;; bounce off bricks
     ((brickp thing)
