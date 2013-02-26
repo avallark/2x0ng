@@ -86,7 +86,7 @@
   (with-fields (direction) self
     (multiple-value-bind (cx cy) (center-point self)
       (multiple-value-bind (tx ty) 
-	  (step-in-direction cx cy direction (units 1.2))
+	  (step-in-direction cx cy direction (units 1.0))
 	(values (- tx (* *ball-size* 0.5))
 		(- ty (* *ball-size* 0.5)))))))
 
