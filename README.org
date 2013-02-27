@@ -1,16 +1,17 @@
-** TODO monitor in red/purple state simply grows and kamikazes 
-** TODO puck can bounce between N multiple enemies before returning, or perhaps release spacebar to return?
-
-
+> the goal in each level will be to get to the exit. which will be inside
+      one of the nested puzzle blocks  [02:20]
+i don't want to require that all enemies be defeated anymore. instead i
+      want to generate more enemies until you either die, or solve the puzzle
+      and exit. 
 ** TODO bricks and anti-bricks, which block when colored properly, but not otherwise
+** TODO black hole slowly eats  things and grows
 ** TODO barriers kill you unless YOU are properly colored, and block the ball unless properly colored
-
+main needs to be wrapped in (sb-int:with-float-traps-masked
+	  (:invalid :inexact :divide-by-zero) (main)) to avoid those
 ** TODO brick guns fire colored bricks which smash (they paint any hit objects)
 
 ** TODO better navigation of the entire scene
-
 ** TODO select-all
-** TODO rectangle mouse select
 
 * TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
 
@@ -58,29 +59,7 @@
 
 * SIDEBAR
 ** TODO allow multiple pages in sidebar, with hotkey switch Alt-n Alt-p 
-** TODO sidebar main menu: 
-
-*** TODO (selection)
-*** TODO (clear-selection)
-*** TODO (copy)
-*** TODO (cut)
-*** TODO (paste)
-*** TODO (paste-from "" 0 0)
-
-*** TODO (trim (current-buffer))
-
-*** TODO (rename (current-buffer) "")
-*** TODO (switch-to-buffer "")
-
-*** TODO (save-project) 
-*** TODO (load-project "")
-*** TODO (make-project "")
-*** TODO (quit-blocky)
-
-
-** TODO [#B] multi select
 ** TODO [#B] group? 
-** TODO [#C] rectangle select using mouse+modkey
 ** TODO [#C] halo/selection shown as blinking corners when not near pointer
 ,
 ** TODO show stack/status in sidebar as part of minibuffer? 
@@ -153,5 +132,74 @@
    :ARCHIVE_OLPATH: 2x0ng: a colorful puzzle game
    :ARCHIVE_CATEGORY: README
    :ARCHIVE_TODO: DONE
+   :END:
+** DONE rectangle mouse select
+   CLOSED: [2013-02-27 Wed 00:40]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:40
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE puck can bounce between N multiple enemies before returning, or perhaps release spacebar to return?
+   CLOSED: [2013-02-27 Wed 00:40]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:40
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+
+** DONE monitor in red/purple state simply grows and kamikazes
+   CLOSED: [2013-02-27 Wed 00:40]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:41
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** TODO sidebar main menu:
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:42
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: SIDEBAR
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: TODO
+   :END:
+
+*** TODO (selection)
+*** TODO (clear-selection)
+*** TODO (copy)
+*** TODO (cut)
+*** TODO (paste)
+*** TODO (paste-from "" 0 0)
+
+*** TODO (trim (current-buffer))
+
+*** TODO (rename (current-buffer) "")
+*** TODO (switch-to-buffer "")
+
+*** TODO (save-project) 
+*** TODO (load-project "")
+*** TODO (make-project "")
+*** TODO (quit-blocky)
+
+** DONE [#B] multi select
+   CLOSED: [2013-02-27 Wed 00:42]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:42
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: SIDEBAR
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: TODO
+   :END:
+** DONE [#C] rectangle select using mouse+modkey
+   CLOSED: [2013-02-27 Wed 00:42]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-02-27 Wed 00:42
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_OLPATH: SIDEBAR
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: TODO
    :END:
 

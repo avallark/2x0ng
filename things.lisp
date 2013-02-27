@@ -1,5 +1,15 @@
 (in-package :2x0ng)
 
+(defparameter *level* 0)
+
+(defun level-value (&rest args)
+  (if (<= (length args) *level*)
+      (nth (1- (length args)) args)
+      (nth *level* args)))
+
+(defun holding-space ()
+  (keyboard-down-p :space))     
+
 (defun targetp (thing)
   (and (blockyp thing)
        (has-tag thing :target)))
@@ -176,7 +186,7 @@
 
 (defparameter *themes* 
   '((:dec "DarkSlateBlue" "orchid" "cyan" "magenta" "yellow")
-    (:zerk "black" "maroon2" "green" "yellow" "orange")
+    (:zerk "black" "gray40" "maroon2" "green" "yellow" "orange")
     (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
     (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")
     (:vax "gray12" "orange" "cyan" "deep pink" "orchid")
@@ -269,11 +279,11 @@
 	(%color thing))
       "white"))
 
-(defun paint (thing color)
-  (when (coloredp thing)
-    (when (not (string= (%color thing) color))
+(define-method paint brick (color)
+  (when (coloredp self)
+    (when (not (string= %color color))
       (play-sample (random-choose *color-sounds*)))
-    (setf (%color thing) color)))
+    (setf %color color)))
 
 (defun same-color (a b)
   (string= (color-of a) (color-of b)))
@@ -293,6 +303,30 @@
 (define-method damage wall (points) 
   ;; TODO flash and/or make a cool (themeable) sound 
   nil)
+
+;;; A colored block that only opens with the right color
+
+(defresource "gate.png")
+
+(defun gatep (thing)
+  (and (blockyp thing)
+       (has-tag thing :gate)))
+
+(define-block (gate :super brick)
+  (tags :initform '(:brick :colored :gate))
+  (color :initform "white"))
+
+(define-method draw gate ()
+  (draw-textured-rectangle %x %y %z %width %height 
+			   (find-texture "gate.png")
+			   :vertex-color %color))
+
+(define-method paint gate (color)
+  (when (string= %color color)
+    (play-sample "slam1.wav")
+    (destroy self)))
+
+(define-method damage gate (points))
 
 ;;; The football
 
@@ -320,6 +354,9 @@
   :hits 6
   :kick-clock 0 :tags '(:ball :colored))
 
+(define-method paint ball (color)
+  (setf %color color))
+
 (define-method initialize ball (&optional color)
   (initialize%super self)
   (setf *ball* self)
@@ -346,7 +383,7 @@
   (setf %kick-clock 0)
   (setf %seeking (if %seeking nil t)))
 
-(define-method find-enemy ball (thing2 &optional (range 150))
+(define-method find-enemy ball (thing2 &optional (range 180))
   (let ((enemies
 	  (loop for thing being the hash-values of (%objects (current-buffer))
 		when (and 
@@ -381,6 +418,10 @@
     
 (define-method collide ball (thing)
   (cond 
+    ((gatep thing)
+     (bounce self)
+     (when (same-color self thing)
+       (destroy thing)))
     ((and (enemyp thing) (not (trailp thing)))
      (bounce self)
      (decf %hits)
@@ -437,4 +478,12 @@
 	   (- %x (* %width 0.3))
 	   (- %y (* %height 0.3)))
   (resize self (* %width 1.3) (* %height 1.3)))
-  
+
+;;; Level exit
+
+(defresource "exit1.png")
+(defresource "exit2.png")
+
+(define-block exit
+  (image :initform "exit1.png"))
+

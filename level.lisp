@@ -52,17 +52,47 @@
 
 (defparameter *sideline-width* 2) 
 
+;; Wrapping things about one another
+
+(defparameter *puzzle-border* (units 2.5))
+
+(define-method wrap brick (items)
+  (multiple-value-bind (top left right bottom)
+      (find-bounding-box items)
+      (move-to self 
+	       (- left *puzzle-border*)
+	       (- top *puzzle-border*))
+      (resize self 
+	      (+ (* 2 *puzzle-border*) (- right left))
+	      (+ (* 2 *puzzle-border*) (- bottom top))))))
+
+(defun nth-color (n)
+  (nth (mod n (length (theme-colors)))
+       (theme-colors)))
+
+(defun make-puzzle (depth)
+  (cond
+    ((zerop depth)
+     (with-new-buffer (add-object (current-buffer) (new 'exit))))
+    ((plusp depth)
+     (let ((gate (new 'gate (nth-color (- depth 1))))
+	   (puzzle (with-border *puzzle-border* (make-puzzle (- depth 1)))))
+       (combine (with-new-buffer 
+		  (add-object (current-buffer) gate)
+		  (wrap gate (get-objects puzzle))
+		  (trim (current-buffer)))
+		puzzle)))))
+
+
 (defun 2x0ng-level 
     (&key
        (difficulty 0)
        (width *level-width*)
        (height *level-height*))
   (setf *ball* nil)
-  ;; (setf *theme* '("black" "gray20" "dark orange" "orange" "gold"))
-  ;; (setf *theme* '("red" "orange" "yellow" "blue" "green" "purple"))
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold")))
-    (set-random-theme)
+    (set-theme :zerk)
     (setf (%background-color buffer) (background-color))
     (prog1 buffer
       (with-buffer buffer
@@ -73,22 +103,10 @@
 	(drop-object buffer robot (units 5) (units 5))
 	(set-cursor buffer robot)
 	(follow-with-camera (current-buffer) robot)
-	;; rows of multicolored bricks
-	;; (themed-row (units 4) (units 15) 13)
-	;; (themed-row (units 8) (units 35) 5)
-	;; (themed-row (units 4) (units 50) 13)
+	;; 
+	(paste-from (current-buffer) (make-puzzle 4) 
+		    (units 10) (units 10))
 	
-	(dotimes (n 5)
-	;;   ;; (drop-object buffer (new 'tracer) 
-	;;   ;; 	       (units (+ 10 (random 70)))
-	;;   ;; 	       (units (+ 10 (random 70))))
-	  (super-fat-row (+ (units 10) (units (random 60)))
-			 (+ (units 10) (units (random 60)))
-			 (+ 3 (random 7))
-			 (random-choose (brick-colors))))
-
-	;;
-	(drop-object buffer robot (units 10) (units 6))
 	;;
 	(trim buffer)))))
 

@@ -8,10 +8,12 @@
   (color :initform "white")
   (tags :initform '(:robot :colored))
   (direction :initform :up)
+  (kick-direction :initform :up)
   ;; timers
   (walk-clock :initform 0)
   (step-clock :initform 0)
   (kick-clock :initform 0)
+
   ;; we want to catch the beginning of firing, even if the input
   ;; polling in `update' misses it. (see below)
   (default-events :initform '(((:space) (strong-kick)))))
@@ -146,8 +148,11 @@
 (define-method collide robot (thing)
   (when (enemyp thing)
     (die self))
+  (when (gatep thing)
+    (unless (same-color thing self)
+      (die self)))
   (when (brickp thing)
-    (paint self (color-of thing))
+;    (paint self (color-of thing))
     (restore-location self)))
 
 (defresource "skull.png")
@@ -177,6 +182,9 @@
 (define-method strong-kick robot ()
   (kick self nil t))
 
+(define-method paint robot (color)
+  (setf %color color))
+
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
@@ -198,7 +206,9 @@
 	      (make-footstep-sounds self)
 	      ;; move in the movement direction
 	      (move-toward self direction *robot-speed*)
-	      (setf %direction direction))
+	      (setf %direction direction)
+	      (unless (holding-space)
+		(setf %kick-direction direction)))
 	    ;; not pushing. allow movement immediately
 	    (setf step-clock 0 %walk-clock 0))
 	;; update animation
@@ -210,7 +220,7 @@
 	(when (zerop kick-clock)
 	  (when (and (null *ball*) kick-button)
 	    ;; yes, do it
-	    (kick self direction kick-button)))))))
+	    (kick self %kick-direction kick-button)))))))
 
 ;;; Player 1 drives the logic with the arrows/numpad and spacebar
 
