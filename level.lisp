@@ -90,13 +90,15 @@
 
 (defun make-level (depth)
   (cond ((zerop depth)
-	 (make-puzzle 4))
+	 (fat-buffer depth (nth-color depth)))
 	((plusp depth)
 	 (with-border 10
 	   (arrange-below 
-	    (arrange-beside (fat-buffer depth (nth-color (- depth 4)))
-			   (wrap (new 'gate (nth-color (- depth 1)))
-				 (fat-buffer depth (nth-color (+ depth 1)))))
+	    (arrange-beside 
+	     (wrap (new 'gate (nth-color (- depth 1)))
+		   (fat-buffer depth (nth-color (- depth 4))))
+	     (wrap (new 'gate (nth-color (- depth 2)))
+		   (fat-buffer depth (nth-color (+ depth 1)))))
 	    (arrange-beside (make-level (- depth 1))
 			   (wrap (new 'gate (nth-color depth))
 				 (with-border *puzzle-border* 
@@ -125,7 +127,11 @@
 	(set-cursor buffer robot)
 	(follow-with-camera (current-buffer) robot)
 	;; 
-	(paste-from (current-buffer) (make-level 5) 
+	(paste-from (current-buffer) 
+		    (arrange-below
+		     (make-level 1)
+		     (arrange-beside
+		      (make-level 2) (make-puzzle 4)))
 		    (units 10) (units 10))
 	
 	;;
