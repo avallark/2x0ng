@@ -46,7 +46,7 @@
 
 (defun super-fat-row (x y length color)
   (let ((y0 y))
-    (dotimes (n 3)
+    (dotimes (n 2)
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
@@ -54,35 +54,55 @@
 
 ;; Wrapping things about one another
 
-(defparameter *puzzle-border* (units 2.5))
+(defparameter *puzzle-border* (units 1.8))
 
-(define-method wrap brick (items)
+(defun wrap (thing buffer)
   (multiple-value-bind (top left right bottom)
-      (find-bounding-box items)
-      (move-to self 
-	       (- left *puzzle-border*)
-	       (- top *puzzle-border*))
-      (resize self 
-	      (+ (* 2 *puzzle-border*) (- right left))
-	      (+ (* 2 *puzzle-border*) (- bottom top))))))
+      (find-bounding-box (get-objects buffer))
+    (prog1 buffer
+      (with-buffer buffer
+	(add-object buffer thing 
+		    (- left *puzzle-border*)
+		    (- top *puzzle-border*))
+	(resize thing 
+		(+ (* 2 *puzzle-border*) (- right left))
+		(+ (* 2 *puzzle-border*) (- bottom top)))
+	(trim (current-buffer))))))
+
+(defparameter *color-phase* 0)
 
 (defun nth-color (n)
-  (nth (mod n (length (theme-colors)))
+  (nth (mod (+ n *color-phase*) (length (theme-colors)))
        (theme-colors)))
+
+(defun fat-buffer (size color)
+  (with-new-buffer 
+    (super-fat-row 0 0 size color)
+    (trim (current-buffer))))
 
 (defun make-puzzle (depth)
   (cond
     ((zerop depth)
      (with-new-buffer (add-object (current-buffer) (new 'exit))))
     ((plusp depth)
-     (let ((gate (new 'gate (nth-color (- depth 1))))
-	   (puzzle (with-border *puzzle-border* (make-puzzle (- depth 1)))))
-       (combine (with-new-buffer 
-		  (add-object (current-buffer) gate)
-		  (wrap gate (get-objects puzzle))
-		  (trim (current-buffer)))
-		puzzle)))))
+     (wrap (new 'gate (nth-color (- depth 2)))
+	   (with-border *puzzle-border* (make-puzzle (- depth 1)))))))
 
+(defun make-level (depth)
+  (cond ((zerop depth)
+	 (make-puzzle 4))
+	((plusp depth)
+	 (with-border 10
+	   (arrange-below 
+	    (arrange-beside (fat-buffer depth (nth-color (- depth 4)))
+			   (wrap (new 'gate (nth-color (- depth 1)))
+				 (fat-buffer depth (nth-color (+ depth 1)))))
+	    (arrange-beside (make-level (- depth 1))
+			   (wrap (new 'gate (nth-color depth))
+				 (with-border *puzzle-border* 
+				   (arrange-below
+				    (fat-buffer depth (nth-color (- depth 1)))
+				    (fat-buffer depth (nth-color (+ depth 1))))))))))))
 
 (defun 2x0ng-level 
     (&key
@@ -98,13 +118,14 @@
       (with-buffer buffer
 	(bind-event buffer '(:r :control) :reset)
 	;; playfield border
+	(setf *color-phase* (random 4))
 	(wall-around-region -1 2 width (- height 1))
 	;; player 1
 	(drop-object buffer robot (units 5) (units 5))
 	(set-cursor buffer robot)
 	(follow-with-camera (current-buffer) robot)
 	;; 
-	(paste-from (current-buffer) (make-puzzle 4) 
+	(paste-from (current-buffer) (make-level 5) 
 		    (units 10) (units 10))
 	
 	;;
