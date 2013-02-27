@@ -168,7 +168,7 @@
   (tags :initform '(:monitor :enemy))
   (image :initform "monitor2"))
 
-(defparameter *monitor-scaling-speed* 1.2)
+(defparameter *monitor-scaling-speed* 1.3)
 
 (define-method grow monitor ()
   (let ((size (+ %width *monitor-scaling-speed*)))
@@ -201,24 +201,19 @@
 
 (defresource (:name "magenta-alert.wav"
 	      :type :sample :file "magenta-alert.wav" 
-	      :properties (:volume 60)))
+	      :properties (:volume 10)))
 
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist 250)
+    (if (< dist 350)
 	(progn 
 	  (setf %heading (heading-to-cursor self))
 	  (forward self 2)
-	  ;; if close enough, fire and run away 
-	  (when (< dist 190)
-	    (fire self (heading-to-cursor self))
-	    (setf %fleeing t)
-	    (later 1.4 (stop-fleeing self))
-	    (play-sound self "magenta-alert.wav")))
+	  (turn-right self 4))
 	;; patrol
-	(progn (percent-of-time 2 (choose-new-direction self))
-	       (move-toward self %direction 2)))))
+	(progn (percent-of-time 1 (choose-new-direction self))
+	       (move-toward self %direction 1.7)))))
 
 (defresource "grow.wav" :volume 10)
 (defresource "grow2.wav" :volume 10)
@@ -231,9 +226,9 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) 1)
-	     (percent-of-time 10
-	       (play-sample (random-choose '("grow.wav" "grow2.wav"))) 
+      (progn (move self (heading-to-cursor self) 3)
+	     (percent-of-time 25
+	       (percent-of-time 30 (play-sample (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
       (if %fleeing 
 	  (flee self)
@@ -255,9 +250,8 @@
 
 (define-method fire monitor (direction)
   (multiple-value-bind (x y) (center-point self)
-    (drop self (new 'bullet (heading-to-cursor self)))
     (dotimes (n 3)
       (drop self (new 'bullet 
-		      (+ (heading-to-cursor self) -1.5 (random 3.2))
+		      (+ (heading-to-cursor self) -0.8 (random 1.6))
 		      :timer 100)))))
 

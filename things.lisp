@@ -312,10 +312,12 @@
 
 (define-block ball 
   :kicker nil
+  :target nil
   :seeking nil
   :height *ball-size* :width *ball-size*
   :color "white"
   :speed 0
+  :hits 6
   :kick-clock 0 :tags '(:ball :colored))
 
 (define-method initialize ball (&optional color)
@@ -338,11 +340,27 @@
   (restore-location self)
   (setf %heading 
 	(if %seeking
-	    (opposite-heading (heading-to-cursor self))
+	    (opposite-heading %heading)
 	    (opposite-heading %heading)))
-  (move self %heading 2)
+  (move self %heading 2.2)
   (setf %kick-clock 0)
   (setf %seeking (if %seeking nil t)))
+
+(define-method find-enemy ball (thing2 &optional (range 150))
+  (let ((enemies
+	  (loop for thing being the hash-values of (%objects (current-buffer))
+		when (and 
+		      (blockyp thing)
+		      (enemyp thing)
+		      (not (object-eq thing2 thing))
+		      (colliding-with-rectangle thing 
+						(- %y range)
+						(- %x range)
+						(* 2 range)
+						(* 2 range)))
+		  collect thing)))
+    (when (consp enemies)
+      (first enemies))))
 
 (define-method update ball ()
   (when (plusp %kick-clock)
@@ -350,9 +368,11 @@
   (with-fields (seeking heading speed kicker) self
     ;; move 
     (if (plusp speed)
-	(if seeking
-	    (move self (heading-to-thing self kicker) speed)
-	    (move self heading speed))
+	(if %target 
+	    (move self (heading-to-thing self %target) (+ speed 2))
+	    (if seeking
+		(move self (heading-to-thing self kicker) speed)
+		(move self heading speed)))
 	(setf %seeking nil))))
 
 (define-method recently-kicked-by ball (cursor)
@@ -361,10 +381,15 @@
     
 (define-method collide ball (thing)
   (cond 
-    ((enemyp thing)
+    ((and (enemyp thing) (not (trailp thing)))
      (bounce self)
+     (decf %hits)
      (when (has-method :damage thing)
-       (damage thing 1)))
+       (damage thing 1))
+     (setf %target
+	   (when (plusp %hits)
+	     (find-enemy self thing)))
+     (when %target (setf %seeking nil)))
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((robotp thing)
@@ -375,6 +400,7 @@
        (setf *ball* nil)))
      ;; bounce off bricks
     ((brickp thing)
+     (setf %target nil)
      (when (coloredp thing)
        (paint self (color-of thing)))
      (slap thing)
