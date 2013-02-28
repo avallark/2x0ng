@@ -477,23 +477,6 @@
     (draw-box x y width height :color "white")
     (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color color)))
 
-;;; Black holes 
-
-(defresource "hole1.png")
-(defresource "hole2.png")
-
-(define-block hole 
-  (image :initform "hole1.png"))
-
-(defresource "hole.wav" :volume 20)
-
-(define-method collide hole (thing)
-  (play-sample "hole.wav")
-  (move-to self 
-	   (- %x (* %width 0.3))
-	   (- %y (* %height 0.3)))
-  (resize self (* %width 1.3) (* %height 1.3)))
-
 ;;; Level exit
 
 (defresource "exit1.png")

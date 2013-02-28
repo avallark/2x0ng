@@ -1,5 +1,9 @@
 (in-package :2x0ng)
 
+(defun holep (thing)
+  (and (blockyp thing)
+       (has-tag thing :hole)))
+
 ;;; Positronic death filament
 
 (defun trailp (thing)
@@ -206,14 +210,14 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist 350)
+    (if (< dist 380)
 	(progn 
 	  (setf %heading (heading-to-cursor self))
 	  (forward self 2)
 	  (turn-right self 4))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
-	       (move-toward self %direction 1.7)))))
+	       (move-toward self %direction 3)))))
 
 (defresource "grow.wav" :volume 10)
 (defresource "grow2.wav" :volume 10)
@@ -235,7 +239,7 @@
 	  (hunt self))))
 
 (define-method collide monitor (thing)
-  (when (not (enemyp thing))
+  (when (not (or (enemyp thing) (holep thing)))
     (restore-location self)
     ;; (when %fleeing (setf %fleeing nil))
     (choose-new-direction self)))
@@ -255,3 +259,27 @@
 		      (+ (heading-to-cursor self) -0.8 (random 1.6))
 		      :timer 100)))))
 
+;;; Black holes 
+
+(defresource "hole1.png")
+(defresource "hole2.png")
+
+(define-block hole 
+  (tags :initform '(:hole))
+  (clock :initform 120)
+  (image :initform "hole1.png"))
+
+(defresource "hole.wav" :volume 20)
+
+(define-method update hole ()
+  (when (< (distance-to-cursor self)
+	   500)
+    (with-fields (clock) self
+      (decf clock)
+      (when (zerop clock)
+	(drop self (new 'monitor))
+	(setf clock 80)))))
+  
+(define-method collide hole (thing)
+  (when (brickp thing)
+    (setf %clock 100)))

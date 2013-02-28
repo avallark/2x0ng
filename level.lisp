@@ -118,8 +118,10 @@
 	  (fat-buffer 4 (random-choose (theme-colors)))
 	  (with-border *puzzle-border*
 	    (arrange-randomly
-	     (wrap (new 'gate (first colors))
-		   (fat-buffer 4 (random-choose (theme-colors))))
+	     (arrange-randomly 
+	      (with-new-buffer (drop-object (current-buffer) (new 'hole)))
+	      (wrap (new 'gate (first colors))
+		    (fat-buffer 4 (random-choose (theme-colors)))))
 	     (let ((*puzzle-border* 12))
 	       (make-exit (derange (theme-colors))))))))
   ;;
@@ -127,9 +129,10 @@
 	 (let ((key (random-choose colors))
 	       (colors2 (derange colors)))
 	   (with-border *puzzle-border*
-	     (arrange-a 
-	      (wrap (new 'gate key)
-		    (fat-buffer 5 (first colors2)))
+	     (arrange-b 
+	      (arrange-a (wrap (new 'gate key)
+			       (fat-buffer 5 (first colors2)))
+			 (with-new-buffer (drop-object (current-buffer) (new 'hole))))
 	      (arrange-b
 	       (arrange-a 
 		(fat-buffer 3 (second colors2))
@@ -141,18 +144,10 @@
 		 (wrap (new 'gate key)
 		       (make-puzzle (derange (rest colors2))))))
 	       (arrange-b 
-		(fat-buffer 5 (third colors2))
+		(arrange-a
+		 (with-new-buffer (drop-object (current-buffer) (new 'hole)))
+		 (fat-buffer 5 (third colors2)))
 		(fat-buffer 4 (random-choose colors2))))))))))
-
-
-		      
-	    ;;  (
-	    ;; (arrange-beside (make-level (- depth 1))
-	    ;; 		   (wrap (new 'gate (nth-color depth))
-	    ;; 			 (with-border *puzzle-border* 
-	    ;; 			   (arrange-below
-	    ;; 			    (fat-buffer depth (nth-color (- depth 1)))
-	    ;; 			    (fat-buffer depth (nth-color (+ depth 1))))))))))))
 
 (defun make-palette (colors) 
   (cond ((null (rest colors))
@@ -172,7 +167,7 @@
   (setf *ball* nil)
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold")))
-    (set-random-theme)
+    (set-theme :zerk)
     (setf (%background-color buffer) (background-color))
     (prog1 buffer
       (with-buffer buffer
