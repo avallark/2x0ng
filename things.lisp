@@ -226,9 +226,9 @@
 
 ;; Level dimensions, in units
 
-(defparameter *level-height* 100)
+(defparameter *level-height* 120)
 
-(defparameter *level-width* 100)
+(defparameter *level-width* 120)
 
 (defparameter *level-screen-height* 35)
 

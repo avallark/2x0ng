@@ -207,7 +207,7 @@
 	      ;; move in the movement direction
 	      (move-toward self direction *robot-speed*)
 	      (setf %direction direction)
-	      (unless (holding-space)
+	      (unless (holding-fire)
 		(setf %kick-direction direction)))
 	    ;; not pushing. allow movement immediately
 	    (setf step-clock 0 %walk-clock 0))
@@ -227,11 +227,14 @@
 (define-block (player-1-robot :super robot)
   (body-color :initform "white"))
 
-(defun holding-space ()
-  (keyboard-down-p :space))     
+(defun holding-fire ()
+  (keyboard-down-p :z))     
+
+(defun holding-antifire ()
+  (keyboard-down-p :x))     
 
 (define-method strong-kick-p player-1-robot ()
-  (holding-space))
+  (holding-fire))
 
 (defun holding-down-arrow ()
   (or (keyboard-down-p :kp2)
