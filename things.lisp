@@ -185,10 +185,14 @@
 ;; Color themes
 
 (defparameter *themes* 
-  '((:snafu "tan" "gray50" 
-     "red" "forest green" "yellow")
+  '((:snafu "dark magenta" "gray20" 
+     "cyan" "red" "yellow")
+    (:atlantis "blue" "yellow" 
+     "white" "green" "yellow")
     (:zerk "black" "gray40" 
      "maroon2" "green" "yellow" "orange")
+    (:krez "black" "maroon2" 
+     "green" "yellow" "orange")
     (:tandy "DarkSlateBlue" "gray80" 
      "blue violet" "orchid" "cyan")
     (:command "black" "DarkGoldenrod" 
