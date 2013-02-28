@@ -1,17 +1,24 @@
+** TODO different exit combinations
+
+** TODO tabs along bottom for recent buffer names
+** TODO align-to-grid
+** TODO tilesets and other things to go dockably in the sidebar
+
+
 > the goal in each level will be to get to the exit. which will be inside
       one of the nested puzzle blocks  [02:20]
 i don't want to require that all enemies be defeated anymore. instead i
       want to generate more enemies until you either die, or solve the puzzle
       and exit. 
 ** TODO bricks and anti-bricks, which block when colored properly, but not otherwise
-** TODO black hole slowly eats  things and grows
-** TODO barriers kill you unless YOU are properly colored, and block the ball unless properly colored
-main needs to be wrapped in (sb-int:with-float-traps-masked
-	  (:invalid :inexact :divide-by-zero) (main)) to avoid those
+** TODO black hole slowly spews enemies
 ** TODO brick guns fire colored bricks which smash (they paint any hit objects)
 
 ** TODO better navigation of the entire scene
 ** TODO select-all
+
+main needs to be wrapped in (sb-int:with-float-traps-masked
+	  (:invalid :inexact :divide-by-zero) (main)) to avoid those
 
 * TODO design a level layout for 2x0ng using the nice editor, with designated open areas and forth words to be executed upon loadout
 

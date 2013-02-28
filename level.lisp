@@ -54,7 +54,7 @@
 
 ;; Wrapping things about one another
 
-(defparameter *puzzle-border* (units 1.8))
+(defparameter *puzzle-border* (units 1.4))
 
 (defun wrap (thing buffer)
   (multiple-value-bind (top left right bottom)
@@ -80,13 +80,13 @@
     (super-fat-row 0 0 size color)
     (trim (current-buffer))))
 
-(defun make-puzzle (depth)
+(defun make-puzzle (colors)
   (cond
-    ((zerop depth)
+    ((null colors)
      (with-new-buffer (add-object (current-buffer) (new 'exit))))
-    ((plusp depth)
-     (wrap (new 'gate (nth-color (- depth 2)))
-	   (with-border *puzzle-border* (make-puzzle (- depth 1)))))))
+    ((consp colors)
+     (wrap (new 'gate (first colors))
+	   (with-border *puzzle-border* (make-puzzle (rest colors)))))))
 
 (defun make-level (depth)
   (cond ((zerop depth)
@@ -105,6 +105,14 @@
 				   (arrange-below
 				    (fat-buffer depth (nth-color (- depth 1)))
 				    (fat-buffer depth (nth-color (+ depth 1))))))))))))
+
+(defun derange (things)
+  (let ((len (length things))
+	(things2 (coerce things 'vector)))
+    (dotimes (n len)
+      (rotatef (aref things2 n)
+	       (aref things2 (random len))))
+    (coerce things2 'list)))
 
 (defun 2x0ng-level 
     (&key
@@ -131,8 +139,8 @@
 		    (arrange-below
 		     (make-level 1)
 		     (arrange-beside
-		      (make-level 2) (make-puzzle 4)))
-		    (units 10) (units 10))
+		      (make-level 2) (make-puzzle (derange (theme-colors)))))
+		    (units 10) (units 12))
 	
 	;;
 	(trim buffer)))))
