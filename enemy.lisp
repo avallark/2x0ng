@@ -273,7 +273,7 @@
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   500)
+	   330)
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)

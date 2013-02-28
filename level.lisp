@@ -75,7 +75,7 @@
   (nth (mod (+ n *color-phase*) (length (theme-colors)))
        (theme-colors)))
 
-(defun fat-buffer (size color)
+(defun bricks (size color)
   (with-new-buffer 
     (super-fat-row 0 0 size color)
     (trim (current-buffer))))
@@ -96,68 +96,76 @@
      (wrap (new 'gate (first colors))
 	   (make-exit (rest colors))))))
 
-(defun arrange-a (a b)
-  (percent-of-time 50 (rotatef a b))
+(defun horizontally (a b)
+;  (percent-of-time 50 (rotatef a b))
   (arrange-beside 
    (with-border 10 a)
    (with-border 10 b)))
 
-(defun arrange-b (a b)
-  (percent-of-time 50 (rotatef a b))
+(defun vertically (a b)
+;  (percent-of-time 50 (rotatef a b))
   (arrange-below 
    (with-border 10 a)
    (with-border 10 b)))
 
-(defun arrange-randomly (a b)
-  (funcall (or (percent-of-time 50 #'arrange-a) #'arrange-b)
+(defun either-way (a b)
+  (funcall (or (percent-of-time 50 #'horizontally) #'vertically)
 	   a b))
-    
-(defun make-puzzle (colors)
-  (cond ((= 2 (length colors))
-	 (arrange-randomly
-	  (fat-buffer 4 (random-choose (theme-colors)))
-	  (with-border *puzzle-border*
-	    (arrange-randomly
-	     (arrange-randomly 
-	      (with-new-buffer (drop-object (current-buffer) (new 'hole)))
-	      (wrap (new 'gate (first colors))
-		    (fat-buffer 4 (random-choose (theme-colors)))))
-	     (let ((*puzzle-border* 12))
-	       (make-exit (derange (theme-colors))))))))
-  ;;
-	((< 2 (length colors))
-	 (let ((key (random-choose colors))
-	       (colors2 (derange colors)))
-	   (with-border *puzzle-border*
-	     (arrange-b 
-	      (arrange-a (wrap (new 'gate key)
-			       (fat-buffer 5 (first colors2)))
-			 (with-new-buffer (drop-object (current-buffer) (new 'hole))))
-	      (arrange-b
-	       (arrange-a 
-		(fat-buffer 3 (second colors2))
-		(arrange-a 
-		 (wrap (new 'gate (third colors2))
-		       (arrange-a 
-			(fat-buffer 4 (random-choose colors2))
-			(fat-buffer 4 key)))
-		 (wrap (new 'gate key)
-		       (make-puzzle (derange (rest colors2))))))
-	       (arrange-b 
-		(arrange-a
-		 (with-new-buffer (drop-object (current-buffer) (new 'hole)))
-		 (fat-buffer 5 (third colors2)))
-		(fat-buffer 4 (random-choose colors2))))))))))
 
-(defun make-palette (colors) 
-  (cond ((null (rest colors))
-	 (fat-buffer 3 (first colors)))
-	((rest colors)
-	 (wrap (new 'gate (first colors))
-	       (with-border *puzzle-border*
-		 (arrange-below 
-		  (make-palette (derange (rest colors)))
-		  (make-palette (derange (rest colors)))))))))
+(defun bordered (x) (with-border *puzzle-border* x))
+
+(defun singleton (x) (with-new-buffer (drop-object (current-buffer) x)))
+
+(defun gated (color buf) (wrap (new 'gate color) buf))
+
+(defun random-color () (random-choose (theme-colors)))
+
+(defvar *required-color* nil)
+
+(defmacro requiring (color &body forms)
+  `(let ((*required-color* ,color)) ,@forms))
+
+(defun make-puzzle (colors)
+  (cond 
+    ;; with two colors, terminate the recursion
+    ((= 2 (length colors))
+     (destructuring-bind (A B) colors
+       (either-way
+	(bricks 4 B)
+	(bordered
+	 (vertically
+	  (horizontally 
+	   (gated A (bricks 3 *required-color*))
+	   (horizontally 
+	    (singleton (new 'hole))
+	    (gated B 
+		   (bricks 4 A))))
+	  (let ((*puzzle-border* 12))
+	    (make-exit (derange (theme-colors)))))))))
+    ;; with three or more colors, puzzify and recurse
+    ((< 2 (length colors))
+     (let ((key (random-choose colors)))
+       (destructuring-bind (A B C &rest other-colors) colors
+	 (bordered
+	  (vertically 
+	   (horizontally (gated A (bricks 4 C))
+			 (singleton (new 'hole)))
+	   (vertically
+	    (horizontally 
+	     (bricks 4 B)
+	     (horizontally 
+	      (gated B 
+		     (horizontally 
+		      (singleton (new 'hole))
+		      (bricks 2 A)))
+	      (gated C
+		     (requiring key
+		       (make-puzzle (derange (rest colors)))))))
+	    (vertically 
+	     (horizontally
+	      (singleton (new 'hole))
+	      (bricks 5 B))
+	     (bricks 2 B))))))))))
 
 (defun 2x0ng-level 
     (&key
