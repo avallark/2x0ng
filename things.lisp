@@ -185,14 +185,21 @@
 ;; Color themes
 
 (defparameter *themes* 
-  '((:dec "DarkSlateBlue" "orchid" "cyan" "magenta" "yellow")
-    (:zerk "black" "gray40" "maroon2" "green" "yellow" "orange")
-    (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
-    (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")
-    (:vax "gray12" "orange" "cyan" "deep pink" "orchid")
-    (:command "black" "DarkGoldenrod" "red" "magenta" "cyan")
-    (:surround "gray30" "goldenrod" "yellow" "yellow green" "red")
-    (:wizard "midnight blue" "slate blue" "dark orange" "orange" "gold")))
+  '((:snafu "tan" "gray50" 
+     "red" "forest green" "yellow")
+    (:zerk "black" "gray40" 
+     "maroon2" "green" "yellow" "orange")
+    (:tandy "DarkSlateBlue" "gray80" 
+     "blue violet" "orchid" "cyan")
+    (:command "black" "DarkGoldenrod" 
+     "red" "magenta" "cyan")))
+
+
+    ;; (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
+    ;; (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")
+    ;; (:vax "gray12" "orange" "cyan" "deep pink" "orchid")
+    ;; (:surround "gray30" "goldenrod" "yellow" "yellow green" "red")
+    ;; (:wizard "midnight blue" "slate blue" "dark orange" "orange" "gold")))
 
 (defun find-theme (name)
   (rest (assoc name *themes*)))
@@ -226,9 +233,9 @@
 
 ;; Level dimensions, in units
 
-(defparameter *level-height* 120)
+(defparameter *level-height* 160)
 
-(defparameter *level-width* 120)
+(defparameter *level-width* 160)
 
 (defparameter *level-screen-height* 35)
 
@@ -307,6 +314,9 @@
 ;;; A colored block that only opens with the right color
 
 (defresource "gate.png")
+(defresource "gate-closing-sound.wav" :volume 150)
+
+(defresource "error.wav" :volume 70)
 
 (defun gatep (thing)
   (and (blockyp thing)
@@ -322,9 +332,11 @@
 			   :vertex-color %color))
 
 (define-method paint gate (color)
-  (when (string= %color color)
-    (play-sample "slam1.wav")
-    (destroy self)))
+  (if (not (string= %color color))
+      (play-sample "error.wav")
+      (progn 
+	(play-sample "gate-closing-sound.wav")
+	(destroy self))))
 
 (define-method damage gate (points))
 
@@ -472,7 +484,6 @@
 (defresource "hole.wav" :volume 20)
 
 (define-method collide hole (thing)
-  (slap thing)
   (play-sample "hole.wav")
   (move-to self 
 	   (- %x (* %width 0.3))

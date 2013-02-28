@@ -25,8 +25,8 @@
 
 ;;; Making rows of breakable bricks
 
-(defparameter *fat-brick-width* 3)
-(defparameter *fat-brick-height* 2)
+(defparameter *fat-brick-width* 2.0)
+(defparameter *fat-brick-height* 1.3)
 
 (defun make-fat-brick (&optional color)
   (let ((brick (new 'brick color)))
@@ -54,7 +54,7 @@
 
 ;; Wrapping things about one another
 
-(defparameter *puzzle-border* (units 3))
+(defparameter *puzzle-border* (units 1.7))
 
 (defun wrap (thing buffer)
   (multiple-value-bind (top left right bottom)
@@ -88,46 +88,63 @@
 	       (aref things2 (random len))))
     (coerce things2 'list)))
 
-(defun make-puzzle (colors)
+(defun make-exit (colors)
   (cond
     ((null colors)
      (with-new-buffer (add-object (current-buffer) (new 'exit))))
     ((consp colors)
      (wrap (new 'gate (first colors))
-	   (with-border *puzzle-border* (make-puzzle (rest colors)))))))
+	   (make-exit (rest colors))))))
+
+(defun arrange-a (a b)
+  (percent-of-time 50 (rotatef a b))
+  (arrange-beside 
+   (with-border 10 a)
+   (with-border 10 b)))
+
+(defun arrange-b (a b)
+  (percent-of-time 50 (rotatef a b))
+  (arrange-below 
+   (with-border 10 a)
+   (with-border 10 b)))
 
 (defun arrange-randomly (a b)
-  (funcall (or (percent-of-time 50 #'arrange-below)
-	       #'arrange-beside) 
-	   (with-border 10 a)
-	   (with-border 10 b)))
-
-(defun make-level (colors)
-  (cond ((null (rest colors))
-	 (make-puzzle (list (random-choose (theme-colors)))))
-	((= 2 (length colors))
-	 (percent-of-time 50 (rotatef (first colors) (second colors)))
-	 (arrange-randomly 
-	  (fat-buffer 2 (first colors))
-	  (with-border *puzzle-border* 
-	    (wrap (new 'gate (second colors))
-		  (with-border *puzzle-border*
-		    (arrange-randomly 
-		     (make-level (rest colors))
-		     (fat-buffer 2 (random-choose (theme-colors)))))))))
+  (funcall (or (percent-of-time 50 #'arrange-a) #'arrange-b)
+	   a b))
+    
+(defun make-puzzle (colors)
+  (cond ((= 2 (length colors))
+	 (arrange-randomly
+	  (fat-buffer 4 (random-choose (theme-colors)))
+	  (with-border *puzzle-border*
+	    (arrange-randomly
+	     (wrap (new 'gate (first colors))
+		   (fat-buffer 4 (random-choose (theme-colors))))
+	     (let ((*puzzle-border* 12))
+	       (make-exit (derange (theme-colors))))))))
   ;;
 	((< 2 (length colors))
-	 (let ((key (random-choose colors)))
+	 (let ((key (random-choose colors))
+	       (colors2 (derange colors)))
 	   (with-border *puzzle-border*
-	     (arrange-randomly 
-	      (fat-buffer 3 key)
-	      (arrange-randomly 
-	       (arrange-randomly
-		(wrap (new 'gate (first colors))
-		      (fat-buffer 3 (second colors)))
-		(wrap (new 'gate key)
-		      (make-level (derange (rest colors)))))
-	       (fat-buffer 3 (first colors)))))))))
+	     (arrange-a 
+	      (wrap (new 'gate key)
+		    (fat-buffer 5 (first colors2)))
+	      (arrange-b
+	       (arrange-a 
+		(fat-buffer 3 (second colors2))
+		(arrange-a 
+		 (wrap (new 'gate (third colors2))
+		       (arrange-a 
+			(fat-buffer 4 (random-choose colors2))
+			(fat-buffer 4 key)))
+		 (wrap (new 'gate key)
+		       (make-puzzle (derange (rest colors2))))))
+	       (arrange-b 
+		(fat-buffer 5 (third colors2))
+		(fat-buffer 4 (random-choose colors2))))))))))
+
+
 		      
 	    ;;  (
 	    ;; (arrange-beside (make-level (- depth 1))
@@ -156,7 +173,6 @@
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold")))
     (set-random-theme)
-    ;; (set-theme :zerk)
     (setf (%background-color buffer) (background-color))
     (prog1 buffer
       (with-buffer buffer
@@ -170,7 +186,7 @@
 	(follow-with-camera (current-buffer) robot)
 	;; 
 	(paste-from (current-buffer) 
-		    (make-level (derange (theme-colors)))
+		    (make-puzzle (derange (theme-colors)))
 		    (units 10) (units 12))
 	
 	;;
