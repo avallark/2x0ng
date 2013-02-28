@@ -153,7 +153,7 @@
 	   (vertically
 	    (horizontally 
 	     (bricks 4 B)
-	     (horizontally 
+	     (either-way 
 	      (gated B 
 		     (horizontally 
 		      (singleton (new 'hole))
@@ -161,7 +161,7 @@
 	      (gated C
 		     (requiring key
 		       (make-puzzle (derange (rest colors)))))))
-	    (vertically 
+	    (horizontally 
 	     (horizontally
 	      (singleton (new 'hole))
 	      (bricks 5 B))

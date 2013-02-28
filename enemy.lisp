@@ -273,12 +273,12 @@
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   330)
+	   480)
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
 	(drop self (new 'monitor))
-	(setf clock 80)))))
+	(setf clock 100)))))
   
 (define-method collide hole (thing)
   (when (brickp thing)
