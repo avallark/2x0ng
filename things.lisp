@@ -1,5 +1,16 @@
 (in-package :2x0ng)
 
+(define-block bubble text) 
+
+(define-method initialize bubble (text)
+  (setf %text text)
+  (later 3.0 (destroy self)))
+
+(define-method draw bubble ()
+  (draw-string %text %x %y 
+	       :color (random-choose '("magenta" "cyan" "yellow" "red" "white"))
+	       :font "sans-mono-bold-18"))
+
 (defparameter *level* 0)
 
 (defun level-value (&rest args)
@@ -191,17 +202,17 @@
 
 (defparameter *two-brick-themes* 
   '((:snefru "saddle brown" "green" 
-     "orange" "cyan")
+     "pale green" "cyan")
     (:xalcrys "black" "cornflower blue" 
      "yellow" "red")
     (:zupro "gray30" "red" 
-     "blue" "cornflower blue")))
+     "cyan" "cornflower blue")))
 
 (defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
      "cyan" "red" "yellow")
-    (:atlantis "blue" "yellow" 
-     "white" "green" "yellow")
+    (:atlantis "midnight blue" "purple" 
+     "green" "hot pink" "blue")
     (:krez "black" "maroon2" 
      "green" "yellow" "orange")))
 
@@ -209,17 +220,13 @@
   '((:zerk "black" "gray40" 
      "maroon2" "green" "yellow" "orange")
     (:tandy "DarkSlateBlue" "gray80" 
-     "blue violet" "orchid" "cyan" "deep pink")
-    (:command "red" "cyan" 
-     "black" "magenta" "hot pink" "orange")))
+     "yellow" "green" "cyan" "deep pink")
+    (:command "black" "goldenrod" 
+     "cyan" "hot pink" "red" "orange")))
 
 (defparameter *themes* (append *two-brick-themes* *three-brick-themes* *four-brick-themes*))
 
-    ;; (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
-    ;; (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")
-    ;; (:vax "gray12" "orange" "cyan" "deep pink" "orchid")
-    ;; (:surround "gray30" "goldenrod" "yellow" "yellow green" "red")
-    ;; (:wizard "midnight blue" "slate blue" "dark orange" "orange" "gold")))
+(defresource "go.wav" :volume 60)
 
 (defun find-theme (name)
   (rest (assoc name *themes*)))
@@ -374,7 +381,7 @@
 
 (defparameter *ball-normal-speed* (units 0.88))
 
-(defparameter *ball-kick-speed* (units 1.2))
+(defparameter *ball-kick-speed* (units 1.0))
 
 (defparameter *ball-deceleration* (units 0.0))
 
@@ -423,6 +430,7 @@
 		when (and 
 		      (blockyp thing)
 		      (enemyp thing)
+		      (not (trailp thing))
 		      (not (object-eq thing2 thing))
 		      (colliding-with-rectangle thing 
 						(- %y range)
@@ -504,3 +512,4 @@
 (define-block exit
   (image :initform "exit1.png"))
 
+(defun exitp (thing) (is-a 'exit thing))

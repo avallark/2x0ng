@@ -146,6 +146,8 @@
   (and *ball* (colliding-with self *ball*)))
 
 (define-method collide robot (thing)
+  (when (exitp thing)
+    (reset-game (current-buffer) (1+ *level*)))
   (when (or (enemyp thing) (holep thing))
     (die self))
   ;; (when (gatep thing)
@@ -228,7 +230,7 @@
   (body-color :initform "white"))
 
 (defun holding-fire ()
-  (keyboard-down-p :z))     
+  (keyboard-down-p :space))     
 
 (defun holding-antifire ()
   (keyboard-down-p :x))     

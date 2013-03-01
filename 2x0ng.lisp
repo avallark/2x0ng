@@ -22,14 +22,14 @@
 
 (setf *window-title* "2x0ng")
 
-(setf *screen-height* (* *unit* *level-screen-height*))
-(setf *screen-width* (* *unit* *level-screen-width*))
-;; (setf *nominal-screen-width* 980)
+;; (setf *screen-width* 1280)
+;; (setf *screen-height* 720)
+;; (setf *nominal-screen-width* 1000)
 ;; (setf *nominal-screen-height* 600)
 
 (setf *scale-output-to-window* nil) 
 (setf *default-texture-filter* :nearest)
-(setf *use-antialiased-text* t)
+(setf *use-antialiased-text* nil)
 
 (setf *frame-rate* 30)
 (setf *dt* 33)
@@ -38,18 +38,20 @@
 
 (setf *font* "sans-mono-bold-11") 
 
-(defun begin-game ()   
-  (switch-to-buffer (2x0ng-level)))
+(defun begin-game (level)   
+  (when (= 0 level)
+    (setf *level-themes* (make-theme-sequence)))
+  (switch-to-buffer (2x0ng-level level)))
 
 (defun 2x0ng ()
   (with-session 
-      (load-project "2x0ng" '(:with-database t))
-    (begin-game)
+      (load-project "2x0ng" '(:with-database nil))
+    (begin-game 0)
     (start-session)))
 
 (define-buffer 2x0ng)
 
-(define-method reset 2x0ng ()
-  (begin-game))
+(define-method reset-game 2x0ng (&optional (level 0))
+  (begin-game level))
 
 ;;; 2x0ng.lisp ends here

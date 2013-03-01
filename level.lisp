@@ -1,11 +1,5 @@
 (in-package :2x0ng)
 
-(defparameter *level-themes* 
-  '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
-
-(defun level-theme (n)
-  (nth (mod n (length *level-themes*)) *level-themes*))
-
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))
@@ -131,18 +125,31 @@
 (defmacro requiring (color &body forms)
   `(let ((*required-color* ,color)) ,@forms))
 
+(defun random-hazard ()
+  (case *level*
+    (0 nil)
+    (1 (new 'monitor))
+    (2 (new 'tracer))
+    (3 (new 'tracer))
+    (otherwise (new (random-choose '(paddle tracer))))))
+
+(defun hazard ()
+  (singleton (or (random-hazard) (new 'wall))))
+
 (defun make-puzzle (colors)
   (cond 
     ;; with two colors, terminate the recursion
     ((= 2 (length colors))
      (destructuring-bind (A B) colors
-       (either-way
-	(bricks 4 B)
+       (vertically
+	(vertically
+	 (singleton (new 'hole))
+	 (bricks 4 B))
 	(bordered
-	 (vertically
-	  (horizontally 
+	 (horizontally
+	  (vertically
 	   (gated A (bricks 3 (or *required-color* B)))
-	   (horizontally 
+	   (vertically 
 	    (singleton (new 'hole))
 	    (gated B 
 		   (bricks 4 A))))
@@ -153,28 +160,44 @@
      (let ((key (random-choose colors)))
        (destructuring-bind (A B C &rest other-colors) (derange colors)
 	 (bordered
-	  (either-way 
-	   (horizontally (gated A (bricks 4 C))
-			 (singleton (new 'hole)))
-	   (vertically
-	    (either-way 
-	     (horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
-	     (either-way 
-	      (gated B 
-		     (horizontally 
-		      (singleton (new 'hole))
-		      (bricks 2 A)))
-	      (gated C
-		     (requiring key
-		       (make-puzzle (rest colors))))))
-	    (horizontally 
+	  (vertically 
+	   (horizontally
+	    (vertically 
+	     (horizontally (gated A (bricks 4 C))
+			   (singleton (new 'hole)))
 	     (horizontally
-	      (singleton (new 'hole))
-	      (bricks 5 B))
-	     (bricks 2 (or *required-color* B)))))))))))
+	      (vertically
+	       (horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
+	       (horizontally 
+		(gated B 
+		       (horizontally 
+			(singleton (new 'hole))
+			(bricks 2 A)))
+		(gated C
+		       (requiring key
+			 (make-puzzle (rest colors))))))
+	      (hazard)))
+	    (hazard))
+	   (vertically 
+	    (horizontally
+	     (singleton (new 'hole))
+	     (bricks 5 B))
+	    (bricks 2 (or *required-color* B))))))))))
+
+(defparameter *level-themes* 
+  '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
+
+(defun level-theme (n)
+  (first (nth (mod n (length *level-themes*)) *level-themes*)))
+
+(defun make-theme-sequence ()
+  (append
+   (derange *two-brick-themes*)
+   (derange *three-brick-themes*)
+   (derange *four-brick-themes*)))
 
 (defun 2x0ng-level (&optional (level 0))
-  (setf *level* (random 9))
+  (setf *level* level)
   (set-theme (level-theme *level*))
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
@@ -183,9 +206,8 @@
 		  (make-puzzle (derange (theme-colors))))))
     (with-buffer buffer
       (paste-from buffer puzzle)
-;;      (trim puzzle)
       (setf (%background-color (current-buffer)) (background-color))
-      (bind-event buffer '(:r :control) :reset)
+      (bind-event buffer '(:r :control) :reset-game)
       ;; playfield border
       (wall-around-region -1 2 
 			  (+ 40 (truncate (/ (%width puzzle) (units 1))))
@@ -195,10 +217,15 @@
       (drop-object (current-buffer) robot (units 5) (units 5))
       (set-cursor (current-buffer) robot)
       (follow-with-camera (current-buffer) robot)
+      ;; message
+      (setf (%window-scrolling-speed buffer) 5
+	    (%horizontal-scrolling-margin buffer) 2/5
+	    (%vertical-scrolling-margin buffer) 2/5)
+      (play-sample "go.wav")
+      (drop-object (current-buffer) 
+		   (new 'bubble (format nil "LEVEL ~S GO!" *level*))
+		   (units 8) (units 6))
       ;;
       (trim (current-buffer))
       (current-buffer))))
 
-	  ;; (%window-scrolling-speed buffer) 4.5
-	  ;; (%horizontal-scrolling-margin buffer) 2/5
-	  ;; (%vertical-scrolling-margin buffer) 2/5)

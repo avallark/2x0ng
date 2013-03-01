@@ -20,6 +20,8 @@
 (define-method draw trail ()
   (draw-box %x %y %width %height :color %color))
 
+(define-method damage trail (points) (destroy self))
+
 (define-method initialize trail ()
   (later 320 (destroy self)))
 
@@ -41,6 +43,7 @@
     (setf %energy 4)))
 
 (define-method update tracer ()
+  (percent-of-time 0.2 (setf %direction (random-direction)))
   (move-toward self %direction %speed)
   (lay-trail self))
 
@@ -49,6 +52,8 @@
     (restore-location self)
     (setf %energy 6)
     (setf %direction (random-direction))))
+
+(define-method damage tracer (points) nil)
 
 ;;; Electric death paddles!
 
@@ -73,6 +78,8 @@
   (when (brickp thing)
     (restore-location self)
     (setf %heading (- %heading pi))))
+
+(define-method damage paddle (thing) nil)
 
 ;;; Radioactive corruption glitches that creep after you
 
@@ -210,14 +217,13 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist 380)
+    (if (< dist (level-value 180 240 300 380 450 500 550 600 800))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self 2)
-	  (turn-right self 4))
+	  (forward self (level-value 1.2 1.5 1.5 2.2 2.2 2.5 3)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
-	       (move-toward self %direction 3)))))
+	       (move-toward self %direction (level-value 1 2 3 4))))))
 
 (defresource "grow.wav" :volume 10)
 (defresource "grow2.wav" :volume 10)
@@ -230,7 +236,7 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) 3)
+      (progn (move self (heading-to-cursor self) (level-value 1.3 1.6 2.0 2.2 2.5 2.8 3.5))
 	     (percent-of-time 25
 	       (percent-of-time 30 (play-sample (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
@@ -273,15 +279,17 @@
 
 (defresource "hole.wav" :volume 20)
 
+(defun hole-clock () (level-value 140 130 130 120 110 100 100 90 90))
+
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   480)
+	   (level-value 350 400 420 480 550 580))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
 	(drop self (new 'monitor))
-	(setf clock 100)))))
+	(setf clock (hole-clock))))))
   
 (define-method collide hole (thing)
   (when (brickp thing)
-    (setf %clock 100)))
+    (setf %clock (hole-clock))))
