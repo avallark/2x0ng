@@ -52,6 +52,23 @@
 
 (defparameter *sideline-width* 2) 
 
+;;; Music
+
+(defresource
+    (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 50))
+    (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 30))
+  (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 50))
+  (:name "phong" :type :music :file "phong.ogg" :properties (:volume 30))
+  (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 50))
+  (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 30))
+  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 50))
+  (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
+  (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
+
+(defparameter *soundtrack*
+  '("vedex" "remembering-xalcyon" "phong" "xioforms"
+    "xiomacs" "xmrio" "rappy" "invec" "ompula"))
+
 ;; Wrapping things about one another
 
 (defparameter *puzzle-border* (units 1.7))
@@ -127,7 +144,7 @@
 
 (defun random-hazard ()
   (case *level*
-    (0 (new 'monitor))
+    (0 (new 'wall))
     (1 (new 'paddle))
     (2 (new 'tracer))
     (otherwise (new (random-choose '(paddle tracer))))))
@@ -140,7 +157,7 @@
     ;; with two colors, terminate the recursion
     ((= 2 (length colors))
      (destructuring-bind (A B) colors
-       (vertically
+       (horizontally
 	(vertically
 	 (singleton (new 'hole))
 	 (horizontally (bricks 4 B) (hazard)))
@@ -223,9 +240,15 @@
 	    (%vertical-scrolling-margin buffer) 2/5)
       (play-sample "go.wav")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "LEVEL ~S GO!" *level*))
-		   (units 8) (units 6))
+		   (new 'bubble (format nil "2x0ng, level ~S --- use arrow keys and spacebar."
+					*level*))
+		   (units 8) (units 5))
+      (drop-object (current-buffer) 
+		   (new 'bubble (format nil "Press control-R to reset game at level 0."
+					*level*))
+		   (units 8) (units 6.3))
       ;;
       (trim (current-buffer))
+      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

@@ -4,12 +4,12 @@
 
 (define-method initialize bubble (text)
   (setf %text text)
-  (later 3.0 (destroy self)))
+  (later 10.0 (destroy self)))
 
 (define-method draw bubble ()
   (draw-string %text %x %y 
-	       :color (random-choose '("magenta" "cyan" "yellow" "red" "white"))
-	       :font "sans-mono-bold-18"))
+	       :color (random-choose '("cyan" "white"))
+	       :font "sans-mono-bold-16"))
 
 (defparameter *level* 0)
 
