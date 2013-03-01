@@ -20,6 +20,11 @@
 
 (in-package :2x0ng)
 
+(eval-when (:load-toplevel) 
+  (setf *current-directory*
+	(make-pathname
+	 :directory (pathname-directory #.#P"./"))))
+
 (setf *window-title* "2x0ng")
 
 (setf *screen-width* 920)
