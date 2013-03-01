@@ -348,6 +348,8 @@
 
 (defvar *ball* nil)
 
+(defvar *auto-return-distance* 640)
+
 (defparameter *ball-size* (truncate (units 1.2)))
 
 (defun ballp (thing)
@@ -419,7 +421,8 @@
   (when (plusp %kick-clock)
     (decf %kick-clock))
   (with-fields (seeking heading speed kicker) self
-    ;; move 
+    (when (> (distance-between self kicker) *auto-return-distance*)
+      (setf %seeking t))
     (if (plusp speed)
 	(if %target 
 	    (move self (heading-to-thing self %target) (+ speed 2))
