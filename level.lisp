@@ -97,13 +97,13 @@
 	   (make-exit (rest colors))))))
 
 (defun horizontally (a b)
-;  (percent-of-time 50 (rotatef a b))
+  (percent-of-time 50 (rotatef a b))
   (arrange-beside 
    (with-border 10 a)
    (with-border 10 b)))
 
 (defun vertically (a b)
-;  (percent-of-time 50 (rotatef a b))
+  (percent-of-time 50 (rotatef a b))
   (arrange-below 
    (with-border 10 a)
    (with-border 10 b)))
@@ -145,14 +145,14 @@
     ;; with three or more colors, puzzify and recurse
     ((< 2 (length colors))
      (let ((key (random-choose colors)))
-       (destructuring-bind (A B C &rest other-colors) colors
+       (destructuring-bind (A B C &rest other-colors) (derange colors)
 	 (bordered
-	  (vertically 
+	  (either-way 
 	   (horizontally (gated A (bricks 4 C))
 			 (singleton (new 'hole)))
 	   (vertically
-	    (horizontally 
-	     (bricks 4 B)
+	    (either-way 
+	     (horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
 	     (either-way 
 	      (gated B 
 		     (horizontally 
@@ -160,12 +160,12 @@
 		      (bricks 2 A)))
 	      (gated C
 		     (requiring key
-		       (make-puzzle (derange (rest colors)))))))
+		       (make-puzzle (rest colors))))))
 	    (horizontally 
 	     (horizontally
 	      (singleton (new 'hole))
 	      (bricks 5 B))
-	     (bricks 2 B))))))))))
+	     (bricks 2 (or *required-color* B)))))))))))
 
 (defun 2x0ng-level 
     (&key
@@ -175,7 +175,8 @@
   (setf *ball* nil)
   (let ((buffer (new '2x0ng))
 	(robot (new 'player-1-robot "gold")))
-    (set-theme :zerk)
+    ;;    (set-theme :zerk)
+    (set-random-theme)
     (setf (%background-color buffer) (background-color))
     (prog1 buffer
       (with-buffer buffer

@@ -237,9 +237,9 @@
 
 ;; Level dimensions, in units
 
-(defparameter *level-height* 160)
+(defparameter *level-height* 200)
 
-(defparameter *level-width* 160)
+(defparameter *level-width* 200)
 
 (defparameter *level-screen-height* 35)
 
@@ -348,7 +348,7 @@
 
 (defvar *ball* nil)
 
-(defparameter *ball-size* (truncate (units 1.0)))
+(defparameter *ball-size* (truncate (units 1.2)))
 
 (defun ballp (thing)
   (and (blockyp thing)
