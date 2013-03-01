@@ -52,6 +52,6 @@
 (define-buffer 2x0ng)
 
 (define-method reset-game 2x0ng (&optional (level 0))
-  (begin-game level))
+  (begin-game 4))
 
 ;;; 2x0ng.lisp ends here

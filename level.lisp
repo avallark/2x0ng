@@ -160,7 +160,7 @@
      (let ((key (random-choose colors)))
        (destructuring-bind (A B C &rest other-colors) (derange colors)
 	 (bordered
-	  (vertically 
+	  (horizontally 
 	   (horizontally
 	    (vertically 
 	     (horizontally (gated A (bricks 4 C))
