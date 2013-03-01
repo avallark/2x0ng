@@ -127,10 +127,9 @@
 
 (defun random-hazard ()
   (case *level*
-    (0 nil)
-    (1 (new 'monitor))
+    (0 (new 'monitor))
+    (1 (new 'paddle))
     (2 (new 'tracer))
-    (3 (new 'tracer))
     (otherwise (new (random-choose '(paddle tracer))))))
 
 (defun hazard ()
@@ -144,7 +143,7 @@
        (vertically
 	(vertically
 	 (singleton (new 'hole))
-	 (bricks 4 B))
+	 (horizontally (bricks 4 B) (hazard)))
 	(bordered
 	 (horizontally
 	  (vertically
@@ -152,7 +151,8 @@
 	   (vertically 
 	    (singleton (new 'hole))
 	    (gated B 
-		   (bricks 4 A))))
+		   (vertically (hazard)
+			       (bricks 4 A)))))
 	  (let ((*puzzle-border* 12))
 	    (make-exit (derange (theme-colors)))))))))
     ;; with three or more colors, puzzify and recurse

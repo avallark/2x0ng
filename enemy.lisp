@@ -217,7 +217,7 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist (level-value 180 240 300 380 450 500 550 600 800))
+    (if (< dist (level-value 240 275 300 350 400 450 500 550 600))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
 	  (forward self (level-value 1.2 1.5 1.5 2.2 2.2 2.5 3)))

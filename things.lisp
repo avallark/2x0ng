@@ -212,7 +212,7 @@
   '((:snafu "dark magenta" "gray20" 
      "cyan" "red" "yellow")
     (:atlantis "midnight blue" "purple" 
-     "green" "hot pink" "blue")
+     "green" "hot pink" "cyan")
     (:krez "black" "maroon2" 
      "green" "yellow" "orange")))
 
