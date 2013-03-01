@@ -65,8 +65,13 @@
 ;;; Sparkle explosion cloud fx
 
 (define-block spark 
-  :width 3 :height 3 :color nil
-  :collision-type nil)
+  :width 3 :height 3 :color nil)
+;  :collision-type nil)
+
+(define-method collide spark (thing)
+  (when (enemyp thing) 
+    (damage thing 1)
+    (destroy self)))
 
 (define-method initialize spark (color)
   (setf %color color)
@@ -184,20 +189,31 @@
 
 ;; Color themes
 
-(defparameter *themes* 
+(defparameter *two-brick-themes* 
+  '((:snefru "saddle brown" "green" 
+     "orange" "cyan")
+    (:xalcrys "black" "cornflower blue" 
+     "yellow" "red")
+    (:zupro "gray30" "red" 
+     "blue" "cornflower blue")))
+
+(defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
      "cyan" "red" "yellow")
     (:atlantis "blue" "yellow" 
      "white" "green" "yellow")
-    (:zerk "black" "gray40" 
-     "maroon2" "green" "yellow" "orange")
     (:krez "black" "maroon2" 
-     "green" "yellow" "orange")
-    (:tandy "DarkSlateBlue" "gray80" 
-     "blue violet" "orchid" "cyan")
-    (:command "black" "DarkGoldenrod" 
-     "red" "magenta" "cyan")))
+     "green" "yellow" "orange")))
 
+(defparameter *four-brick-themes*
+  '((:zerk "black" "gray40" 
+     "maroon2" "green" "yellow" "orange")
+    (:tandy "DarkSlateBlue" "gray80" 
+     "blue violet" "orchid" "cyan" "deep pink")
+    (:command "red" "cyan" 
+     "black" "magenta" "hot pink" "orange")))
+
+(defparameter *themes* (append *two-brick-themes* *three-brick-themes* *four-brick-themes*))
 
     ;; (:vcs "black" "red" "goldenrod" "khaki" "cornsilk")
     ;; (:tandy "MidnightBlue" "gray80" "yellow" "orchid" "purple")

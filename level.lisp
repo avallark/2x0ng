@@ -1,5 +1,11 @@
 (in-package :2x0ng)
 
+(defparameter *level-themes* 
+  '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
+
+(defun level-theme (n)
+  (nth (mod n (length *level-themes*)) *level-themes*))
+
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))
@@ -114,7 +120,7 @@
 
 (defun bordered (x) (with-border *puzzle-border* x))
 
-(defun singleton (x) (with-new-buffer (drop-object (current-buffer) x)))
+(defun singleton (x) (bordered (with-new-buffer (drop-object (current-buffer) x))))
 
 (defun gated (color buf) (wrap (new 'gate color) buf))
 
@@ -135,7 +141,7 @@
 	(bordered
 	 (vertically
 	  (horizontally 
-	   (gated A (bricks 3 *required-color*))
+	   (gated A (bricks 3 (or *required-color* B)))
 	   (horizontally 
 	    (singleton (new 'hole))
 	    (gated B 
@@ -167,34 +173,31 @@
 	      (bricks 5 B))
 	     (bricks 2 (or *required-color* B)))))))))))
 
-(defun 2x0ng-level 
-    (&key
-       (difficulty 0)
-       (width *level-width*)
-       (height *level-height*))
+(defun 2x0ng-level (&optional (level 0))
+  (setf *level* (random 9))
+  (set-theme (level-theme *level*))
   (setf *ball* nil)
-  (let ((buffer (new '2x0ng))
-	(robot (new 'player-1-robot "gold")))
-    ;;    (set-theme :zerk)
-    (set-random-theme)
-    (setf (%background-color buffer) (background-color))
-    (prog1 buffer
-      (with-buffer buffer
-	(bind-event buffer '(:r :control) :reset)
-	;; playfield border
-	(setf *color-phase* (random 4))
-	(wall-around-region -1 2 width (- height 1))
-	;; player 1
-	(drop-object buffer robot (units 5) (units 5))
-	(set-cursor buffer robot)
-	(follow-with-camera (current-buffer) robot)
-	;; 
-	(paste-from (current-buffer) 
-		    (make-puzzle (derange (theme-colors)))
-		    (units 10) (units 12))
-	
-	;;
-	(trim buffer)))))
+  (let ((robot (new 'player-1-robot "gold"))
+	(buffer (new '2x0ng))
+	(puzzle (with-border (units 20)
+		  (make-puzzle (derange (theme-colors))))))
+    (with-buffer buffer
+      (paste-from buffer puzzle)
+;;      (trim puzzle)
+      (setf (%background-color (current-buffer)) (background-color))
+      (bind-event buffer '(:r :control) :reset)
+      ;; playfield border
+      (wall-around-region -1 2 
+			  (+ 40 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 40 (1- (truncate (/ (%width puzzle)
+						 (units 1))))))
+      ;; player 1
+      (drop-object (current-buffer) robot (units 5) (units 5))
+      (set-cursor (current-buffer) robot)
+      (follow-with-camera (current-buffer) robot)
+      ;;
+      (trim (current-buffer))
+      (current-buffer))))
 
 	  ;; (%window-scrolling-speed buffer) 4.5
 	  ;; (%horizontal-scrolling-margin buffer) 2/5

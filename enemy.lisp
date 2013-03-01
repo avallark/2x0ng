@@ -248,16 +248,18 @@
   (decf %hp)
   (play-sound self (random-choose *whack-sounds*))
   (when (zerop %hp)
-    (make-sparks (- %x 16) (- %y 16) "yellow")
-    (play-sound self "xplod")
-    (destroy self)))
+    (multiple-value-bind (x y) (center-point self)
+      (let ((size (truncate (/ %width (units 1)))))
+	(when (> size 2)
+	  (dotimes (n size)
+	    (make-sparks x y "magenta"))))
+      (make-sparks x y "yellow")
+      (play-sound self "xplod")
+      (destroy self))))
 
-(define-method fire monitor (direction)
+(define-method fire monitor (heading)
   (multiple-value-bind (x y) (center-point self)
-    (dotimes (n 3)
-      (drop self (new 'bullet 
-		      (+ (heading-to-cursor self) -0.8 (random 1.6))
-		      :timer 100)))))
+    (drop self (new 'bullet heading :timer 40))))
 
 ;;; Black holes 
 

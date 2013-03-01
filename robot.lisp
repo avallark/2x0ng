@@ -146,7 +146,7 @@
   (and *ball* (colliding-with self *ball*)))
 
 (define-method collide robot (thing)
-  (when (enemyp thing)
+  (when (or (enemyp thing) (holep thing))
     (die self))
   ;; (when (gatep thing)
   ;;   (unless (same-color thing self)
