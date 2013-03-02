@@ -16,9 +16,7 @@
 
   ;; we want to catch the beginning of firing, even if the input
   ;; polling in `update' misses it. (see below)
-  (default-events :initform '
-		  (((:space) (strong-kick))
-		   ((:joystick :x :button
+  (default-events :initform '(((:space) (strong-kick)))))
 
 (defparameter *robot-colors* '("gold" "olive drab" "RoyalBlue3" "dark orchid"))
 

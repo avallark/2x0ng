@@ -1,5 +1,10 @@
-** TODO fix ball getting stuck when it can't get to targeted enemy
-** TODO fix disappearing ball
+
+** TODO randomly tweaking positions after #'horizontally or #'vertically
+
+** DONE fix ball getting stuck when it can't get to targeted enemy
+   CLOSED: [2013-03-02 Sat 05:35]
+** DONE fix disappearing ball
+   CLOSED: [2013-03-02 Sat 05:35]
 
 ** TODO growing corruption areas that eat color
 ** TODO francophone voicesynthesis
@@ -57,7 +62,6 @@ main needs to be wrapped in (sb-int:with-float-traps-masked
 *** TODO what i really want to do is run through with M-x checkdoc
 
 * TODO Fare's idea: release basic engine with a pack of sample remixable games
-
 
 * TODO [#A] GET COMMAND PROMPT WORKING PROPERLY and USEFULLY
 ** TODO integrate notifications into the mix.
