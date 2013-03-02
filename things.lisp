@@ -201,12 +201,12 @@
 ;; Color themes
 
 (defparameter *two-brick-themes* 
-  '((:snefru "saddle brown" "green" 
-     "pale green" "cyan")
+  '((:snefru "DarkSlateBlue" "green" 
+     "magenta" "cyan")
     (:xalcrys "black" "cornflower blue" 
      "yellow" "red")
     (:zupro "gray30" "red" 
-     "cyan" "cornflower blue")))
+     "green yellow" "cornflower blue")))
 
 (defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
@@ -392,6 +392,7 @@
   :height *ball-size* :width *ball-size*
   :color "white"
   :speed 0
+  :bounces 20
   :hits 6
   :kick-clock 0 :tags '(:ball :colored))
 
@@ -414,16 +415,22 @@
 (defresource "bounce.wav" :volume 10)
 
 (define-method bounce ball ()
-  (play-sound self (random-choose *bounce-sounds*))
-  (restore-location self)
-  (setf %heading 
-	(if %seeking
-	    (opposite-heading %heading)
-	    (opposite-heading %heading)))
-  (move self %heading 2.2)
-  (setf %kick-clock 0)
-  (setf %seeking (if %seeking nil t)))
-
+  (decf %bounces)
+  (if (zerop %bounces)
+      (progn (make-sparks %x %y "white")
+	     (setf *ball* nil)
+	     (destroy self))
+      (progn
+	(play-sound self (random-choose *bounce-sounds*))
+	(restore-location self)
+	(setf %heading 
+	      (if %seeking
+		  (opposite-heading %heading)
+		  (opposite-heading %heading)))
+	(move self %heading 2.2)
+	(setf %kick-clock 0)
+	(setf %seeking (if %seeking nil t)))))
+      
 (define-method find-enemy ball (thing2 &optional (range 180))
   (let ((enemies
 	  (loop for thing being the hash-values of (%objects (current-buffer))
@@ -464,18 +471,18 @@
   (cond 
     ((gatep thing)
      (setf %target nil)
-     (bounce self)
      (when (same-color self thing)
-       (destroy thing)))
+       (destroy thing))
+     (bounce self))
     ((and (enemyp thing) (not (trailp thing)))
-     (bounce self)
      (decf %hits)
      (when (has-method :damage thing)
        (damage thing 1))
      (setf %target
 	   (when (plusp %hits)
 	     (find-enemy self thing)))
-     (when %target (setf %seeking nil)))
+     (when %target (setf %seeking nil))
+     (bounce self))
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((robotp thing)

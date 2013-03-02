@@ -46,7 +46,7 @@
 
 (defun super-fat-row (x y length color)
   (let ((y0 y))
-    (dotimes (n 2)
+    (dotimes (n 3)
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
@@ -288,6 +288,6 @@
 		   (units 8) (units 6.3))
       ;;
       (trim (current-buffer))
-      (play-music (nth *level* *soundtrack*) :loop t)
+;      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

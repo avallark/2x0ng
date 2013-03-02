@@ -16,7 +16,9 @@
 
   ;; we want to catch the beginning of firing, even if the input
   ;; polling in `update' misses it. (see below)
-  (default-events :initform '(((:space) (strong-kick)))))
+  (default-events :initform '
+		  (((:space) (strong-kick))
+		   ((:joystick :x :button
 
 (defparameter *robot-colors* '("gold" "olive drab" "RoyalBlue3" "dark orchid"))
 
@@ -230,28 +232,31 @@
   (body-color :initform "white"))
 
 (defun holding-fire ()
-  (keyboard-down-p :space))     
-
-(defun holding-antifire ()
-  (keyboard-down-p :x))     
+  (or (holding-space)
+      (some #'joystick-button-pressed-p
+	    '(:a :b :x :y))))
 
 (define-method strong-kick-p player-1-robot ()
   (holding-fire))
 
 (defun holding-down-arrow ()
-  (or (keyboard-down-p :kp2)
+  (or (joystick-button-pressed-p :down)
+      (keyboard-down-p :kp2)
       (keyboard-down-p :down)))
 
 (defun holding-up-arrow ()
-  (or (keyboard-down-p :kp8)
+  (or (joystick-button-pressed-p :up)
+      (keyboard-down-p :kp8)
       (keyboard-down-p :up)))
 
 (defun holding-left-arrow ()
-  (or (keyboard-down-p :kp4)
+  (or (joystick-button-pressed-p :left)
+      (keyboard-down-p :kp4)
       (keyboard-down-p :left)))
 
 (defun holding-right-arrow ()
-  (or (keyboard-down-p :kp6)
+  (or (joystick-button-pressed-p :right)
+      (keyboard-down-p :kp6)
       (keyboard-down-p :right)))
 
 (define-method movement-direction player-1-robot ()
