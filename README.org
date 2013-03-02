@@ -1,18 +1,26 @@
-** TODO different exit combinations
+** TODO fix ball getting stuck when it can't get to targeted enemy
+** TODO fix disappearing ball
+
+** TODO growing corruption areas that eat color
+** TODO francophone voicesynthesis
+
+
+** TODO for level gen, paste named buffers <---- "vaults"
+
+
+** TODO enemy dudes who fire a warlord ball at you
 
 ** TODO tabs along bottom for recent buffer names
 ** TODO align-to-grid
 ** TODO tilesets and other things to go dockably in the sidebar
 
 
-> the goal in each level will be to get to the exit. which will be inside
-      one of the nested puzzle blocks  [02:20]
-i don't want to require that all enemies be defeated anymore. instead i
-      want to generate more enemies until you either die, or solve the puzzle
-      and exit. 
-** TODO bricks and anti-bricks, which block when colored properly, but not otherwise
-** TODO black hole slowly spews enemies
-** TODO brick guns fire colored bricks which smash (they paint any hit objects)
+** DONE bricks and anti-bricks, which block when colored properly, but not otherwise
+   CLOSED: [2013-03-01 Fri 23:19]
+** DONE black hole slowly spews enemies
+   CLOSED: [2013-03-01 Fri 23:19]
+** DONE brick guns fire colored bricks which smash (they paint any hit objects)
+   CLOSED: [2013-03-01 Fri 23:19]
 
 ** TODO better navigation of the entire scene
 ** TODO select-all
