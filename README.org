@@ -34,7 +34,6 @@ main needs to be wrapped in (sb-int:with-float-traps-masked
 ** TODO no chevrons, but still black holes
 ** TODO black hole floats on its own, can be kicked into the enemies
 
-** TODO for level gen, paste named buffers <---- "vaults"
 ** TODO level 1: destroy all enemies
 ** TODO level 2: destroy all enemies, some are locked
 
