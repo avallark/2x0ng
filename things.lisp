@@ -381,7 +381,7 @@
 
 (defparameter *ball-normal-speed* (units 0.88))
 
-(defparameter *ball-kick-speed* (units 1.12))
+(defparameter *ball-kick-speed* (units 1.16))
 
 (defparameter *ball-deceleration* (units 0.0))
 
@@ -442,6 +442,7 @@
       (first enemies))))
 
 (define-method update ball ()
+  (when (not (blockyp %target)) (setf %target nil))
   (when (plusp %kick-clock)
     (decf %kick-clock))
   (with-fields (seeking heading speed kicker) self

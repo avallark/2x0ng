@@ -27,12 +27,12 @@
 
 (setf *window-title* "2x0ng")
 
-;; (setf *screen-width* 920)
-;; (setf *screen-height* 600)
-;; (setf *nominal-screen-width* 1000)
-;; (setf *nominal-screen-height* 750)
+(setf *screen-width* 1080)
+(setf *screen-height* 620)
+(setf *nominal-screen-width* 1080)
+(setf *nominal-screen-height* 620)
 
-;; (setf *scale-output-to-window* t) 
+(setf *scale-output-to-window* t) 
 (setf *default-texture-filter* :nearest)
 (setf *use-antialiased-text* nil)
 
@@ -44,7 +44,7 @@
 (setf *font* "sans-mono-bold-11") 
 
 (defun begin-game (level)   
-  (when (= 0 level)
+  (when (= 1 level)
     (setf *level-themes* (make-theme-sequence)))
   (switch-to-buffer (2x0ng-level level)))
 
@@ -52,12 +52,12 @@
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
-    (begin-game 0)
+    (begin-game 1)
     (start-session)))
 
 (define-buffer 2x0ng)
 
-(define-method reset-game 2x0ng (&optional (level 0))
+(define-method reset-game 2x0ng (&optional (level 1))
   (setf *soundtrack* (derange *soundtrack*))
   (begin-game level))
 

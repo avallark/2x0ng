@@ -55,14 +55,19 @@
 ;;; Music
 
 (defresource
-    (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 50))
+    (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 30))
     (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 30))
-  (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 50))
+  (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
   (:name "phong" :type :music :file "phong.ogg" :properties (:volume 30))
-  (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 50))
+  (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 30))
   (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 30))
-  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 50))
-  (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
+  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 30))
+  (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 30))
+  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 30))
+  (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 30))
+  (:name "entel" :type :music :file "entel.ogg" :properties (:volume 30))
+  (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
+  (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 30))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
@@ -71,7 +76,7 @@
 
 ;; Wrapping things about one another
 
-(defparameter *puzzle-border* (units 1.7))
+(defparameter *puzzle-border* (units 1.9))
 
 (defun wrap (thing buffer)
   (multiple-value-bind (top left right bottom)
@@ -146,32 +151,66 @@
   (case *level*
     (0 (new 'wall))
     (1 (new 'paddle))
-    (2 (new 'tracer))
+    (2 (new 'paddle))
     (otherwise (new (random-choose '(paddle tracer))))))
 
 (defun hazard ()
   (singleton (or (random-hazard) (new 'wall))))
 
+;; (defun make-two-puzzle-hard (colors)
+;;   (destructuring-bind (A B) colors
+;;     (vertically
+;;      (horizontally
+;;       (singleton (new 'hole))
+;;       (vertically (bricks 6 B) (hazard)))
+;;      (bordered
+;;       (vertically
+;; 	(horizontally 
+;; 	 (singleton (new 'hole))
+;; 	 (gated B 
+;; 		(horizontally (either-way (hazard) (hazard))
+;; 			      (bricks 7 A))))
+;; 	(gated A 
+;; 	       (horizontally
+;; 		(bricks 6 (or *required-color* B))
+;; 		(let ((*puzzle-border* 12))
+;; 		  (make-exit (derange (theme-colors)))))))))))
+
+(defun make-two-puzzle-easy (colors)
+  (destructuring-bind (A B) colors
+    (horizontally
+     (vertically
+      (singleton (new 'hole))
+      (horizontally (bricks 5 B) (hazard)))
+     (bordered
+      (horizontally
+       (vertically
+	(gated A (bricks 4 (or *required-color* B)))
+	(vertically 
+	 (singleton (new 'hole))
+	 (gated B 
+		(vertically (hazard)
+			    (bricks 5 A)))))
+       (let ((*puzzle-border* 12))
+	 (make-exit (derange (theme-colors)))))))))
+
+(defun make-two-puzzle (colors) 
+  (case *level*
+    (0 (make-two-puzzle-easy colors))
+    (1 (make-two-puzzle-easy colors))
+    (2 (make-two-puzzle-hard colors))
+    (3 (make-two-puzzle-easy colors))
+    (4 (make-two-puzzle-hard colors))
+    (5 (make-two-puzzle-hard colors))
+    (6 (make-two-puzzle-easy colors))
+    (7 (make-two-puzzle-hard colors))
+    (8 (make-two-puzzle-hard colors))))
+
 (defun make-puzzle (colors)
   (cond 
     ;; with two colors, terminate the recursion
     ((= 2 (length colors))
-     (destructuring-bind (A B) colors
-       (horizontally
-	(vertically
-	 (singleton (new 'hole))
-	 (horizontally (bricks 4 B) (hazard)))
-	(bordered
-	 (horizontally
-	  (vertically
-	   (gated A (bricks 3 (or *required-color* B)))
-	   (vertically 
-	    (singleton (new 'hole))
-	    (gated B 
-		   (vertically (hazard)
-			       (bricks 4 A)))))
-	  (let ((*puzzle-border* 12))
-	    (make-exit (derange (theme-colors)))))))))
+     (make-two-puzzle-easy colors))
     ;; with three or more colors, puzzify and recurse
     ((< 2 (length colors))
      (let ((key (random-choose colors)))
@@ -249,6 +288,6 @@
 		   (units 8) (units 6.3))
       ;;
       (trim (current-buffer))
-;      (play-music (nth *level* *soundtrack*) :loop t)
+      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 
