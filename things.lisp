@@ -371,7 +371,7 @@
 
 (defvar *ball* nil)
 
-(defvar *auto-return-distance* 640)
+(defvar *auto-return-distance* 520)
 
 (defparameter *ball-size* (truncate (units 1.2)))
 
@@ -381,7 +381,7 @@
 
 (defparameter *ball-normal-speed* (units 0.88))
 
-(defparameter *ball-kick-speed* (units 1.0))
+(defparameter *ball-kick-speed* (units 1.12))
 
 (defparameter *ball-deceleration* (units 0.0))
 
@@ -449,7 +449,7 @@
       (setf %seeking t))
     (if (plusp speed)
 	(if %target 
-	    (move self (heading-to-thing self %target) (+ speed 2))
+	    (move self (heading-to-thing self %target) speed)
 	    (if seeking
 		(move self (heading-to-thing self kicker) speed)
 		(move self heading speed)))
@@ -462,6 +462,7 @@
 (define-method collide ball (thing)
   (cond 
     ((gatep thing)
+     (setf %target nil)
      (bounce self)
      (when (same-color self thing)
        (destroy thing)))

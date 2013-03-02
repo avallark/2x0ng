@@ -27,12 +27,12 @@
 
 (setf *window-title* "2x0ng")
 
-(setf *screen-width* 920)
-(setf *screen-height* 600)
-(setf *nominal-screen-width* 1000)
-(setf *nominal-screen-height* 750)
+;; (setf *screen-width* 920)
+;; (setf *screen-height* 600)
+;; (setf *nominal-screen-width* 1000)
+;; (setf *nominal-screen-height* 750)
 
-(setf *scale-output-to-window* t) 
+;; (setf *scale-output-to-window* t) 
 (setf *default-texture-filter* :nearest)
 (setf *use-antialiased-text* nil)
 
