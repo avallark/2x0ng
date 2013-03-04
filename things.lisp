@@ -2,14 +2,15 @@
 
 (define-block bubble text) 
 
-(define-method initialize bubble (text)
+(define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
   (setf %text text)
+  (setf %font font)
   (later 10.0 (destroy self)))
 
 (define-method draw bubble ()
   (draw-string %text %x %y 
 	       :color (random-choose '("cyan" "white"))
-	       :font "sans-mono-bold-16"))
+	       :font %font))
 
 (defparameter *level* 0)
 
@@ -30,8 +31,13 @@
        (has-tag thing :enemy)))
 
 (defresource 
-    (:name "xplod"
+    (:name "xplod.wav"
      :type :sample :file "xplod.wav" 
+     :properties (:volume 30)))
+
+(defresource 
+    (:name "robovoxx.wav"
+     :type :sample :file "robovoxx.wav" 
      :properties (:volume 30)))
 
 (defresource 
@@ -41,11 +47,12 @@
 
 (defparameter *bounce-sounds* '("boop1.wav" "boop2.wav" "boop3.wav"))
 
-(defparameter *doorbell-sounds*
-  (defresource 
-      (:name "doorbell.wav" :type :sample :file "doorbell.wav" :properties (:volume 20))
-      (:name "doorbell2.wav" :type :sample :file "doorbell2.wav" :properties (:volume 20))
-    (:name "doorbell3.wav" :type :sample :file "doorbell3.wav" :properties (:volume 20))))
+(defresource 
+    (:name "doorbell1.wav" :type :sample :file "doorbell1.wav" :properties (:volume 23))
+    (:name "doorbell2.wav" :type :sample :file "doorbell2.wav" :properties (:volume 23))
+  (:name "doorbell3.wav" :type :sample :file "doorbell3.wav" :properties (:volume 23)))
+
+(defparameter *doorbell-sounds* '("doorbell1.wav" "doorbell2.wav" "doorbell3.wav"))
 
 (defparameter *slam-sounds*
   (defresource 
@@ -61,9 +68,9 @@
 (defparameter *whack-sounds* '("whack1.wav" "whack2.wav" "whack3.wav"))
 
 (defresource 
-    (:name "color1.wav" :type :sample :file "color1.wav" :properties (:volume 12))
-    (:name "color2.wav" :type :sample :file "color2.wav" :properties (:volume 12))
-  (:name "color3.wav" :type :sample :file "color3.wav" :properties (:volume 12)))
+    (:name "color1.wav" :type :sample :file "color1.wav" :properties (:volume 32))
+    (:name "color2.wav" :type :sample :file "color2.wav" :properties (:volume 32))
+  (:name "color3.wav" :type :sample :file "color3.wav" :properties (:volume 32)))
 
 (defparameter *color-sounds* '("color1.wav" "color2.wav" "color3.wav"))
 
@@ -129,13 +136,17 @@
   :growth-rate nil
   :tags '(:bullet))
 
+(defresource "bullet.png")
+(defresource "bullet2.png")
+(defresource "bullet3.png")
+
 (define-method draw bullet ()
-  (draw-circle %x %y %radius 
-	       :color (random-choose 
+  (draw-textured-rectangle 
+   %x %y %z 8 8 (find-texture (random-choose '("bullet.png" "bullet2.png" "bullet3.png")))
+	       :vertex-color (random-choose 
 		       (if (player-bullet-p self)
 			   '("green" "yellow")
-			   '("cyan" "white" "deep sky blue")))
-	       :type :solid))
+			   '("cyan" "white" "deep sky blue")))))
 	      
 (define-method update bullet ()
   (decf %timer)
@@ -180,6 +191,10 @@
       (and (enemy-bullet-p self)
 	   (player-bullet-p thing)))
      nil)
+    ;; kill player
+    ((and (enemy-bullet-p self)
+	  (robotp thing))
+     (die thing))
     ;; by default, just damage whatever it is
     (t (when (has-method :damage thing)
 	 (damage thing 1)
@@ -315,8 +330,6 @@
 
 (define-method paint brick (color)
   (when (coloredp self)
-    (when (not (string= %color color))
-      (play-sample (random-choose *color-sounds*)))
     (setf %color color)))
 
 (defun same-color (a b)
@@ -365,6 +378,10 @@
 	(play-sample "gate-closing-sound.wav")
 	(destroy self))))
 
+(define-method destroy gate ()
+  (play-sample (random-choose *doorbell-sounds*))
+  (destroy%super self))
+
 (define-method damage gate (points))
 
 ;;; The football
@@ -397,6 +414,9 @@
   :kick-clock 0 :tags '(:ball :colored))
 
 (define-method paint ball (color)
+  ;; beep when color changes
+  (when (not (string= %color color))
+    (play-sample (random-choose *color-sounds*)))
   (setf %color color))
 
 (define-method initialize ball (&optional color)
@@ -485,13 +505,16 @@
      (bounce self))
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
-    ((robotp thing)
+    ((and (robotp thing) (humanp thing))
+     ;; possibly catch ball
      (unless (recently-kicked-by self thing)
-       ;; possibly catch ball
        (paint thing (color-of *ball*))
        (destroy self)
        (setf *ball* nil)))
-     ;; bounce off bricks
+    ((and (robotp thing) (not (humanp thing)))
+     ;; enemy catch ball
+     (setf (field-value :carrying thing) t))
+    ;; bounce off bricks
     ((brickp thing)
      (setf %target nil)
      (when (coloredp thing)

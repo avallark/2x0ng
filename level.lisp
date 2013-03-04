@@ -61,9 +61,9 @@
   (:name "phong" :type :music :file "phong.ogg" :properties (:volume 30))
   (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 30))
   (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 30))
-  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 30))
+  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 30))
-  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 30))
+  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 250))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 30))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 30))
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
@@ -152,10 +152,17 @@
     (0 (new 'wall))
     (1 (new 'paddle))
     (2 (new 'paddle))
-    (otherwise (new (random-choose '(paddle tracer))))))
+    (3 (new (random-choose '(paddle tracer))))
+    (4 (new (random-choose '(tracer paddle))))
+    (otherwise 
+     (or (percent-of-time 20 (new 'robot "purple"))
+	 (new (random-choose '(tracer paddle)))))))
 
 (defun hazard ()
   (singleton (or (random-hazard) (new 'wall))))
+
+(defun boss-hazard ()
+  (singleton (if (> *level* 4) (new 'ghost) (random-hazard))))
 
 ;; (defun make-two-puzzle-hard (colors)
 ;;   (destructuring-bind (A B) colors
@@ -192,7 +199,8 @@
 		(vertically (hazard)
 			    (bricks 5 A)))))
        (let ((*puzzle-border* 12))
-	 (make-exit (derange (theme-colors)))))))))
+	 (either-way (boss-hazard)
+		     (make-exit (derange (theme-colors))))))))))
 
 (defun make-two-puzzle (colors) 
   (case *level*
@@ -258,7 +266,7 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 20)
+	(puzzle (with-border (units 10)
 		  (make-puzzle (derange (theme-colors))))))
     (with-buffer buffer
       (paste-from buffer puzzle)
@@ -266,11 +274,15 @@
       (bind-event buffer '(:r :control) :reset-game)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 40 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 40 (1- (truncate (/ (%width puzzle)
+			  (+ 20 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 20 (1- (truncate (/ (%width puzzle)
 						 (units 1))))))
       ;; player 1
       (drop-object (current-buffer) robot (units 5) (units 5))
+
+      ;; TEST OBJECT 
+;      (drop-object (current-buffer) (new 'robot "purple") (units 15) (units 7))
+
       (set-cursor (current-buffer) robot)
       (follow-with-camera (current-buffer) robot)
       ;; message
@@ -279,15 +291,15 @@
 	    (%vertical-scrolling-margin buffer) 2/5)
       (play-sample "go.wav")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "2x0ng, level ~S --- use arrow keys and spacebar."
-					*level*))
+		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-20")
 		   (units 8) (units 5))
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "Press control-R to reset game at level 0."
+		   (new 'bubble (format nil "arrow keys to move. space to fire. control-r to reset"
 					*level*))
-		   (units 8) (units 6.3))
+		   (units 8) (units 6.5))
       ;;
       (trim (current-buffer))
+;      (play-music "bootypax" :loop t)
 ;      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

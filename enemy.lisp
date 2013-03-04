@@ -113,7 +113,7 @@
   '("blurp.wav" "blop.wav"))
 
 (defresource (:name "munch1.wav" :type :sample :file "munch1.wav" :properties (:volume 60)))
-(defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 60)))
+(defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 40)))
 
 (define-block glitch
   (tags :initform '(:enemy :glitch))
@@ -212,7 +212,7 @@
 
 (defresource (:name "magenta-alert.wav"
 	      :type :sample :file "magenta-alert.wav" 
-	      :properties (:volume 10)))
+	      :properties (:volume 15)))
 
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
@@ -260,12 +260,102 @@
 	  (dotimes (n size)
 	    (make-sparks x y "magenta"))))
       (make-sparks x y "yellow")
-      (play-sound self "xplod")
+      (play-sound self "xplod.wav")
       (destroy self))))
 
 (define-method fire monitor (heading)
   (multiple-value-bind (x y) (center-point self)
     (drop self (new 'bullet heading :timer 40))))
+
+;;; Ghost 
+
+(defresource 
+    (:name "ghost.png" :type :image :file "ghost.png")
+    (:name "ghost2.png" :type :image :file "ghost2.png")
+    (:name "ghost3.png" :type :image :file "ghost3.png")
+    (:name "ghost4.png" :type :image :file "ghost4.png")
+    (:name "ghost5.png" :type :image :file "ghost5.png")
+    (:name "ghost6.png" :type :image :file "ghost6.png"))
+
+(defparameter *ghost-images* 
+ '("ghost.png" "ghost2.png" "ghost3.png" "ghost4.png" "ghost5.png" "ghost6.png"))
+
+(defresource "death.wav" :volume 50)
+(defresource "death-alien.wav" :volume 50)
+
+(defun ghostp (thing)
+  (and (blockyp thing)
+       (has-tag thing :ghost)))
+
+(define-block ghost 
+  :image "ghost2.png" 
+  :hp 5
+  :tags '(:ghost :enemy)
+  :timer 0
+  :fleeing nil)
+
+(define-method initialize ghost ()
+  (initialize%super self)
+  (resize self 100 100))
+
+(define-method damage ghost (points)
+  (decf %hp)
+  (play-sound self (random-choose '("death.wav" "death-alien.wav")))
+  (when (zerop %hp)
+    (play-sound self "bigboom.wav")
+    (make-sparks %x %y)
+    (destroy self)))
+
+(define-method fire ghost (heading)
+  (multiple-value-bind (x y) (center-point self)
+    (drop self (new 'bullet heading :timer 40))))
+
+(defun ghost-image (hp)
+  (case hp
+    (5 (or (percent-of-time 2 "ghost.png") "ghost3.png"))
+    (4 (or (percent-of-time 4 "ghost.png") "ghost2.png"))
+    (3 (or (percent-of-time 30 "ghost2.png") "ghost4.png"))
+    (2 (random-choose (list "ghost3.png" (or (percent-of-time 30 "ghost2.png") "ghost4.png"))))
+    (1 (random-choose *ghost-images*))
+    (0 "ghost.png")))
+
+(define-method update ghost ()
+  (change-image self (ghost-image %hp))
+  (with-fields (timer) self
+    (setf timer (max 0 (1- timer))) 
+    (let ((dir (heading-to-cursor self))
+	  (dist (distance-to-cursor self)))
+      (cond 
+	;; shoot then set flag to run away
+	((and (< dist 280) 
+	      (zerop timer))
+	 ;; don't always fire
+	 (percent-of-time 65 
+	   (play-sample "robovoxx.wav")
+	   (fire self dir))
+	 (aim self (- dir 0.62))
+	 (setf timer 90))
+	;; begin approach after staying still
+	((and (< dist 570) (zerop timer))
+	 (aim self dir)
+	 (forward self 2))
+	;; run away fast
+	((and (< dist 420) (plusp timer))
+	 (aim self (- %heading 0.03))
+	 (percent-of-time (level-value 0 1.0 1.3) 
+	   (play-sample "magenta-alert.wav")
+	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
+	 (forward self 3))
+	;; otherwise do nothing
+	))))
+
+(define-method collide ghost (thing)
+  (cond 
+    ((or (brickp thing) (enemyp thing))
+     (restore-location self)
+     (setf %timer 40))
+    ((robotp thing)
+     (damage thing 1))))
 
 ;;; Black holes 
 

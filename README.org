@@ -1,3 +1,18 @@
+** TODO glitchy purplegreen ghost, big boss (hazard)
+** TODO he spawns bullets and/or babyghosts
+
+** TODO display color name
+** TODO growing corruption areas that eat color
+
+
+** TODO enemies that merge to form larger ships like in space fury 
+
+** TODO francophone voicesynthesis taunts you when you die
+
+** TODO mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
+
+** TODO brief town scenes with friendlies 
+** TODO fake retro 2600 glitch lines on left side aligned with sprites 
 
 ** TODO randomly tweaking positions after #'horizontally or #'vertically
 
@@ -6,14 +21,12 @@
 ** DONE fix disappearing ball
    CLOSED: [2013-03-02 Sat 05:35]
 
-** TODO growing corruption areas that eat color
-** TODO francophone voicesynthesis
 
 
 ** TODO for level gen, paste named buffers <---- "vaults"
 
 
-** TODO enemy dudes who fire a warlord ball at you
+** TODO enemy dudes who fire a missile at you
 
 ** TODO tabs along bottom for recent buffer names
 ** TODO align-to-grid

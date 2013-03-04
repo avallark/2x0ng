@@ -6,6 +6,7 @@
   (alive :initform t)
   (body-color :initform "white")
   (color :initform "white")
+  (carrying :initform nil)
   (tags :initform '(:robot :colored))
   (direction :initform :up)
   (kick-direction :initform :up)
@@ -23,6 +24,8 @@
 (define-method initialize robot (&optional color)
   (initialize%super self)
   (when color (setf %body-color color)))
+
+(define-method humanp robot () nil)
 
 (defvar *ball-carrier* nil)
 
@@ -98,14 +101,7 @@
 	      (or (robot-image %direction %walk-clock) "robot-up.png")
 	      "skull.png")))
     (draw-textured-rectangle %x %y %z %width %height (find-texture image) 
-			     :vertex-color %body-color)
-    ;; possibly draw held ball 
-    (when (and %alive (null *ball*))
-      (multiple-value-bind (x y) (serve-location self)
-	(let ((width *ball-size*)
-	      (height *ball-size*))
-	  (draw-box x y width height :color "white")
-	  (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color %color))))))
+			     :vertex-color %body-color)))
 	  
 (define-method serve robot ()
   (multiple-value-bind (x y) (serve-location self)
@@ -129,32 +125,30 @@
 
 (define-method make-footstep-sounds robot ()
   (let ((sound (footstep-sound self)))
-    (when sound (play-sound self sound))))
+    (when sound 
+      (when (< (distance-to-cursor self) 400)
+	(play-sound self sound)))))
 
-(defresource "kick.wav" :volume 20)
-(defresource "serve.wav" :volume 20)
+(defresource "kick.wav" :volume 23)
+(defresource "serve.wav" :volume 23)
 
 (defparameter *kick-sound* "kick.wav")
 
 ;;; Default AI methods. 
 
 (define-method movement-direction robot ()
-  (or (percent-of-time 5 (setf %direction (random-choose *directions*)))
-      %direction))
+  (if (< (distance-to-cursor self) 500)
+      (if *ball*
+	  (direction-to-thing self *ball*)
+	  (opposite-direction (direction-to-cursor self)))
+      (or (percent-of-time 5 (setf %direction (random-choose *directions*)))
+	  %direction)))
 
 (define-method can-reach-ball robot ()
   (and *ball* (colliding-with self *ball*)))
 
 (define-method collide robot (thing)
-  (when (exitp thing)
-    (reset-game (current-buffer) (1+ *level*)))
-  (when (or (enemyp thing) (holep thing))
-    (die self))
-  ;; (when (gatep thing)
-  ;;   (unless (same-color thing self)
-  ;;     (die self)))
-  (when (brickp thing)
-;    (paint self (color-of thing))
+  (when (or (brickp thing) (enemyp thing) (holep thing))
     (restore-location self)))
 
 (defresource "skull.png")
@@ -168,7 +162,7 @@
     (change-image self "skull.png")
     (setf %alive nil)))
 
-(define-method strong-kick-p robot () t)
+(define-method strong-kick-p robot () nil)
 
 (define-method kick robot (&optional direction strong)
   (when %alive
@@ -190,6 +184,10 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
+  (when (null *ball*)
+    (setf %carrying nil))
+  (when (and %carrying *ball*)
+    (move-to *ball* %x %y))
   (when %alive
     (resize self (* 2 *unit*) (* 2 *unit*))
     (with-fields (step-clock kick-clock) self
@@ -234,8 +232,28 @@
       (some #'joystick-button-pressed-p
 	    '(:a :b :x :y))))
 
+(define-method collide player-1-robot (thing)
+  (when (exitp thing)
+    (reset-game (current-buffer) (1+ *level*)))
+  (when (or (enemyp thing) (holep thing))
+    (die self))
+  (when (brickp thing)
+    (restore-location self)))
+
+(define-method draw player-1-robot ()
+  (robot%draw self)
+  ;; possibly draw held ball 
+  (when (and %alive (null *ball*))
+    (multiple-value-bind (x y) (serve-location self)
+      (let ((width *ball-size*)
+	    (height *ball-size*))
+	(draw-box x y width height :color "white")
+	(draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color %color)))))
+
 (define-method strong-kick-p player-1-robot ()
   (holding-fire))
+
+(define-method humanp player-1-robot () t)
 
 (defun holding-down-arrow ()
   (or (joystick-button-pressed-p :down)
