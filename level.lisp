@@ -224,7 +224,7 @@
      (let ((key (random-choose colors)))
        (destructuring-bind (A B C &rest other-colors) (derange colors)
 	 (bordered
-	  (horizontally 
+	  (vertically 
 	   (horizontally
 	    (vertically 
 	     (horizontally (gated A (bricks 4 C))
@@ -266,7 +266,7 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 10)
+	(puzzle (with-border (units 6)
 		  (make-puzzle (derange (theme-colors))))))
     (with-buffer buffer
       (paste-from buffer puzzle)
@@ -274,8 +274,8 @@
       (bind-event buffer '(:r :control) :reset-game)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 20 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 20 (1- (truncate (/ (%width puzzle)
+			  (+ 12 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 12 (1- (truncate (/ (%width puzzle)
 						 (units 1))))))
       ;; player 1
       (drop-object (current-buffer) robot (units 5) (units 5))

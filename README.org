@@ -1,32 +1,28 @@
-** TODO glitchy purplegreen ghost, big boss (hazard)
-** TODO he spawns bullets and/or babyghosts
-
-** TODO display color name
-** TODO growing corruption areas that eat color
-
-
-** TODO enemies that merge to form larger ships like in space fury 
-
-** TODO francophone voicesynthesis taunts you when you die
-
-** TODO mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
-
-** TODO brief town scenes with friendlies 
-** TODO fake retro 2600 glitch lines on left side aligned with sprites 
-
-** TODO randomly tweaking positions after #'horizontally or #'vertically
-
+** DONE glitchy purplegreen ghost, big boss (hazard)
+   CLOSED: [2013-03-04 Mon 10:46]
+** DONE he spawns bullets and/or babyghosts
+   CLOSED: [2013-03-04 Mon 10:46]
+** DONE enemy guy who steals ball
+   CLOSED: [2013-03-04 Mon 17:46]
 ** DONE fix ball getting stuck when it can't get to targeted enemy
    CLOSED: [2013-03-02 Sat 05:35]
 ** DONE fix disappearing ball
    CLOSED: [2013-03-02 Sat 05:35]
 
-
-
+** TODO tighten up the puzzle design
+** TODO display how-to-restart message when you die
+** TODO always display current color name 
+** TODO randomly tweaking positions after #'horizontally or #'vertically
+** TODO growing corruption areas that eat color
+** TODO enemies that merge to form larger ships like in space fury 
+** TODO francophone voicesynthesis taunts you when you die
+** TODO mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
+** TODO brief town scenes with friendlies 
+** TODO fake retro 2600 glitch lines on left side aligned with sprites 
+** TODO make sure old buffers/objects are destroyed after buffer compositions
++
 ** TODO for level gen, paste named buffers <---- "vaults"
 
-
-** TODO enemy dudes who fire a missile at you
 
 ** TODO tabs along bottom for recent buffer names
 ** TODO align-to-grid

@@ -162,6 +162,8 @@
     (change-image self "skull.png")
     (setf %alive nil)))
 
+(define-method damage robot (points) (die self))
+
 (define-method strong-kick-p robot () nil)
 
 (define-method kick robot (&optional direction strong)
