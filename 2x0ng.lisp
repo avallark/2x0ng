@@ -25,34 +25,33 @@
 	(make-pathname
 	 :directory (pathname-directory #.#P"./"))))
 
-(setf *window-title* "2x0ng")
-
-(setf *screen-width* 1080)
-(setf *screen-height* 720)
-(setf *nominal-screen-width* 1080)
-(setf *nominal-screen-height* 720)
-
-(setf *scale-output-to-window* t) 
-(setf *default-texture-filter* :nearest)
-(setf *use-antialiased-text* nil)
-
-(setf *frame-rate* 30)
-(setf *dt* 33)
-
-(disable-key-repeat) 
-
-(setf *font* "sans-mono-bold-11") 
-
 (defun begin-game (level)   
   (when (= 1 level)
     (setf *level-themes* (make-theme-sequence)))
   (switch-to-buffer (2x0ng-level level)))
 
-(defun 2x0ng ()
+(defun 2x0ng (&optional (level 1))
+  (setf *window-title* "2x0ng")
+  
+  (setf *screen-width* 1080)
+  (setf *screen-height* 720)
+  (setf *nominal-screen-width* 1080)
+  (setf *nominal-screen-height* 720)
+  
+  (setf *scale-output-to-window* t) 
+  (setf *default-texture-filter* :nearest)
+  (setf *use-antialiased-text* nil)
+  
+  (setf *frame-rate* 30)
+  (setf *dt* 33)
+  
+  (disable-key-repeat) 
+  
+  (setf *font* "sans-mono-bold-11") 
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
-    (begin-game 1)
+    (begin-game level)
     (start-session)))
 
 (define-buffer 2x0ng)

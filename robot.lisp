@@ -137,12 +137,16 @@
 ;;; Default AI methods. 
 
 (define-method movement-direction robot ()
-  (if (< (distance-to-cursor self) 500)
-      (if *ball*
-	  (direction-to-thing self *ball*)
-	  (opposite-direction (direction-to-cursor self)))
-      (or (percent-of-time 5 (setf %direction (random-choose *directions*)))
-	  %direction)))
+  (if %carrying
+      (opposite-direction (direction-to-cursor self))
+      (if (< (distance-to-cursor self) 500)
+	  (if *ball*
+	      (direction-to-thing self *ball*)
+	      (if (> (distance-to-cursor self) 250)
+		  (opposite-direction (direction-to-cursor self))
+		  (direction-to-cursor self)))
+	  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
+	      %direction))))
 
 (define-method can-reach-ball robot ()
   (and *ball* (colliding-with self *ball*)))
@@ -157,7 +161,12 @@
 
 (define-method die robot ()
   (when %alive
-    (play-sample "analog-death.wav")
+    (when (humanp self) 
+      (play-sample "analog-death.wav")
+      (drop-object (current-buffer) 
+		   (new 'bubble (format nil "You died. Control-R to reset.") "sans-mono-bold-14")
+		   (+ %x (units 5))
+		   %y))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
     (setf %alive nil)))
@@ -186,8 +195,10 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
-  (when (null *ball*)
-    (setf %carrying nil))
+  (when (and %carrying (null *ball*))
+    (setf %carrying nil)
+    (play-sound self "xplod.wav")
+    (later 2 (destroy self)))
   (when (and %carrying *ball*)
     (move-to *ball* %x %y))
   (when %alive

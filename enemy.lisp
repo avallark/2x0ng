@@ -70,7 +70,7 @@
 (define-method update paddle ()
   (let ((speed
 	  (if (< (distance-to-cursor self)
-		 (level-value 200 250 300 350 400 450 500 550 600))
+		 (level-value 200 250 300 350 400))
 	      (level-value 8 10 12 14 16) 
 	      (level-value 3 4 5 6 7 9 11 13))))
     (forward self speed)))
@@ -122,6 +122,7 @@
   (overlay-color :initform nil))
 
 (define-method damage glitch (points)
+  (make-sparks %x %y "yellow green")
   (play-sound self (random-choose *corruption-sounds*))
   (destroy self))
 

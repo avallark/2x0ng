@@ -291,12 +291,11 @@
 	    (%vertical-scrolling-margin buffer) 2/5)
       (play-sample "go.wav")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-20")
+		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
 		   (units 8) (units 5))
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "arrow keys to move. space to fire. control-r to reset"
-					*level*))
-		   (units 8) (units 6.5))
+		   (new 'bubble "arrow keys to move. space to fire. control-r to reset" "sans-mono-bold-14")
+		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
 ;      (play-music "bootypax" :loop t)
