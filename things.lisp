@@ -1,5 +1,7 @@
 (in-package :2x0ng)
 
+(defresource "alarm.wav" :volume 100)
+
 (define-block bubble text) 
 
 (define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
@@ -219,9 +221,9 @@
   '((:snefru "DarkSlateBlue" "green" 
      "magenta" "cyan")
     (:xalcrys "black" "cornflower blue" 
-     "yellow" "red")
-    (:zupro "gray30" "red" 
-     "green yellow" "cornflower blue")))
+     "goldenrod" "red")
+    (:zupro "gray20" "olive drab" 
+     "deep sky blue" "orange red")))
 
 (defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
@@ -513,6 +515,11 @@
        (setf *ball* nil)))
     ((and (robotp thing) (not (humanp thing)))
      ;; enemy catch ball
+     (when (not (field-value :carrying thing))
+       (play-sample "alarm.wav")
+       (drop-object (current-buffer) 
+		    (new 'bubble (format nil "I GOT THE BALL!!" *level*) "sans-mono-bold-22")
+		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; bounce off bricks
     ((brickp thing)

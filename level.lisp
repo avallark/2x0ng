@@ -118,6 +118,14 @@
      (wrap (new 'gate (first colors))
 	   (make-exit (rest colors))))))
 
+(defun with-padding (amount buffer)
+  (with-fields (height width) buffer
+    (with-new-buffer 
+      (paste-from (current-buffer) buffer amount 0) 
+      (resize (current-buffer)
+	      height
+	      (+ width amount)))))
+
 (defun horizontally (a b)
   (percent-of-time 50 (rotatef a b))
   (arrange-beside 
@@ -129,6 +137,17 @@
   (arrange-below 
    (with-border 10 a)
    (with-border 10 b)))
+
+(defun padded (buffer)
+  (with-padding 
+    (units (level-value 5 7 10 20 20 30 40 45 45))
+    buffer))
+
+(defun padded-vertically (a b)
+  (percent-of-time 50 (rotatef a b))
+  (arrange-below 
+   (padded (with-border 10 a))
+   (padded (with-border 10 b))))
 
 (defun either-way (a b)
   (funcall (or (percent-of-time 50 #'horizontally) #'vertically)
@@ -155,7 +174,7 @@
     (3 (new (random-choose '(paddle tracer))))
     (4 (new (random-choose '(tracer paddle))))
     (otherwise 
-     (or (percent-of-time 20 (new 'robot "purple"))
+     (or (percent-of-time 20 (new 'robot "hot pink"))
 	 (new (random-choose '(tracer paddle)))))))
 
 (defun hazard ()
@@ -224,29 +243,31 @@
      (let ((key (random-choose colors)))
        (destructuring-bind (A B C &rest other-colors) (derange colors)
 	 (bordered
-	  (vertically 
-	   (horizontally
-	    (vertically 
-	     (horizontally (gated A (bricks 4 C))
-			   (singleton (new 'hole)))
-	     (horizontally
-	      (vertically
-	       (horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
-	       (horizontally 
-		(gated B 
-		       (horizontally 
-			(singleton (new 'hole))
-			(bricks 2 A)))
-		(gated C
-		       (requiring key
-			 (make-puzzle (rest colors))))))
-	      (hazard)))
-	    (hazard))
-	   (vertically 
+	  (arrange-beside
+	   (padded-vertically 
 	    (horizontally
-	     (singleton (new 'hole))
-	     (bricks 5 B))
-	    (bricks 2 (or *required-color* B))))))))))
+	     (vertically 
+	      (horizontally (gated A (bricks 4 C))
+			    (singleton (new 'hole)))
+	      (horizontally
+	       (vertically
+		(horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
+		(horizontally 
+		 (gated B 
+			(horizontally 
+			 (singleton (new 'hole))
+			 (bricks 2 A)))
+		 (gated C
+			(requiring key
+			  (make-puzzle (rest colors))))))
+	       (hazard)))
+	     (hazard))
+	    (padded-vertically 
+	     (horizontally
+	      (singleton (new 'hole))
+	      (bricks 5 B))
+	     (bricks 2 (or *required-color* B))))
+	   (bordered (either-way (bricks 4 (random-color)) (hazard))))))))))
 
 (defparameter *level-themes* 
   '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
@@ -266,7 +287,7 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 6)
+	(puzzle (with-border (units 8)
 		  (make-puzzle (derange (theme-colors))))))
     (with-buffer buffer
       (paste-from buffer puzzle)
@@ -274,8 +295,8 @@
       (bind-event buffer '(:r :control) :reset-game)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 12 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 12 (1- (truncate (/ (%width puzzle)
+			  (+ 16 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 16 (1- (truncate (/ (%width puzzle)
 						 (units 1))))))
       ;; player 1
       (drop-object (current-buffer) robot (units 5) (units 5))
@@ -294,7 +315,7 @@
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
 		   (units 8) (units 5))
       (drop-object (current-buffer) 
-		   (new 'bubble "arrow keys to move. space to fire. control-r to reset" "sans-mono-bold-14")
+		   (new 'bubble "Arrow keys to move. space to fire. control-r to reset. F12 to pause." "sans-mono-bold-14")
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))

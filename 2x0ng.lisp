@@ -26,8 +26,7 @@
 	 :directory (pathname-directory #.#P"./"))))
 
 (defun begin-game (level)   
-  (when (= 1 level)
-    (setf *level-themes* (make-theme-sequence)))
+  (setf *level-themes* (make-theme-sequence))
   (switch-to-buffer (2x0ng-level level)))
 
 (defun 2x0ng (&optional (level 1))
