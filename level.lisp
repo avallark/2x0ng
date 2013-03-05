@@ -71,7 +71,7 @@
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
-  '("vedex" "remembering-xalcyon" "phong" "xioforms"
+  '("vedex" "remembering-xalcyon" "phong" "basswarp" "entel" "maxmacro" "bootypax"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 ;; Wrapping things about one another
@@ -320,6 +320,6 @@
       ;;
       (trim (current-buffer))
 ;      (play-music "bootypax" :loop t)
-;      (play-music (nth *level* *soundtrack*) :loop t)
+      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 
