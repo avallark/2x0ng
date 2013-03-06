@@ -9,6 +9,7 @@
 ** DONE fix disappearing ball
    CLOSED: [2013-03-02 Sat 05:35]
 
+** TODO fix scroll jitter of player guy i need to match it to his movement speed, because right now both are moving in slightly different sized jumps
 ** TODO tighten up the puzzle design
 ** TODO display how-to-restart message when you die
 ** TODO always display current color name 
@@ -22,6 +23,8 @@
 ** TODO make sure old buffers/objects are destroyed after buffer compositions
 +
 ** TODO for level gen, paste named buffers <---- "vaults"
+
+** TODO story and ending!
 
 
 ** TODO tabs along bottom for recent buffer names
