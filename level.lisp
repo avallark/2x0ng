@@ -68,6 +68,7 @@
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
   (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
+  (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
@@ -307,7 +308,7 @@
       (set-cursor (current-buffer) robot)
       (follow-with-camera (current-buffer) robot)
       ;; message
-      (setf (%window-scrolling-speed buffer) 5
+      (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 2/5)
       (play-sample "go.wav")
