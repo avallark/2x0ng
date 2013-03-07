@@ -1,30 +1,8 @@
 
-** TODO title screen and copyright
-** TODO fix scroll jitter of player guy i need to match it to his movement speed, because right now both are moving in slightly different sized jumps
-** TODO tighten up the puzzle design
-** TODO display how-to-restart message when you die
-** TODO always display current color name 
-** TODO growing corruption/mismunch areas that eat color
-** TODO enemies that merge to form larger ships like in space fury 
-** TODO francophone voicesynthesis taunts you when you die
-** TODO mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
-** TODO brief town scenes with friendlies 
-** TODO fake retro 2600 glitch lines on left side aligned with sprites 
-** TODO make sure old buffers/objects are destroyed after buffer compositions
-** TODO for level gen, paste named buffers <---- "vaults"
-** TODO story and ending!
-
 ** TODO tabs along bottom for recent buffer names
 ** TODO align-to-grid
 ** TODO tilesets and other things to go dockably in the sidebar
 
-
-** DONE bricks and anti-bricks, which block when colored properly, but not otherwise
-   CLOSED: [2013-03-01 Fri 23:19]
-** DONE black hole slowly spews enemies
-   CLOSED: [2013-03-01 Fri 23:19]
-** DONE brick guns fire colored bricks which smash (they paint any hit objects)
-   CLOSED: [2013-03-01 Fri 23:19]
 
 ** TODO better navigation of the entire scene
 ** TODO select-all
@@ -263,6 +241,56 @@ main needs to be wrapped in (sb-int:with-float-traps-masked
    CLOSED: [2013-03-05 Tue 23:44]
    :PROPERTIES:
    :ARCHIVE_TIME: 2013-03-05 Tue 23:44
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE title screen and copyright
+   CLOSED: [2013-03-06 Wed 21:36]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE fix scroll jitter of player guy i need to match it to his movement speed, because right now both are moving in slightly different sized jumps
+   CLOSED: [2013-03-06 Wed 21:36]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE display how-to-restart message when you die
+   CLOSED: [2013-03-06 Wed 21:36]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+
+
+** DONE bricks and anti-bricks, which block when colored properly, but not otherwise
+   CLOSED: [2013-03-01 Fri 23:19]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE black hole slowly spews enemies
+   CLOSED: [2013-03-01 Fri 23:19]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
+   :ARCHIVE_FILE: ~/2x0ng/README.org
+   :ARCHIVE_CATEGORY: README
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE brick guns fire colored bricks which smash (they paint any hit objects)
+   CLOSED: [2013-03-01 Fri 23:19]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-06 Wed 21:38
    :ARCHIVE_FILE: ~/2x0ng/README.org
    :ARCHIVE_CATEGORY: README
    :ARCHIVE_TODO: DONE

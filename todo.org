@@ -1,0 +1,12 @@
+** TODO [#C] always display current color name 
+** TODO [#A] additional puzzle elements for the fringe areas
+*** TODO for level gen, paste named buffers <---- "vaults"
+*** TODO brief town scenes with friendlies 
+** TODO [#A] tighten up the puzzle design
+** TODO [#B] growing corruption/mismunch areas that eat color
+** TODO [#B] enemies that merge to form larger ships like in space fury 
+** TODO [#C] francophone voicesynthesis taunts you when you die
+** TODO [#B] mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
+** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
+** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
+** TODO [#B] story and ending!

@@ -69,10 +69,13 @@
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
   (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
   (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
+  (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
+  (:name "saga" :type :music :file "saga.ogg" :properties (:volume 30))
+  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 20))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
-  '("vedex" "remembering-xalcyon" "phong" "basswarp" "entel" "maxmacro" "bootypax"
+  '("vedex" "remembering-xalcyon" "phong" "saga" "basswarp" "entel" "maxmacro" "bootypax" "musicbox" "reprise"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 ;; Wrapping things about one another
