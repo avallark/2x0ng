@@ -129,9 +129,9 @@
 (define-method collide glitch (thing)
   (when (brickp thing)
     (percent-of-time 90 (restore-location self)))
-  (when (ballp thing)
-    (play-sample "blurp.wav")
-    (destroy self))
+  ;; (when (ballp thing)
+  ;;   (play-sound self "blurp.wav")
+  ;;   (destroy self))
   (when (robotp thing)
     (die thing)))
 
