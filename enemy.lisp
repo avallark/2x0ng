@@ -343,8 +343,8 @@
 	;; run away fast
 	((and (< dist 420) (plusp timer))
 	 (aim self (- %heading 0.03))
-	 (percent-of-time (level-value 0 1.0 1.3) 
-	   (play-sample "magenta-alert.wav")
+	 (percent-of-time (level-value 1 1 1 1 2 3 4 5)
+	   (play-sound self "magenta-alert.wav")
 	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
 	 (forward self 3))
 	;; otherwise do nothing
