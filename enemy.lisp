@@ -370,11 +370,11 @@
 
 (defresource "hole.wav" :volume 20)
 
-(defun hole-clock () (level-value 140 130 130 120 110 100 100 90 90))
+(defun hole-clock () (level-value 140 130 130 120 110 100 100 95 90))
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   (level-value 350 400 420 440 460 480 500 520))
+	   (level-value 350 400 420 440 460 460 480 480))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
