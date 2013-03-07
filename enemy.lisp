@@ -145,10 +145,7 @@
   (move self (heading-to-cursor self) %speed)
   (when (< (distance-to-cursor self) 460)
     (percent-of-time 2 
-;      (play-sound self "munch1.wav")
-      (let ((size (* %height 1.3)))
-	(resize self size size))
-      (incf %speed 0.3))))
+      (setf %speed (min 2 (+ %speed 0.3))))))
 
 (define-method update glitch ()
   (percent-of-time 3 (change-image self (random-choose *corruption-images*)))
