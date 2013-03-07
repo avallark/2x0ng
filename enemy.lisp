@@ -278,6 +278,7 @@
 (defparameter *ghost-images* 
  '("ghost.png" "ghost2.png" "ghost3.png" "ghost4.png" "ghost5.png" "ghost6.png"))
 
+(defresource "datanoise.wav" :volume 30)
 (defresource "death.wav" :volume 50)
 (defresource "death-alien.wav" :volume 50)
 
@@ -319,17 +320,19 @@
 
 (define-method update ghost ()
   (change-image self (ghost-image %hp))
+  ;; chatter sound
+  (percent-of-time (- 40 (* 5 %hp)) (play-sound self "datanoise.wav"))
   (with-fields (timer) self
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
 	  (dist (distance-to-cursor self)))
       (cond 
 	;; shoot then set flag to run away
-	((and (< dist 280) 
+	((and (< dist (level-value 250 250 250 250 300 350 350)) 
 	      (zerop timer))
 	 ;; don't always fire
-	 (percent-of-time 65 
-	   (play-sample "robovoxx.wav")
+	 (percent-of-time (level-value 65 65 65 65 65 70 80 85)  
+	   (play-sound self "robovoxx.wav")
 	   (fire self dir))
 	 (aim self (- dir 0.62))
 	 (setf timer 90))
