@@ -1,6 +1,6 @@
 (in-package :2x0ng)
 
-(defresource "alarm.wav" :volume 100)
+(defresource "alarm.wav" :volume 30)
 
 (define-block bubble text) 
 
@@ -435,12 +435,15 @@
   (setf *ball* self))
 
 (defresource "bounce.wav" :volume 10)
+(defresource "newball.wav" :volume 20)
+(defresource "return.wav" :volume 20)
 
 (define-method bounce ball ()
   (decf %bounces)
   (if (zerop %bounces)
       (progn (make-sparks %x %y "white")
 	     (setf *ball* nil)
+	     (play-sample "newball.wav")
 	     (destroy self))
       (progn
 	(play-sound self (random-choose *bounce-sounds*))
@@ -476,6 +479,7 @@
     (decf %kick-clock))
   (with-fields (seeking heading speed kicker) self
     (when (> (distance-between self kicker) *auto-return-distance*)
+      (when (not %seeking) (play-sample "return.wav"))
       (setf %seeking t))
     (if (plusp speed)
 	(if %target 
@@ -491,11 +495,13 @@
     
 (define-method collide ball (thing)
   (cond 
+    ;; unlock gates
     ((gatep thing)
      (setf %target nil)
      (when (same-color self thing)
        (destroy thing))
      (bounce self))
+    ;; target and smash enemies
     ((and (enemyp thing) (not (trailp thing)))
      (decf %hits)
      (when (has-method :damage thing)
@@ -508,17 +514,17 @@
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.
     ((and (robotp thing) (humanp thing))
-     ;; possibly catch ball
+     ;; player catches ball
      (unless (recently-kicked-by self thing)
        (paint thing (color-of *ball*))
        (destroy self)
        (setf *ball* nil)))
+    ;; enemy AI catches ball 
     ((and (robotp thing) (not (humanp thing)))
-     ;; enemy catch ball
      (when (not (field-value :carrying thing))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
-		    (new 'bubble (format nil "I GOT THE BALL!!" *level*) "sans-mono-bold-22")
+		    (new 'bubble (format nil "I GOT THE BALL!!" *level*) "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; bounce off bricks
