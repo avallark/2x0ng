@@ -25,11 +25,21 @@
 	(make-pathname
 	 :directory (pathname-directory #.#P"./"))))
 
+(defresource "title.png")
+
+(define-buffer title 
+    (background-image :initform "title.png"))
+
+(define-method start-playing title ()
+  (sleep 0.2) ;; allow time for human to remove finger from spacebar
+  (begin-game *level*))
+
 (defun begin-game (level)   
   (setf *level-themes* (make-theme-sequence))
   (switch-to-buffer (2x0ng-level level)))
 
 (defun 2x0ng (&optional (level 1))
+  (setf *level* level)
   (setf *window-title* "2x0ng")
   
   (setf *screen-width* 1080)
@@ -50,7 +60,9 @@
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
-    (begin-game level)
+    (switch-to-buffer (new 'title))
+    (play-music "rekall" :loop t)
+    (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
 (define-buffer 2x0ng)
