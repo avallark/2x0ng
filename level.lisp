@@ -63,7 +63,7 @@
   (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 30))
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
-  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 50))
+  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 40))
   (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 30))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 80))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
@@ -72,7 +72,7 @@
   (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
   (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
   (:name "saga" :type :music :file "saga.ogg" :properties (:volume 30))
-  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 20))
+  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 12))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
@@ -328,6 +328,6 @@
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
-;      (play-music (nth *level* *soundtrack*) :loop t)
+      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 
