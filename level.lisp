@@ -77,8 +77,8 @@
 
 (defparameter *soundtrack*
   '("vedex" "remembering-xalcyon" "phong" 
-    "saga" "basswarp" "entel" "vrov" 
-    "maxmacro" "bootypax" "musicbox" "reprise"
+    "saga" "basswarp" "entel"  
+    "maxmacro" "bootypax" "musicbox" 
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 ;; Wrapping things about one another
