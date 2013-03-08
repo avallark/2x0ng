@@ -239,10 +239,10 @@
 (defparameter *two-brick-themes* 
   '((:snefru "DarkSlateBlue" "green" 
      "magenta" "cyan")
-    (:xalcrys "black" "cornflower blue" 
-     "goldenrod" "red")
-    (:zupro "gray20" "olive drab" 
-     "deep sky blue" "orange red")))
+    (:xalcrys "black" "blue violet" 
+     "deep pink" "orange")
+    (:zupro "olive drab" "hot pink" 
+     "cyan" "yellow")))
 
 (defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
