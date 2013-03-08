@@ -21,8 +21,8 @@
 
 (defresource "alarm.wav" :volume 30)
 
-(defresource "sense.wav" :volume 20)
-(defresource "sense2.wav" :volume 20)
+(defresource "sense.wav" :volume 10)
+(defresource "sense2.wav" :volume 10)
 
 (define-block bubble text) 
 

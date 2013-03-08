@@ -276,7 +276,10 @@
 	      (singleton (new 'hole))
 	      (bricks 6 B))
 	     (bricks 6 (or *required-color* B))))
-	   (bordered (either-way (bricks 6 (random-color)) (hazard))))))))))
+	   (bordered 
+	    (either-way 
+	     (bricks 6 (random-color))
+	     (either-way (bricks 6 (random-color)) (hazard)))))))))))
 
 (defparameter *level-themes* 
   '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
