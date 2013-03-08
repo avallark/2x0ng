@@ -1,6 +1,28 @@
 (in-package :2x0ng)
 
+(defresource "corruption-horz2.png")
+(defresource "corruption-horz.png")
+(defresource "drone.png")
+(defresource "osc-sine-off.png")
+(defresource "pulsator-pulse.png")
+(defresource "pulsator-on.png")
+(defresource "resonator-on.png")
+(defresource "resonator.png")
+(defresource "pulsator.png")
+(defresource "shocker.png")
+(defresource "tank-disabled.png")
+(defresource "tank-northeast.png")
+(defresource "tank-north.png")
+(defresource "trigger.png")
+(defresource "turret-right-on.png")
+(defresource "turret-right.png")
+
+(defresource "woom.wav" :volume 20)
+
 (defresource "alarm.wav" :volume 30)
+
+(defresource "sense.wav" :volume 20)
+(defresource "sense2.wav" :volume 20)
 
 (define-block bubble text) 
 
@@ -518,7 +540,9 @@
        (setf *ball* nil)))
     ;; enemy AI catches ball 
     ((and (robotp thing) (not (humanp thing)))
-     (when (not (field-value :carrying thing))
+     (when
+	 (and (field-value :alive thing)
+	      (not (field-value :carrying thing)))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
 		    (new 'bubble (format nil "I GOT THE BALL!!" *level*) "sans-mono-bold-20")

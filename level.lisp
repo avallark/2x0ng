@@ -180,8 +180,10 @@
     (2 (new 'paddle))
     (3 (new (random-choose '(paddle tracer))))
     (4 (new (random-choose '(tracer paddle))))
+    (7 (new (random-choose '(paddle base base))))
+    (8 (new (random-choose '(paddle base base ghost))))
     (otherwise 
-     (or (percent-of-time 20 (new 'robot "hot pink"))
+     (or (percent-of-time 12 (new 'robot "hot pink"))
 	 (new (random-choose '(tracer paddle)))))))
 
 (defun hazard ()
@@ -326,7 +328,6 @@
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
-;      (play-music "bootypax" :loop t)
-      (play-music (nth *level* *soundtrack*) :loop t)
+;      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

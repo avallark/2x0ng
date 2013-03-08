@@ -1,10 +1,14 @@
-** TODO powerups
-*** TODO shield stays on and absorbs 1 hit
-*** TODO 
-** TODO [#C] always display current color name 
+** TODO walls made of empty gray gates
+** TODO bomb bricks that explode
+** TODO 
 ** TODO [#A] additional puzzle elements for the fringe areas
+*** TODO buffer-per-file approach
 *** TODO for level gen, paste named buffers <---- "vaults"
 *** TODO brief town scenes with friendlies 
+** TODO powerups
+*** TODO shield stays on and absorbs 1 hit
+*** TODO temporary wildcard color
+** TODO [#C] always display current color name 
 ** TODO [#A] tighten up the puzzle design
 ** TODO [#B] growing corruption/mismunch areas that eat color
 ** TODO [#B] enemies that merge to form larger ships like in space fury 

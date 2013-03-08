@@ -358,6 +358,38 @@
     ((robotp thing)
      (damage thing 1))))
 
+
+;;; Swarming Shockers
+
+(define-block shocker
+  (tags :initform '(:shocker :enemy :target))
+  (image :initform "shocker.png"))
+
+(define-method update shocker ()
+  (if (< (distance-to-cursor self)
+	 (level-value 300 300 300 300 350 400 400 425))
+      (move self 
+	    (or (percent-of-time 65 (heading-to-cursor self))
+		(progn 
+		  (percent-of-time 15 (play-sound self (random-choose '("sense.wav" "sense2.wav"))))
+		  (random (* 2 pi))))
+	    (level-value 2 2 2 3 3 4 4 5 5))
+      (progn 
+	(move self %heading 1)
+	(incf %heading (radian-angle (level-value 2.5 2.5 2.5 2.5 2 1.5))))))
+
+(define-method damage shocker (points)
+  (make-sparks %x %y "hot pink")
+  (play-sound self "woom.wav")
+  (destroy self))
+
+(define-method collide shocker (thing)
+  (when (robotp thing)
+    (die thing))
+  (when (brickp thing)
+    (restore-location self)
+    (setf %heading (opposite-heading %heading))))
+
 ;;; Black holes 
 
 (defresource "hole1.png")
@@ -372,6 +404,11 @@
 
 (defun hole-clock () (level-value 140 130 130 120 110 100 100 95 90))
 
+(defun level-beast () 
+  (if (<= *level* 5)
+      (new 'monitor)
+      (new (random-choose '(monitor shocker)))))
+
 (define-method update hole ()
   (when (< (distance-to-cursor self)
 	   (level-value 350 400 420 440 460 460 480 480))
@@ -384,3 +421,35 @@
 (define-method collide hole (thing)
   (when (brickp thing)
     (setf %clock (hole-clock))))
+
+;;; Starbase 
+
+(define-block base 
+  (tags :initform '(:base :enemy :target))
+  (clock :initform 120)
+  (image :initform "resonator.png")
+  (hp :initform 10))
+
+(define-method damage base (points)
+  (decf %hp)
+  (play-sound self (random-choose *whack-sounds*))
+  (unless (plusp %hp)
+    (play-sound self "bigboom.wav")
+    (make-sparks %x %y "white")
+    (destroy self)))
+
+(define-method collide base (thing)
+  (when (brickp thing)
+    (setf %clock 100)))
+
+(define-method update base ()
+  (when (< (distance-to-cursor self)
+	   (level-value 350 400 420 440 460 460 480 480))
+    (with-fields (clock) self
+      (decf clock)
+      (when (zerop clock)
+	(let ((shocker (new 'shocker)))
+	  (play-sound self "woom.wav")
+	  (setf (%heading shocker) (random (* 2 pi)))
+	  (drop self shocker)
+	  (setf clock (hole-clock)))))))
