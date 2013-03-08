@@ -241,8 +241,16 @@
 (define-block (player-1-robot :super robot)
   (body-color :initform "white"))
 
+(defun holding-space ()
+  (keyboard-down-p :space))     
+
+(defun holding-alt ()
+  (or (keyboard-modifier-down-p :lalt)
+      (keyboard-modifier-down-p :ralt)))
+
 (defun holding-fire ()
   (or (holding-space)
+      (holding-alt)
       (some #'joystick-button-pressed-p
 	    '(:a :b :x :y))))
 

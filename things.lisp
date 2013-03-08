@@ -21,9 +21,6 @@
       (nth (1- (length args)) args)
       (nth *level* args)))
 
-(defun holding-space ()
-  (keyboard-down-p :space))     
-
 (defun targetp (thing)
   (and (blockyp thing)
        (has-tag thing :target)))

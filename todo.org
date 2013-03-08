@@ -1,3 +1,6 @@
+** TODO powerups
+*** TODO shield stays on and absorbs 1 hit
+*** TODO 
 ** TODO [#C] always display current color name 
 ** TODO [#A] additional puzzle elements for the fringe areas
 *** TODO for level gen, paste named buffers <---- "vaults"

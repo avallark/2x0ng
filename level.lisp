@@ -64,6 +64,7 @@
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
   (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 50))
+  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 30))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 80))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
@@ -75,7 +76,9 @@
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
-  '("vedex" "remembering-xalcyon" "phong" "saga" "basswarp" "entel" "maxmacro" "bootypax" "musicbox" "reprise"
+  '("vedex" "remembering-xalcyon" "phong" 
+    "saga" "basswarp" "entel" "vrov" 
+    "maxmacro" "bootypax" "musicbox" "reprise"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 ;; Wrapping things about one another
@@ -319,7 +322,7 @@
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
 		   (units 8) (units 5))
       (drop-object (current-buffer) 
-		   (new 'bubble "Arrow keys to move. space to fire. control-r to reset. F12 to pause." "sans-mono-bold-14")
+		   (new 'bubble "Arrow keys to move. Space (or Alt) to fire. Control-r to reset. F12 to pause." "sans-mono-bold-14")
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
