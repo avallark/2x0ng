@@ -256,16 +256,16 @@
 	   (padded-vertically 
 	    (horizontally
 	     (vertically 
-	      (horizontally (gated A (bricks 4 C))
+	      (horizontally (gated A (bricks 5 C))
 			    (singleton (new 'hole)))
 	      (horizontally
 	       (vertically
-		(horizontally (bricks 4 B) (bricks 3 (random-choose (theme-colors))))
+		(horizontally (bricks 5 B) (bricks 5 (random-choose (theme-colors))))
 		(horizontally 
 		 (gated B 
 			(horizontally 
 			 (singleton (new 'hole))
-			 (bricks 2 A)))
+			 (bricks 4 A)))
 		 (gated C
 			(requiring key
 			  (make-puzzle (rest colors))))))
@@ -274,9 +274,9 @@
 	    (padded-vertically 
 	     (horizontally
 	      (singleton (new 'hole))
-	      (bricks 5 B))
-	     (bricks 2 (or *required-color* B))))
-	   (bordered (either-way (bricks 4 (random-color)) (hazard))))))))))
+	      (bricks 6 B))
+	     (bricks 6 (or *required-color* B))))
+	   (bordered (either-way (bricks 6 (random-color)) (hazard))))))))))
 
 (defparameter *level-themes* 
   '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))

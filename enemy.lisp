@@ -443,6 +443,8 @@
     (setf %clock 100)))
 
 (define-method update base ()
+  (when (<= %hp 9)
+    (setf %image (random-choose '("resonator.png" "resonator-on.png"))))
   (when (< (distance-to-cursor self)
 	   (level-value 350 400 420 440 460 460 480 480))
     (with-fields (clock) self
