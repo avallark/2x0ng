@@ -1,3 +1,4 @@
+** TODO series of bullet-firing turrets in centers of each of the 4 walls
 ** TODO walls made of empty gray gates
 ** TODO bomb bricks that explode
 ** TODO 

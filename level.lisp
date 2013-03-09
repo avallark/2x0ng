@@ -177,20 +177,21 @@
   (case *level*
     (0 (new 'wall))
     (1 (new 'paddle))
-    (2 (new 'paddle))
+    (2 (new (random-choose '(paddle tracer))))
     (3 (new (random-choose '(paddle tracer))))
-    (4 (new (random-choose '(tracer paddle))))
-    (7 (new (random-choose '(paddle base base))))
-    (8 (new (random-choose '(paddle base base ghost))))
-    (otherwise 
-     (or (percent-of-time 12 (new 'robot "hot pink"))
-	 (new (random-choose '(tracer paddle)))))))
+    (4 (new (random-choose '(paddle ghost tracer))))
+    (5 (new 'paddle))
+    (6 (new (random-choose '(base paddle))))
+    (7 (new (random-choose '(paddle base base tracer))))
+    (8 (new (random-choose '(paddle base base ghost tracer glitch))))))
 
 (defun hazard ()
-  (singleton (or (random-hazard) (new 'wall))))
+  (singleton (random-hazard)))
 
 (defun boss-hazard ()
-  (singleton (if (> *level* 4) (new 'ghost) (random-hazard))))
+  (singleton 
+   (or (when (> *level* 4) (percent-of-time 20 (new 'robot "hot pink")))
+       (random-hazard))))
 
 ;; (defun make-two-puzzle-hard (colors)
 ;;   (destructuring-bind (A B) colors
@@ -222,7 +223,12 @@
        (vertically
 	(gated A (bricks 4 (or *required-color* B)))
 	(vertically 
-	 (singleton (new 'hole))
+	 (horizontally 
+	  (singleton (new 'hole))
+	  (if (>= *level* 6)
+	      (singleton (new 'glitch))
+	      (singleton (new 'wall))
+	      ))
 	 (gated B 
 		(vertically (hazard)
 			    (bricks 5 A)))))

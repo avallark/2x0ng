@@ -39,7 +39,7 @@
 (define-method lay-trail tracer ()
   (decf %energy)
   (unless (plusp %energy)
-    (percent-of-time 0.5 (drop self (new 'glitch)))
+    ;; (percent-of-time 0.5 (drop self (new 'glitch)))
     (drop self (new 'trail) 6 6)
     (setf %energy 4)))
 
@@ -117,12 +117,16 @@
 
 (define-block glitch
   (tags :initform '(:enemy :glitch))
+  (depth :initform 0)
   (image :initform (random-choose *corruption-images*))
   (speed :initform 1)
   (overlay-color :initform nil))
 
+(define-method initialize glitch (&optional (depth 4))
+  (initialize%super self)
+  (setf %depth depth))
+
 (define-method damage glitch (points)
-  (make-sparks %x %y "yellow green")
   (play-sound self (random-choose *corruption-sounds*))
   (destroy self))
 
@@ -142,14 +146,25 @@
   (setf %overlay-color nil))
 
 (define-method creep glitch ()
-  (move self (heading-to-cursor self) %speed)
-  (when (< (distance-to-cursor self) 460)
-    (percent-of-time 2 
-      (setf %speed (min 2 (+ %speed 0.3))))))
+  (when (and (plusp %depth) 
+	     (< (distance-to-cursor self) 300))
+    (percent-of-time 2
+      (with-fields (x y width height) self
+	(multiple-value-bind (x0 y0)
+	    (ecase (direction-to-cursor self)
+	      (:up (values x (- y height)))
+	      (:down (values x (+ y height)))
+	      (:left (values (- x width) y))
+	      (:right (values (+ x width) y))
+	      (:upright (values (+ x width) (- y height)))
+	      (:downright (values (+ x width) (+ y height)))
+	      (:upleft (values (- x width) (- y height)))
+	      (:downleft (values (- x width) (+ y height))))
+	  (drop-object (current-buffer) (new 'glitch (1- %depth)) x0 y0))))))
 
 (define-method update glitch ()
-  (percent-of-time 3 (change-image self (random-choose *corruption-images*)))
   (creep self)
+  (percent-of-time 3 (change-image self (random-choose *corruption-images*)))
   (percent-of-time 3 
     (set-overlay self)
     (later 20 (clear-overlay self))))
@@ -428,7 +443,7 @@
   (tags :initform '(:base :enemy :target))
   (clock :initform 120)
   (image :initform "resonator.png")
-  (hp :initform 10))
+  (hp :initform 8))
 
 (define-method damage base (points)
   (decf %hp)
@@ -443,7 +458,7 @@
     (setf %clock 100)))
 
 (define-method update base ()
-  (when (<= %hp 9)
+  (when (<= %hp 7)
     (setf %image (random-choose '("resonator.png" "resonator-on.png"))))
   (when (< (distance-to-cursor self)
 	   (level-value 350 400 420 440 460 460 480 480))
