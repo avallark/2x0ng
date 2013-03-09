@@ -1,10 +1,9 @@
+** TODO [#A] joystick support
 ** TODO FINAL LEVEL WITH 5 COLORS AND HYPERPADDLE GOND
-** TODO [#A] remove the large blank areas around the puzzle 
 ** TODO goodie boxes, "black" is code for sparkle
-** TODO [#A] additional puzzle elements for the fringe areas
-*** TODO [#A] grey gates
-*** TODO [#A] walls made of empty gray gates , gray bricks nearby, tunnel thru
-*** TODO series of bullet-firing turrets in centers of each of the 4 walls
+** TODO [#A] grey gates
+** TODO [#A] walls made of empty gray gates , gray bricks nearby, tunnel thru
+** TODO series of bullet-firing turrets in centers of each of the 4 walls
 ** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
 ** TODO [#B] "TOWN" icon leads to mini corridor levels with powerups, conversations, brief town scenes with friendlies 
 ** TODO [#B] story and ending!
@@ -18,3 +17,21 @@
 ** TODO [#C] enemies that merge to form larger ships like in space fury 
 ** TODO [#C] francophone voicesynthesis taunts you when you die
 ** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
+
+* Archived Entries
+** DONE [#A] remove the large blank areas around the puzzle
+   CLOSED: [2013-03-09 Sat 15:31]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-09 Sat 15:31
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** TODO [#A] additional puzzle elements for the fringe areas
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-09 Sat 15:31
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: TODO
+   :END:
+

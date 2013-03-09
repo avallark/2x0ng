@@ -97,6 +97,16 @@
 		(- ty (* *ball-size* 0.5)))))))
 
 (define-method draw robot ()
+  ;; (let ((heading (stick-heading self)))
+  ;;   (when heading
+  ;;     (multiple-value-bind (x y)
+  ;; 	  (step-toward-heading self heading 50)
+  ;; 	(draw-line %x %y x y :color "magenta"))
+  ;;     (multiple-value-bind (x y)
+  ;; 	  (step-in-direction %x %y (or (heading-direction heading)
+  ;; 				       :downleft)
+  ;; 				       60)
+  ;; 	(draw-line %x %y x y :color "cyan"))))
   (let ((image 
 	  (if %alive
 	      (or (robot-image %direction %walk-clock) "robot-up.png")
@@ -148,6 +158,13 @@
 		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
 		      %direction))))))
 
+(define-method stick-heading robot () 
+  (when (humanp self)
+    (or (when (left-analog-stick-pressed-p)
+	  (left-analog-stick-heading))
+	(when (right-analog-stick-pressed-p)
+	  (right-analog-stick-heading)))))
+
 (define-method can-reach-ball robot ()
   (and *ball* (colliding-with self *ball*)))
 
@@ -195,13 +212,16 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
+  ;; player took ball away
   (when (and %carrying (null *ball*))
     (setf %carrying nil)
     (play-sound self "xplod.wav")
     (later 2 (die self))
     (later 2.5 (destroy self)))
+  ;; carry ball
   (when (and %carrying *ball*)
     (move-to *ball* %x %y))
+  ;; normal update
   (when %alive
     (resize self (* 2 *unit*) (* 2 *unit*))
     (with-fields (step-clock kick-clock) self
@@ -252,7 +272,7 @@
   (or (holding-space)
       (holding-alt)
       (some #'joystick-button-pressed-p
-	    '(:a :b :x :y))))
+	    '(0 1 2 3 4 5 6 7 8 9))))
 
 (define-method collide player-1-robot (thing)
   (when (exitp thing)
@@ -298,13 +318,18 @@
       (keyboard-down-p :right)))
 
 (define-method movement-direction player-1-robot ()
-  (cond 
-    ((and (holding-down-arrow) (holding-right-arrow)) :downright)
-    ((and (holding-down-arrow) (holding-left-arrow)) :downleft)
-    ((and (holding-up-arrow) (holding-right-arrow)) :upright)
-    ((and (holding-up-arrow) (holding-left-arrow)) :upleft)
-    ((holding-down-arrow) :down)
-    ((holding-up-arrow) :up)
-    ((holding-left-arrow) :left)
-    ((holding-right-arrow) :right)))
+  (or 
+   (cond 
+     ((and (holding-down-arrow) (holding-right-arrow)) :downright)
+     ((and (holding-down-arrow) (holding-left-arrow)) :downleft)
+     ((and (holding-up-arrow) (holding-right-arrow)) :upright)
+     ((and (holding-up-arrow) (holding-left-arrow)) :upleft)
+     ((holding-down-arrow) :down)
+     ((holding-up-arrow) :up)
+     ((holding-left-arrow) :left)
+     ((holding-right-arrow) :right))
+   (let ((heading (stick-heading self)))
+     (when (or (left-analog-stick-pressed-p)
+	       (right-analog-stick-pressed-p))
+       (or (heading-direction heading) :left)))))
 
