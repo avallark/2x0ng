@@ -46,7 +46,7 @@
 
 (defun super-fat-row (x y length color)
   (let ((y0 y))
-    (dotimes (n 3)
+    (dotimes (n 4)
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
@@ -71,7 +71,7 @@
   (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
   (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
   (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
-  (:name "saga" :type :music :file "saga.ogg" :properties (:volume 30))
+  (:name "saga" :type :music :file "saga.ogg" :properties (:volume 20))
   (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 12))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
@@ -130,8 +130,8 @@
     (with-new-buffer 
       (paste-from (current-buffer) buffer amount 0) 
       (resize (current-buffer)
-	      height
-	      (+ width amount)))))
+	      (+ width amount)
+	      height))))
 
 (defun horizontally (a b)
   (percent-of-time 50 (rotatef a b))
@@ -182,7 +182,7 @@
     (4 (new (random-choose '(paddle ghost tracer))))
     (5 (new 'paddle))
     (6 (new (random-choose '(base paddle))))
-    (7 (new (random-choose '(paddle base base tracer))))
+    (7 (new (random-choose '(paddle base tracer))))
     (8 (new (random-choose '(paddle base base ghost tracer glitch))))))
 
 (defun hazard ()
@@ -248,6 +248,23 @@
     (7 (make-two-puzzle-hard colors))
     (8 (make-two-puzzle-hard colors))))
 
+(defun waves ()
+  (arrange-below
+   (with-padding (units 100) (singleton (new 'wave)))
+   (with-padding (units 150) (singleton (new 'wave)))))
+	  
+(defun paddle-or-waves ()
+   (if (>= *level* 5)
+       (waves)
+       (with-padding (units (+ 5 (random 20))) 
+	 (singleton (new 'paddle)))))
+
+(defun with-waves (x)
+  (arrange-below 
+   (paddle-or-waves)
+   (arrange-below x    
+		  (paddle-or-waves))))
+
 (defun make-puzzle (colors)
   (cond 
     ;; with two colors, terminate the recursion
@@ -306,18 +323,20 @@
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
 	(puzzle (with-border (units 8)
-		  (make-puzzle (derange (theme-colors))))))
+		  (with-waves
+		   (make-puzzle (derange (theme-colors)))))))
     (with-buffer buffer
-      (paste-from buffer puzzle)
       (setf (%background-color (current-buffer)) (background-color))
       (bind-event buffer '(:r :control) :reset-game)
+      ;;
+      (paste-from buffer puzzle)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 16 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 16 (1- (truncate (/ (%width puzzle)
+			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
       ;; player 1
-      (drop-object (current-buffer) robot (units 5) (units 5))
+      (drop-object (current-buffer) robot (units 4) (units 5))
 
       ;; TEST OBJECT 
 ;      (drop-object (current-buffer) (new 'robot "purple") (units 15) (units 7))

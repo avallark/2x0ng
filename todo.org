@@ -1,20 +1,20 @@
-** TODO series of bullet-firing turrets in centers of each of the 4 walls
-** TODO walls made of empty gray gates
-** TODO bomb bricks that explode
-** TODO 
+** TODO FINAL LEVEL WITH 5 COLORS AND HYPERPADDLE GOND
+** TODO [#A] remove the large blank areas around the puzzle 
+** TODO goodie boxes, "black" is code for sparkle
 ** TODO [#A] additional puzzle elements for the fringe areas
-*** TODO buffer-per-file approach
-*** TODO for level gen, paste named buffers <---- "vaults"
-*** TODO brief town scenes with friendlies 
-** TODO powerups
+*** TODO [#A] grey gates
+*** TODO [#A] walls made of empty gray gates , gray bricks nearby, tunnel thru
+*** TODO series of bullet-firing turrets in centers of each of the 4 walls
+** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
+** TODO [#B] "TOWN" icon leads to mini corridor levels with powerups, conversations, brief town scenes with friendlies 
+** TODO [#B] story and ending!
+** TODO [#B] powerups
 *** TODO shield stays on and absorbs 1 hit
 *** TODO temporary wildcard color
-** TODO [#C] always display current color name 
-** TODO [#A] tighten up the puzzle design
-** TODO [#B] growing corruption/mismunch areas that eat color
-** TODO [#B] enemies that merge to form larger ships like in space fury 
-** TODO [#C] francophone voicesynthesis taunts you when you die
 ** TODO [#B] mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
+** TODO [#C] start guy in different corners 
+** TODO [#C] always display current color name 
+** TODO [#C] growing corruption/mismunch areas that eat color
+** TODO [#C] enemies that merge to form larger ships like in space fury 
+** TODO [#C] francophone voicesynthesis taunts you when you die
 ** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
-** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
-** TODO [#B] story and ending!

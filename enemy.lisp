@@ -13,6 +13,7 @@
 (define-block trail
   (tags :initform '(:trail :enemy))
   (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
+  (counter :initform 320)
   (collision-type :initform :passive)
   (height :initform 5)
   (width :initform 5))
@@ -22,8 +23,10 @@
 
 (define-method damage trail (points) (destroy self))
 
-(define-method initialize trail ()
-  (later 320 (destroy self)))
+(define-method update trail ()
+  (decf %counter)
+  (when (zerop %counter) 
+    (destroy self)))
 
 ;; Nasty tracers 
 
@@ -70,9 +73,9 @@
 (define-method update paddle ()
   (let ((speed
 	  (if (< (distance-to-cursor self)
-		 (level-value 200 250 300 350 400))
-	      (level-value 8 10 12 14 16) 
-	      (level-value 3 4 5 6 7 9 11 13))))
+		 (level-value 200 250 300 350 400 450))
+	      (level-value 8 10 12 14 16 17) 
+	      (level-value 3 4 5 6 7 10 12 13))))
     (forward self speed)))
 
 (define-method collide paddle (thing)
@@ -117,6 +120,7 @@
 
 (define-block glitch
   (tags :initform '(:enemy :glitch))
+  (clock :initform nil)
   (depth :initform 0)
   (image :initform (random-choose *corruption-images*))
   (speed :initform 1)
@@ -147,8 +151,7 @@
 
 (define-method creep glitch ()
   (when (and (plusp %depth) 
-	     (< (distance-to-cursor self) 300))
-    (percent-of-time 2
+	     (< (distance-to-cursor self) 350))
       (with-fields (x y width height) self
 	(multiple-value-bind (x0 y0)
 	    (ecase (direction-to-cursor self)
@@ -160,15 +163,22 @@
 	      (:downright (values (+ x width) (+ y height)))
 	      (:upleft (values (- x width) (- y height)))
 	      (:downleft (values (- x width) (+ y height))))
-	  (drop-object (current-buffer) (new 'glitch (1- %depth)) x0 y0))))))
+	  (drop-object (current-buffer) (new 'glitch (1- %depth)) x0 y0)
+	  (setf %clock 10)))))
 
 (define-method update glitch ()
-  (creep self)
-  (percent-of-time 3 (change-image self (random-choose *corruption-images*)))
-  (percent-of-time 3 
-    (set-overlay self)
-    (later 20 (clear-overlay self))))
-
+  (or (when (numberp %clock)
+	(decf %clock)
+	(when (zerop %clock)
+	  (destroy self)))
+      (progn (percent-of-time 3 
+	       (creep self)
+	       (move self (heading-to-cursor self) 14)
+	       (change-image self (random-choose *corruption-images*)))
+	     (percent-of-time 3 
+	       (set-overlay self)
+	       (later 20 (clear-overlay self))))))
+      
 (define-method draw glitch ()
   (draw%super self)
   (set-blending-mode :additive2)
@@ -192,7 +202,7 @@
   (image :initform "monitor2"))
 
 (defun monitor-scaling-speed ()
-  (level-value 1.2 1.3 1.4 1.5 1.6))
+  (level-value 1.2 1.3 1.4 1.5 1.6 1.7))
 
 (define-method grow monitor ()
   (let ((size (+ %width (monitor-scaling-speed))))
@@ -233,7 +243,7 @@
     (if (< dist (level-value 240 275 300 325 360 400 440 500))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self (level-value 1.2 1.5 1.5 1.5 1.7 2.0 2.4)))
+	  (forward self (level-value 1.2 1.5 1.5 1.6 1.8 2.2 2.4)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
 	       (move-toward self %direction (level-value 1 2 2.5 3))))))
@@ -249,7 +259,7 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) (level-value 1.3 1.6 2.0 2.2 2.5 2.8 3.0 3.3))
+      (progn (move self (heading-to-cursor self) (level-value 1.3 1.6 2.0 2.2 2.6 2.9 3.1 3.3))
 	     (percent-of-time 25
 	       (percent-of-time 30 (play-sound self (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
@@ -470,3 +480,26 @@
 	  (setf (%heading shocker) (random (* 2 pi)))
 	  (drop self shocker)
 	  (setf clock (hole-clock)))))))
+
+;;; Shockwaves
+
+(define-block wave :image "corruption-horz2.png" :tags '(:enemy :wave) :heading (random-choose (list (/ pi 2) (/ pi -2))))
+
+(define-method update wave ()
+  (let ((speed
+	  (if (> (distance-to-cursor self)
+		 (level-value 200 250 300 350 400 450))
+	      (level-value 1 1 2 3 4 5 6 7 8)
+	      (level-value 2 2 4 6 8 10 12 12))))
+    (percent-of-time 40 (setf %image (random-choose '("corruption-horz2.png" "corruption-horz.png"))))
+    (forward self speed)))
+
+(define-method collide wave (thing)
+  (when (brickp thing)
+    (restore-location self)
+    (setf %heading (- %heading pi))))
+
+(define-method damage wave (thing) nil)
+
+  
+

@@ -314,7 +314,7 @@
 
 (define-block brick 
   :tags '(:brick :colored)
-  ;;  :collision-type :passive
+  :collision-type :passive
   :color "gray50")
 
 (define-method damage brick (points) 
