@@ -489,8 +489,8 @@
   (let ((speed
 	  (if (> (distance-to-cursor self)
 		 (level-value 200 250 300 350 400 450))
-	      (level-value 1 1 2 3 4 5 6 7 8)
-	      (level-value 2 2 4 6 8 10 12 12))))
+	      (level-value 1 1 2 3 4)
+	      (level-value 2 2 4 6 7))))
     (percent-of-time 40 (setf %image (random-choose '("corruption-horz2.png" "corruption-horz.png"))))
     (forward self speed)))
 
