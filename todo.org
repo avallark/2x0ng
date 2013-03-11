@@ -1,12 +1,28 @@
-** TODO [#A] joystick support
-** TODO FINAL LEVEL WITH 5 COLORS AND HYPERPADDLE GOND
-** TODO goodie boxes, "black" is code for sparkle
-** TODO [#A] grey gates
-** TODO [#A] walls made of empty gray gates , gray bricks nearby, tunnel thru
-** TODO series of bullet-firing turrets in centers of each of the 4 walls
+** TODO easy music toggle switch
+** TODO help screen is a mini town you can visit at any time with f1 to learn about the game, use the menu, etc
+** TODO add taunts from ball stealer guy
+** TODO some levels should have no monitors... diversify levels
+** TODO fix crash when collisions with *ball* and changing levels at same time
+** TODO fix sometimes ball disappears behind block when firing at point-blank
+** TODO more colors, including PeachPuff and NavajoWhite!
+** TODO wrap some areas with gray bricks
+** TODO free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
+** TODO make moving blocks of selected color which sprout eyes and "meep" and run away. they don't die, but you have to chase them. they turn to white smileys when you grab the color. 
+** TODO extend game: do two levels at each difficulty level: one with three colors, one with four
+
+
+** TODO space bar seems held down when coming back from another window
 ** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
+** TODO [#A] mini story and ending!
+** TODO [#B] do something with the corners
+** TODO [#B] start in any corner
+** DONE [#A] joystick support
+   CLOSED: [2013-03-09 Sat 18:31]
+** TODO FINAL LEVEL WITH 5 COLORS AND HYPERPADDLE GOND
+** TODO [#C] goodie boxes, "black" is code for sparkle
+** TODO [#C] grey gates
+** TODO [#C] walls made of empty gray gates , gray bricks nearby, tunnel thru
 ** TODO [#B] "TOWN" icon leads to mini corridor levels with powerups, conversations, brief town scenes with friendlies 
-** TODO [#B] story and ending!
 ** TODO [#B] powerups
 *** TODO shield stays on and absorbs 1 hit
 *** TODO temporary wildcard color

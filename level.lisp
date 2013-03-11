@@ -356,6 +356,6 @@
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
-;;      (play-music (nth *level* *soundtrack*) :loop t)
+;      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 
