@@ -35,11 +35,9 @@
   (begin-game *level*))
 
 (defun begin-game (level)   
-  (setf *level-themes* (make-theme-sequence))
   (switch-to-buffer (2x0ng-level level)))
 
 (defun 2x0ng (&optional (level 1))
-  (setf *level* level)
   (setf *window-title* "2x0ng")
   
   (setf *screen-width* 1080)

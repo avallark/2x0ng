@@ -40,7 +40,7 @@
 
 (defun themed-row (x y length)
   (let ((y0 y))
-    (dolist (color (brick-colors))
+    (dolist (color (level-colors))
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
@@ -147,7 +147,7 @@
 
 (defun padded (buffer)
   (with-padding 
-    (units (level-value 5 7 10 20 20 30 40 45 45))
+    (units (with-difficulty 5 7 10 20 20 30 40 45 45))
     buffer))
 
 (defun padded-vertically (a b)
@@ -160,9 +160,13 @@
   (funcall (or (percent-of-time 50 #'horizontally) #'vertically)
 	   a b))
 
-(defun bordered (x) (with-border *puzzle-border* x))
+(defun bordered (x) 
+  (assert (blockyp x))
+  (with-border *puzzle-border* x))
 
-(defun singleton (x) (bordered (with-new-buffer (drop-object (current-buffer) x))))
+(defun singleton (x) 
+  (assert (blockyp x))
+  (bordered (with-new-buffer (drop-object (current-buffer) x))))
 
 (defun gated (color buf) (wrap (new 'gate color) buf))
 
@@ -173,97 +177,34 @@
 (defmacro requiring (color &body forms)
   `(let ((*required-color* ,color)) ,@forms))
 
-(defun random-hazard ()
-  (case *level*
-    (0 (new 'wall))
-    (1 (new 'paddle))
-    (2 (new (random-choose '(paddle tracer))))
-    (3 (new (random-choose '(paddle tracer))))
-    (4 (new (random-choose '(paddle ghost tracer))))
-    (5 (new 'paddle))
-    (6 (new (random-choose '(base paddle))))
-    (7 (new (random-choose '(paddle base tracer))))
-    (8 (new (random-choose '(paddle base base ghost tracer glitch))))))
+(defun hazard () 
+  (singleton (make-hazard)))
 
-(defun hazard ()
-  (singleton (random-hazard)))
-
-(defun boss-hazard ()
-  (singleton 
-   (or (when (> *level* 4) (percent-of-time 20 (new 'robot "hot pink")))
-       (random-hazard))))
-
-;; (defun make-two-puzzle-hard (colors)
-;;   (destructuring-bind (A B) colors
-;;     (vertically
-;;      (horizontally
-;;       (singleton (new 'hole))
-;;       (vertically (bricks 6 B) (hazard)))
-;;      (bordered
-;;       (vertically
-;; 	(horizontally 
-;; 	 (singleton (new 'hole))
-;; 	 (gated B 
-;; 		(horizontally (either-way (hazard) (hazard))
-;; 			      (bricks 7 A))))
-;; 	(gated A 
-;; 	       (horizontally
-;; 		(bricks 6 (or *required-color* B))
-;; 		(let ((*puzzle-border* 12))
-;; 		  (make-exit (derange (theme-colors)))))))))))
+(defun wildcard ()
+  (singleton (make-wildcard)))
 
 (defun make-two-puzzle-easy (colors)
   (destructuring-bind (A B) colors
     (horizontally
      (vertically
-      (singleton (new 'hole))
-      (horizontally (bricks 5 B) (hazard)))
+      (hazard)
+      (horizontally 
+       (bricks 6 B) 
+       (hazard)))
      (bordered
       (horizontally
        (vertically
-	(gated A (bricks 4 (or *required-color* B)))
+	(gated A (bricks 6 (or *required-color* B)))
 	(vertically 
 	 (horizontally 
-	  (singleton (new 'hole))
-	  (if (>= *level* 6)
-	      (singleton (new 'glitch))
-	      (singleton (new 'wall))
-	      ))
+	  (hazard)
+	  (singleton (new 'wall)))
 	 (gated B 
 		(vertically (hazard)
-			    (bricks 5 A)))))
+			    (bricks 6 A)))))
        (let ((*puzzle-border* 12))
-	 (either-way (boss-hazard)
+	 (either-way (wildcard)
 		     (make-exit (derange (theme-colors))))))))))
-
-(defun make-two-puzzle (colors) 
-  (case *level*
-    (0 (make-two-puzzle-easy colors))
-    (1 (make-two-puzzle-easy colors))
-    (2 (make-two-puzzle-hard colors))
-    (3 (make-two-puzzle-easy colors))
-    (4 (make-two-puzzle-hard colors))
-    (5 (make-two-puzzle-hard colors))
-    (6 (make-two-puzzle-easy colors))
-    (7 (make-two-puzzle-hard colors))
-    (8 (make-two-puzzle-hard colors))))
-
-(defun waves ()
-  (arrange-below
-   (with-padding (units 100) (singleton (new 'wave)))
-   (with-padding (units 150) (singleton (new 'wave)))))
-	  
-(defun paddle-or-waves ()
-   (if (>= *level* 5)
-       (waves)
-       (with-padding (units (+ 5 (random 20))) 
-	 (singleton (new 'paddle)))))
-
-(defun with-waves (x)
-  (arrange-below 
-   (paddle-or-waves)
-   (arrange-below x    
-		  (paddle-or-waves))))
 
 (defun make-puzzle (colors)
   (cond 
@@ -279,16 +220,16 @@
 	   (padded-vertically 
 	    (horizontally
 	     (vertically 
-	      (horizontally (gated A (bricks 5 C))
-			    (singleton (new 'hole)))
+	      (horizontally (gated A (bricks 6 C))
+			    (hazard))
 	      (horizontally
 	       (vertically
-		(horizontally (bricks 5 B) (bricks 5 (random-choose (theme-colors))))
+		(horizontally (bricks 6 B) (bricks 6 (random-choose (theme-colors))))
 		(horizontally 
 		 (gated B 
 			(horizontally 
-			 (singleton (new 'hole))
-			 (bricks 4 A)))
+			 (hazard)
+			 (bricks 5 A)))
 		 (gated C
 			(requiring key
 			  (make-puzzle (rest colors))))))
@@ -296,35 +237,21 @@
 	     (hazard))
 	    (padded-vertically 
 	     (horizontally
-	      (singleton (new 'hole))
-	      (bricks 6 B))
+	      (hazard)
+	      (bricks 5 B))
 	     (bricks 6 (or *required-color* B))))
 	   (bordered 
 	    (either-way 
 	     (bricks 6 (random-color))
 	     (either-way (bricks 6 (random-color)) (hazard)))))))))))
 
-(defparameter *level-themes* 
-  '(:xalcrys :snefru :zupro :krez :snafu :atlantis :zerk :tandy :command))
-
-(defun level-theme (n)
-  (first (nth (mod n (length *level-themes*)) *level-themes*)))
-
-(defun make-theme-sequence ()
-  (append
-   (derange *two-brick-themes*)
-   (derange *three-brick-themes*)
-   (derange *four-brick-themes*)))
-
 (defun 2x0ng-level (&optional (level 0))
-  (setf *level* level)
-  (set-theme (level-theme *level*))
+  (configure-level level)
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
 	(puzzle (with-border (units 8)
-		  (with-waves
-		   (make-puzzle (derange (theme-colors)))))))
+		  (make-puzzle (derange (level-colors))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
       (bind-event buffer '(:r :control) :reset-game)
@@ -337,17 +264,15 @@
 						 (units 1))))))
       ;; player 1
       (drop-object (current-buffer) robot (units 4) (units 5))
-
-      ;; TEST OBJECT 
-;      (drop-object (current-buffer) (new 'robot "purple") (units 15) (units 7))
-
       (set-cursor (current-buffer) robot)
       (follow-with-camera (current-buffer) robot)
-      ;; message
+      ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 2/5)
+      ;; sound the bell
       (play-sample "go.wav")
+      ;; give some instructions
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
 		   (units 8) (units 5))

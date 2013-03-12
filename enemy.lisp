@@ -73,9 +73,9 @@
 (define-method update paddle ()
   (let ((speed
 	  (if (< (distance-to-cursor self)
-		 (level-value 200 250 300 350 400 450))
-	      (level-value 8 10 12 14 16 17) 
-	      (level-value 3 4 5 6 7 10 12 13))))
+		 (with-difficulty 200 250 300 350 400 450))
+	      (with-difficulty 8 10 12 14 16 17) 
+	      (with-difficulty 3 4 5 6 7 10 12 13))))
     (forward self speed)))
 
 (define-method collide paddle (thing)
@@ -202,7 +202,7 @@
   (image :initform "monitor2"))
 
 (defun monitor-scaling-speed ()
-  (level-value 1.2 1.3 1.4 1.5 1.6 1.7))
+  (with-difficulty 1.2 1.3 1.4 1.5 1.6 1.7))
 
 (define-method grow monitor ()
   (let ((size (+ %width (monitor-scaling-speed))))
@@ -240,13 +240,13 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist (level-value 240 275 300 325 360 400 440 500))
+    (if (< dist (with-difficulty 240 275 300 325 360 400 440 500))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self (level-value 1.2 1.5 1.5 1.6 1.8 2.2 2.4)))
+	  (forward self (with-difficulty 1.2 1.5 1.5 1.6 1.8 2.2 2.4)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
-	       (move-toward self %direction (level-value 1 2 2.5 3))))))
+	       (move-toward self %direction (with-difficulty 1 2 2.5 3))))))
 
 (defresource "grow.wav" :volume 10)
 (defresource "grow2.wav" :volume 10)
@@ -259,7 +259,7 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) (level-value 1.3 1.6 2.0 2.2 2.6 2.9 3.1 3.3))
+      (progn (move self (heading-to-cursor self) (with-difficulty 1.3 1.6 2.0 2.2 2.6 2.9 3.1 3.3))
 	     (percent-of-time 25
 	       (percent-of-time 30 (play-sound self (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
@@ -353,10 +353,10 @@
 	  (dist (distance-to-cursor self)))
       (cond 
 	;; shoot then set flag to run away
-	((and (< dist (level-value 250 250 250 250 300 350 350)) 
+	((and (< dist (with-difficulty 250 250 250 250 300 350 350)) 
 	      (zerop timer))
 	 ;; don't always fire
-	 (percent-of-time (level-value 65 65 65 65 65 70 80 85)  
+	 (percent-of-time (with-difficulty 65 65 65 65 65 70 80 85)  
 	   (play-sound self "robovoxx.wav")
 	   (fire self dir))
 	 (aim self (- dir 0.62))
@@ -368,7 +368,7 @@
 	;; run away fast
 	((and (< dist 420) (plusp timer))
 	 (aim self (- %heading 0.03))
-	 (percent-of-time (level-value 1 1 1 1 2 3 4 5)
+	 (percent-of-time (with-difficulty 1 1 1 1 2 3 4 5)
 	   (play-sound self "magenta-alert.wav")
 	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
 	 (forward self 3))
@@ -392,16 +392,16 @@
 
 (define-method update shocker ()
   (if (< (distance-to-cursor self)
-	 (level-value 300 300 300 300 350 400 400 425))
+	 (with-difficulty 300 300 300 300 350 400 400 425))
       (move self 
 	    (or (percent-of-time 65 (heading-to-cursor self))
 		(progn 
 		  (percent-of-time 15 (play-sound self (random-choose '("sense.wav" "sense2.wav"))))
 		  (random (* 2 pi))))
-	    (level-value 2 2 2 3 3 4 4 5 5))
+	    (with-difficulty 2 2 2 3 3 4 4 5 5))
       (progn 
 	(move self %heading 1)
-	(incf %heading (radian-angle (level-value 2.5 2.5 2.5 2.5 2 1.5))))))
+	(incf %heading (radian-angle (with-difficulty 2.5 2.5 2.5 2.5 2 1.5))))))
 
 (define-method damage shocker (points)
   (make-sparks %x %y "hot pink")
@@ -427,7 +427,7 @@
 
 (defresource "hole.wav" :volume 20)
 
-(defun hole-clock () (level-value 140 130 130 120 110 100 100 95 90))
+(defun hole-clock () (with-difficulty 140 130 130 120 110 100 100 95 90))
 
 (defun level-beast () 
   (if (<= *level* 5)
@@ -436,7 +436,7 @@
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   (level-value 350 400 420 440 460 460 480 480))
+	   (with-difficulty 350 400 420 440 460 460 480 480))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
@@ -471,7 +471,7 @@
   (when (<= %hp 7)
     (setf %image (random-choose '("resonator.png" "resonator-on.png"))))
   (when (< (distance-to-cursor self)
-	   (level-value 350 400 420 440 460 460 480 480))
+	   (with-difficulty 350 400 420 440 460 460 480 480))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
@@ -488,9 +488,9 @@
 (define-method update wave ()
   (let ((speed
 	  (if (> (distance-to-cursor self)
-		 (level-value 200 250 300 350 400 450))
-	      (level-value 1 1 2 3 4)
-	      (level-value 2 2 4 6 7))))
+		 (with-difficulty 200 250 300 350 400 450))
+	      (with-difficulty 1 1 2 3 4)
+	      (with-difficulty 2 2 4 6 7))))
     (percent-of-time 40 (setf %image (random-choose '("corruption-horz2.png" "corruption-horz.png"))))
     (forward self speed)))
 

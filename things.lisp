@@ -1,5 +1,30 @@
 (in-package :2x0ng)
 
+(defun robotp (thing)
+  (and (blockyp thing)
+       (has-tag thing :robot)))
+
+(define-block bubble text) 
+
+(define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
+  (setf %text text)
+  (setf %font font)
+  (later 10.0 (destroy self)))
+
+(define-method draw bubble ()
+  (draw-string %text %x %y 
+	       :color (random-choose '("cyan" "white"))
+	       :font %font))
+
+(defun targetp (thing)
+  (and (blockyp thing)
+       (has-tag thing :target)))
+
+(defun enemyp (thing)
+  (and (blockyp thing)
+       (has-tag thing :enemy)))
+
+(defresource "go.wav" :volume 60)
 (defresource "corruption-horz2.png")
 (defresource "corruption-horz.png")
 (defresource "drone.png")
@@ -16,40 +41,10 @@
 (defresource "trigger.png")
 (defresource "turret-right-on.png")
 (defresource "turret-right.png")
-
 (defresource "woom.wav" :volume 20)
-
 (defresource "alarm.wav" :volume 30)
-
 (defresource "sense.wav" :volume 10)
 (defresource "sense2.wav" :volume 10)
-
-(define-block bubble text) 
-
-(define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
-  (setf %text text)
-  (setf %font font)
-  (later 10.0 (destroy self)))
-
-(define-method draw bubble ()
-  (draw-string %text %x %y 
-	       :color (random-choose '("cyan" "white"))
-	       :font %font))
-
-(defparameter *level* 0)
-
-(defun level-value (&rest args)
-  (if (<= (length args) *level*)
-      (nth (1- (length args)) args)
-      (nth *level* args)))
-
-(defun targetp (thing)
-  (and (blockyp thing)
-       (has-tag thing :target)))
-
-(defun enemyp (thing)
-  (and (blockyp thing)
-       (has-tag thing :enemy)))
 
 (defresource 
     (:name "xplod.wav"
@@ -233,82 +228,6 @@
   (when tags
     (dolist (tag tags)
       (add-tag self tag))))
-
-;; Color themes
-
-(defparameter *two-brick-themes* 
-  '((:snefru "DarkSlateBlue" "green" 
-     "magenta" "cyan")
-    (:xalcrys "black" "blue violet" 
-     "deep pink" "orange")
-    (:zupro "olive drab" "hot pink" 
-     "cyan" "yellow")))
-
-(defparameter *three-brick-themes*
-  '((:snafu "dark magenta" "gray20" 
-     "cyan" "red" "yellow")
-    (:atlantis "midnight blue" "purple" 
-     "green" "hot pink" "cyan")
-    (:krez "black" "maroon2" 
-     "green" "yellow" "orange")))
-
-(defparameter *four-brick-themes*
-  '((:zerk "black" "gray40" 
-     "maroon2" "green" "yellow" "orange")
-    (:tandy "DarkSlateBlue" "gray80" 
-     "yellow" "green" "cyan" "deep pink")
-    (:command "black" "goldenrod" 
-     "cyan" "hot pink" "red" "orange")))
-
-(defparameter *themes* (append *two-brick-themes* *three-brick-themes* *four-brick-themes*))
-
-(defresource "go.wav" :volume 60)
-
-(defun find-theme (name)
-  (rest (assoc name *themes*)))
-
-(defparameter *theme* (find-theme :wizard))
-
-(defun theme-colors (&optional (theme *theme*))
-  (rest (rest theme)))
-
-(defun set-theme (&optional (theme :wizard))
-  (setf *theme* (find-theme theme)))
-
-(defun random-theme () (random-choose (mapcar #'car *themes*)))
-
-(defun set-random-theme () (set-theme (random-theme)))
-
-(defun background-color ()
-  (when *theme* (first *theme*)))
-
-(defun wall-color ()
-  (when *theme* (second *theme*)))
-
-(defun brick-colors ()
-  (when *theme* (rest (rest *theme*))))
-
-;; Standard gamebuffer grid measurement
-
-(defparameter *unit* 14)
-
-(defun units (n) (* n *unit*))
-
-;; Level dimensions, in units
-
-(defparameter *level-height* 200)
-
-(defparameter *level-width* 200)
-
-(defparameter *level-screen-height* 35)
-
-(defparameter *level-screen-width* 50)
-
-;; Is it a robot?
-
-(defun robotp (thing)
-  (and (blockyp thing)
-       (has-tag thing :robot)))
 
 ;; Breakable colored bricks
 

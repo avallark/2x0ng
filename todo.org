@@ -1,20 +1,41 @@
-** TODO easy music toggle switch
-** TODO help screen is a mini town you can visit at any time with f1 to learn about the game, use the menu, etc
-** TODO add taunts from ball stealer guy
-** TODO some levels should have no monitors... diversify levels
-** TODO fix crash when collisions with *ball* and changing levels at same time
-** TODO fix sometimes ball disappears behind block when firing at point-blank
-** TODO more colors, including PeachPuff and NavajoWhite!
-** TODO wrap some areas with gray bricks
-** TODO free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
-** TODO make moving blocks of selected color which sprout eyes and "meep" and run away. they don't die, but you have to chase them. they turn to white smileys when you grab the color. 
-** TODO extend game: do two levels at each difficulty level: one with three colors, one with four
+* TODO Lengthen difficulty curve
+** TODO Data driven ExperienceSynth TM
+** TODO [#A] extend game: do two levels at each difficulty level: one with three colors, one with four
+*** TODO change level-value to use *difficulty-level* 
+*** TODO rename level-value to with-difficulty 
+*** TODO set up array of numbered levels showing what are the colors, music, hazards, wildcard
+** TODO [#A] diversify levels
+*** standard monitors-and-paddles
+*** level with no monitors, only a bunch of very fast tracers and paddles
+*** wildcards: thief ghost friendly
+*** level with lots of waves
+** TODO [#A] Algorithmically generated compile-shmup multi eye base final boss
+** TODO [#A] more colors, including PeachPuff and NavajoWhite!
+** TODO difficulty level 0 has no enemies? 
+** TODO [#A] easy music toggle switch
 
+* Bugfixes
 
-** TODO space bar seems held down when coming back from another window
-** TODO [#A] make sure old buffers/objects are destroyed after buffer compositions
-** TODO [#A] mini story and ending!
+** TODO [#A] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+
+* Other
+
+** TODO [#A] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
+** TODO [#A] tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
+** TODO [#A] make sure thief works properly, add taunts 
+
 ** TODO [#B] do something with the corners
+** TODO [#C] start guy in different corners 
+** TODO [#C] always display current color name 
+** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
+
+
+
+** TODO [#B] make moving blocks of selected color which sprout eyes and "meep" and run away. they don't die, but you have to chase them. they turn to white smileys when you grab the color. 
+** TODO space bar seems held down when coming back from another window
+** TODO [#A] mini story and ending!
 ** TODO [#B] start in any corner
 ** DONE [#A] joystick support
    CLOSED: [2013-03-09 Sat 18:31]
@@ -27,12 +48,9 @@
 *** TODO shield stays on and absorbs 1 hit
 *** TODO temporary wildcard color
 ** TODO [#B] mega white paddle boss who taunts you with textboxes. the textboxes ARE THE ENEMIES. words are bullets
-** TODO [#C] start guy in different corners 
-** TODO [#C] always display current color name 
 ** TODO [#C] growing corruption/mismunch areas that eat color
 ** TODO [#C] enemies that merge to form larger ships like in space fury 
 ** TODO [#C] francophone voicesynthesis taunts you when you die
-** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
 
 * Archived Entries
 ** DONE [#A] remove the large blank areas around the puzzle
