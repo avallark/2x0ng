@@ -470,9 +470,9 @@
 (define-method update wave ()
   (let ((speed
 	  (if (> (distance-to-cursor self)
-		 (with-difficulty 200 250 300 350 400))
-	      (with-difficulty 1 1 2 2 3 3 4)
-	      (with-difficulty 2 2 3 3 5 5 6))))
+		 (with-difficulty 100 100 100 100 100 150 200 250 275))
+	      (with-difficulty 1 1 2 2 3 3)
+	      (with-difficulty 2 2 2 2 2 3 3))))
     (percent-of-time 40 (setf %image (random-choose '("corruption-horz2.png" "corruption-horz.png"))))
     (forward self speed)))
 
@@ -564,7 +564,7 @@
       (percent-of-time 3
 	(when (< (distance-to-cursor self) 350)
 	  (setf timer 20))))
-    (percent-of-time 1.5
+    (percent-of-time 0.6
       (drop self (new 'cloud) 40 40))))
 
 (define-method damage vent (points) nil)
@@ -586,8 +586,6 @@
 
 (define-method collide vent (thing)
   (when (robotp thing)
-    (die thing))
-  (when (brickp thing)
-    (destroy self)))
+    (die thing)))
 
 

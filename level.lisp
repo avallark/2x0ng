@@ -252,10 +252,31 @@
 	 (x (units 2))
 	 (y (/ height 2))
 	 (garrison (with-new-buffer 
-		     (drop-object (current-buffer) (new 'hole) x (- y (units 4)))
-		     (drop-object (current-buffer) (new 'vent) x y))))
-
+		     (drop-object (current-buffer) 
+				  (new 'base)
+				  x (- y (units 4)))
+		     (drop-object (current-buffer)
+				   (new 'paddle)
+				   x (+ y (units 12)))
+		     (drop-object (current-buffer)
+				   (new 'paddle)
+				   x (- y (units 12)))
+		     (drop-object (current-buffer) 
+				  (new 'vent) x y))))
     (lined-up garrison buffer garrison)))
+
+(defun with-outposts (buffer)
+  (trim buffer)
+  (let* ((height (%height buffer))
+	 (x (units 2))
+	 (y (/ height 2))
+	 (outpost (with-new-buffer 
+		     (drop-object (current-buffer) 
+				  (new 'hole)
+				  x (- y (units 4)))
+		     (drop-object (current-buffer) 
+				  (new 'hole) x y))))
+    (lined-up outpost buffer outpost)))
 
 (defun make-core (colors)
 ;  (assert (zerop *depth*))
@@ -302,7 +323,8 @@
 	      (with-bulkheads
 		  (gated C
 			 (requiring key
-			   (make-layer (rest colors)))))
+			   (with-garrisons
+			       (make-layer (rest colors))))))
 	      (stacked-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
 	     (stacked-up-randomly
 	      (lined-up-randomly
@@ -318,16 +340,17 @@
   (assert (every #'stringp colors))
   (let ((*depth* (length colors))
 	(puzzle (make-layer colors)))
-    (if (>= (length colors) 4) 
-	(with-garrisons puzzle)
-	puzzle)))
+    (case (length colors) 
+      (2 puzzle)
+      (3 (with-outposts puzzle))
+      (4 (with-garrisons puzzle)))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 8)
+	(puzzle (with-border (units 10)
 		  (make-puzzle (derange (level-colors))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
@@ -336,8 +359,8 @@
       (paste-from buffer puzzle)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 8 (1- (truncate (/ (%height puzzle)
+			  (+ 10 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 10 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
       ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)

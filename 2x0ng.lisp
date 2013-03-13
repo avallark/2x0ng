@@ -37,16 +37,22 @@
 (defun begin-game (level)   
   (switch-to-buffer (2x0ng-level level)))
 
+(defun reset-level ()
+  (begin-game *level*))
+
+(defun next-level ()
+  (begin-game (1+ *level*)))
+
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
   (setf *window-title* "2x0ng")
   
   (setf *screen-width* 1080)
   (setf *screen-height* 720)
-  (setf *nominal-screen-width* 1080)
-  (setf *nominal-screen-height* 720)
-  ;; (setf *nominal-screen-width* (* 1080 4))
-  ;; (setf *nominal-screen-height* (* 720 4))
+  ;; (setf *nominal-screen-width* 1080)
+  ;; (setf *nominal-screen-height* 720)
+  (setf *nominal-screen-width* (* 1080 4))
+  (setf *nominal-screen-height* (* 720 4))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)

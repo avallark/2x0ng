@@ -46,7 +46,7 @@
     (:zendium "gray17" "orchid"
      "deep pink" "deep sky blue" "yellow" "orange")
     (:command "black" "yellow" 
-     "cyan" "hot pink" "red" "blue")))
+     "aquamarine" "deep pink" "red" "purple")))
 
 (defparameter *boss-theme* '(:voltz "black" "black" "red" "orchid" "aquamarine"))
 
@@ -130,7 +130,10 @@
 
 (defun make-wildcard ()
   (let ((wildcards (level-wildcards)))
-    (if wildcards (new (random-choose wildcards)) (bulkhead))))
+    (if wildcards 
+	(let ((wildcard (random-choose wildcards)))
+	  (when wildcard (new wildcard)))
+	(bulkhead))))
 
 (defun configure-level (level) 
   (assert (integerp level))
