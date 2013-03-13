@@ -298,6 +298,7 @@
 ;;; A colored block that only opens with the right color
 
 (defresource "gate.png")
+(defresource "gate2.png")
 (defresource "gate-closing-sound.wav" :volume 150)
 
 (defresource "error.wav" :volume 70)
@@ -314,6 +315,11 @@
   (draw-textured-rectangle %x %y %z %width %height 
 			   (find-texture "gate.png")
 			   :vertex-color %color))
+  ;; (when (> %width 500)
+  ;;   (draw-textured-rectangle %x %y %z %width %height 
+  ;; 			     (find-texture "gate2.png")
+  ;; 			     :vertex-color %color)))
+
 
 (define-method paint gate (color)
   (if (not (string= %color color))

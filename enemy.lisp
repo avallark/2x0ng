@@ -366,9 +366,9 @@
 	 (aim self dir)
 	 (forward self 2))
 	;; run away fast
-	((and (< dist 420) (plusp timer))
+	((and (< dist 520) (plusp timer))
 	 (aim self (- %heading 0.03))
-	 (percent-of-time (with-difficulty 1 1 1 1 2 3 4 5)
+	 (percent-of-time (with-difficulty 1 2 2 2 3 3 4 5)
 	   (play-sound self "magenta-alert.wav")
 	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
 	 (forward self 3))

@@ -226,14 +226,24 @@
   (assert things)
   (apply #'funcall #'mixed-up (mapcar #'with-automatic-padding things)))
 
+(defun horizontal-bulkhead (width)		   
+  (let ((u (/ width 3)))
+    (with-new-buffer
+      (drop-object (current-buffer) (new 'wall u (units 1)) 0 0)
+      (drop-object (current-buffer) (new 'wall u (units 1)) (* 2 u) 0))))
+
+(defun vertical-bulkhead (width)		   
+  (let ((u (/ width 3)))
+    (with-new-buffer
+      (drop-object (current-buffer) (new 'wall (units 1) u) 0 0)
+      (drop-object (current-buffer) (new 'wall (units 1) u) 0 (* 2 u)))))
+
 (defun with-bulkheads (buffer)
   (trim buffer)
-  (let ((wall (singleton 
-	       (if (evenp *depth*)
-		   (new 'wall (- (%width buffer) (units 2))
-			(units 1))
-		   (new 'wall (units 1) (- (%height buffer) (units 2)))))))
-    (laid-out wall buffer (duplicate wall))))
+  (let ((wall (if (evenp *depth*)
+		  (horizontal-bulkhead (%width buffer))
+		  (vertical-bulkhead (%height buffer)))))
+    (laid-out (bordered wall) buffer (bordered (duplicate wall)))))
 
 (defun make-core (colors)
 ;  (assert (zerop *depth*))
@@ -274,11 +284,13 @@
 		     (randomly (hazard)
 			       (bricks 5 A)))
 	      (hazard)
-	      (with-bulkheads
-		  (gated C
-			 (requiring key
-			   (make-layer (rest colors))))))
-	     (lined-up-randomly (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
+	      (bricks 6 (or *required-color* B)))
+	     (hazard)
+	     (with-bulkheads
+		 (gated C
+			(requiring key
+			  (make-layer (rest colors)))))
+	     (lined-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
 	    (stacked-up-randomly
 	     (lined-up-randomly
 	      (skewed (hazard)
@@ -286,6 +298,7 @@
 	      (hazard))
 	     (lined-up-randomly
 	      (bricks 6 (or *required-color* B))
+	      (hazard)
 	      (bricks 6 (random-color)))))))))))
 
 (defun make-puzzle (colors)
@@ -310,16 +323,10 @@
 			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
 			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
-      ;; player 1
-      (drop-object (current-buffer) robot (units 4) (units 5))
-      (set-cursor (current-buffer) robot)
-      (follow-with-camera (current-buffer) robot)
       ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 2/5)
-      ;; make player temporarily invulnerable 
-      (raise-shield robot)
       ;; give some instructions
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
@@ -329,6 +336,14 @@
 		   (units 8) (units 7))
       ;;
       (trim (current-buffer))
-;      (play-music (nth *level* *soundtrack*) :loop t)
+      ;; player 1
+      ;; (let ((y (or (percent-of-time 50 (units 4))
+      ;; 		   (- (%height buffer) (units 7)))))
+      (drop-object (current-buffer) robot (units 4) (units 5))
+      (set-cursor (current-buffer) robot)
+      (move-window-to-cursor (current-buffer))
+      (follow-with-camera (current-buffer) robot)
+      (raise-shield robot)
+      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

@@ -24,7 +24,7 @@
   '((:snefru "DarkSlateBlue" "green" 
      "magenta" "cyan")
     (:xalcrys "black" "blue violet" 
-     "deep pink" "orange")
+     "deep pink" "cornflower blue")
     (:zupro "olive drab" "hot pink" 
      "cyan" "yellow")))
 
@@ -44,9 +44,9 @@
     (:tandy "DarkSlateBlue" "gray80" 
      "yellow" "green" "cyan" "deep pink")
     (:zendium "gray17" "orchid"
-     "deep pink" "chartreuse" "cyan" "peach puff")
-    (:command "black" "goldenrod" 
-     "cyan" "hot pink" "red" "orange")))
+     "deep pink" "deep sky blue" "yellow" "orange")
+    (:command "black" "yellow" 
+     "cyan" "hot pink" "red" "blue")))
 
 (defparameter *boss-theme* '(:voltz "black" "black" "red" "orchid" "aquamarine"))
 

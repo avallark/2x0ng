@@ -43,10 +43,10 @@
   
   (setf *screen-width* 1080)
   (setf *screen-height* 720)
-  ;; (setf *nominal-screen-width* 1080)
-  ;; (setf *nominal-screen-height* 720)
-  (setf *nominal-screen-width* (* 1080 4))
-  (setf *nominal-screen-height* (* 720 4))
+  (setf *nominal-screen-width* 1080)
+  (setf *nominal-screen-height* 720)
+  ;; (setf *nominal-screen-width* (* 1080 4))
+  ;; (setf *nominal-screen-height* (* 720 4))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
@@ -62,7 +62,7 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-;    (play-music "rekall" :loop t)
+    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
