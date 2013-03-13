@@ -179,7 +179,7 @@
   (and *ball* (colliding-with self *ball*)))
 
 (define-method collide robot (thing)
-  (when (or (brickp thing) (enemyp thing) (holep thing))
+  (when (or (brickp thing) (enemyp thing) (holep thing) (cloudp thing))
     (restore-location self)))
 
 (defresource "skull.png")

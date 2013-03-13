@@ -13,6 +13,7 @@
 ** TODO [#B] display message when paused
 ** TODO [#C] shield pickup
 ** TODO NOW LOADING screen
+** TODO indicate direction of exit
 
 * TODO RELEASE 0.9
 ** TODO Music review/polish

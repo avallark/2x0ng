@@ -508,6 +508,10 @@
   :tags '(:cloud)
   :image "vent.png")
 
+(defun cloudp (thing)
+  (and (blockyp thing)
+       (has-tag thing :cloud)))
+
 (define-method draw cloud ()
   (with-field-values (x y width height image) self
     (let ((jitter (random 10)))

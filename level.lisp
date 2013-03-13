@@ -365,7 +365,7 @@
       ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
-	    (%vertical-scrolling-margin buffer) 2/5)
+	    (%vertical-scrolling-margin buffer) 4/7)
       ;; give some instructions
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
