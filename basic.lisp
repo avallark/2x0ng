@@ -83,37 +83,40 @@
     (:difficulty 0 :colors 2 :hazards (hole) :wildcards nil) 
     (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcards nil)
     (:difficulty 1 :colors 3 :hazards (hole hole paddle) :wildcards nil)
-    (:difficulty 2 :colors 2 :hazards (hole hole paddle) :wildcards (ghost thief))
+    (:difficulty 2 :colors 2 :hazards (hole hole paddle) :wildcards (ghost thief nil))
     (:difficulty 2 :colors 3 :hazards (hole hole tracer) :wildcards nil)
     (:difficulty 3 :colors 3 :hazards (tracer paddle hole) :wildcards nil)
-    (:difficulty 3 :colors 4 :hazards (hole hole paddle) :wildcards nil)
+    (:difficulty 3 :colors 4 :hazards (hole hole paddle) :wildcards (wave nil))
     (:difficulty 4 :colors 3 :hazards (hole hole paddle) :wildcards (thief ghost))
     (:difficulty 4 :colors 4 :hazards (hole hole paddle tracer) :wildcards nil)
-    (:difficulty 5 :colors 3 :hazards (glitch paddle hole) :wildcards nil)
-    (:difficulty 5 :colors 4 :hazards (glitch paddle hole hole) :wildcards (ghost thief))
+    (:difficulty 5 :colors 3 :hazards (wave paddle hole) :wildcards nil)
+    (:difficulty 5 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
     (:difficulty 6 :colors 3 :hazards (base paddle wave) :wildcards nil)
     (:difficulty 6 :colors 4 :hazards (base paddle tracer) :wildcards nil)
-    (:difficulty 7 :colors 3 :hazards (base hole paddle) :wildcards (thief))
-    (:difficulty 7 :colors 4 :hazards (paddle tracer glitch) :wildcards (ghost))
+    (:difficulty 7 :colors 3 :hazards (base hole wave) :wildcards (thief))
+    (:difficulty 7 :colors 4 :hazards (paddle tracer) :wildcards (ghost))
     (:difficulty 8 :colors 3 :hazards (hole paddle base wave) :wildcards nil)
-    (:difficulty 8 :colors 4 :hazards (base) :wildcards (boss))))
+    (:difficulty 8 :colors 2 :hazards (base) :wildcards (boss))))
+
+(defun nth-level (level)
+  (nth (mod level (length *levels*)) *levels*))
 
 (defun level-difficulty (&optional (level *level*))
-  (getf (nth level *levels*) :difficulty))
+  (getf (nth-level level) :difficulty))
 
 (defun level-theme (&optional (level *level*))
   (random-choose 
    (mapcar #'car
-	   (ecase (getf (nth level *levels*) :colors)
+	   (ecase (getf (nth-level level) :colors)
 	     (2 *two-brick-themes*)
 	     (3 *three-brick-themes*)
 	     (4 *four-brick-themes*)))))
 
 (defun level-hazards (&optional (level *level*))
-  (getf (nth level *levels*) :hazards))
+  (getf (nth-level level) :hazards))
 
 (defun level-wildcards (&optional (level *level*))
-  (getf (nth level *levels*) :wildcards))
+  (getf (nth-level level) :wildcards))
 
 (defun bulkhead ()
   (new 'wall 200 20))
@@ -121,7 +124,8 @@
 (defun make-hazard ()
   (let ((hazards (level-hazards)))
     (if hazards 
-	(new (random-choose hazards))
+	(let ((hazard (random-choose hazards)))
+	  (when hazard (new hazard)))
 	(bulkhead))))
 
 (defun make-wildcard ()

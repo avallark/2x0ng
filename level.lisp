@@ -136,7 +136,7 @@
 (defun with-automatic-padding (buffer)
   (with-border (units 3)
     (with-padding (+ (units 1) 
-		     (random (units (with-depth 20 40))))
+		     (random (units 25)))
       buffer)))
 
 (defun horizontally (a b)
@@ -176,7 +176,8 @@
   (singleton (make-hazard)))
 
 (defun wildcard ()
-  (singleton (make-wildcard)))
+  (singleton (or (make-wildcard)
+		 (make-hazard))))
 
 (defun stacked-up (&rest things)
   (assert things)
@@ -245,6 +246,17 @@
 		  (vertical-bulkhead (%height buffer)))))
     (laid-out (bordered wall) buffer (bordered (duplicate wall)))))
 
+(defun with-garrisons (buffer)
+  (trim buffer)
+  (let* ((height (%height buffer))
+	 (x (units 2))
+	 (y (/ height 2))
+	 (garrison (with-new-buffer 
+		     (drop-object (current-buffer) (new 'hole) x (- y (units 4)))
+		     (drop-object (current-buffer) (new 'vent) x y))))
+
+    (lined-up garrison buffer garrison)))
+
 (defun make-core (colors)
 ;  (assert (zerop *depth*))
   (destructuring-bind (A B) colors
@@ -304,8 +316,11 @@
 
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
-  (let ((*depth* (length colors)))
-    (make-layer colors)))
+  (let ((*depth* (length colors))
+	(puzzle (make-layer colors)))
+    (if (>= (length colors) 4) 
+	(with-garrisons puzzle)
+	puzzle)))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
@@ -345,6 +360,6 @@
       (move-window-to-cursor (current-buffer))
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-      (play-music (nth *level* *soundtrack*) :loop t)
+;      (play-music (nth *level* *soundtrack*) :loop t)
       (current-buffer))))
 

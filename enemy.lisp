@@ -42,7 +42,6 @@
 (define-method lay-trail tracer ()
   (decf %energy)
   (unless (plusp %energy)
-    ;; (percent-of-time 0.5 (drop self (new 'glitch)))
     (drop self (new 'trail) 6 6)
     (setf %energy 4)))
 
@@ -121,12 +120,13 @@
 (define-block glitch
   (tags :initform '(:enemy :glitch))
   (clock :initform nil)
-  (depth :initform 0)
+  (heading :initform (random (* pi 2)))
   (image :initform (random-choose *corruption-images*))
   (speed :initform 1)
   (overlay-color :initform nil))
 
 (define-method initialize glitch (&optional (depth 4))
+  (setf %clock 30)
   (initialize%super self)
   (setf %depth depth))
 
@@ -136,10 +136,7 @@
 
 (define-method collide glitch (thing)
   (when (brickp thing)
-    (percent-of-time 90 (restore-location self)))
-  ;; (when (ballp thing)
-  ;;   (play-sound self "blurp.wav")
-  ;;   (destroy self))
+    (restore-location self))
   (when (robotp thing)
     (die thing)))
 
@@ -149,35 +146,14 @@
 (define-method clear-overlay glitch ()
   (setf %overlay-color nil))
 
-(define-method creep glitch ()
-  (when (and (plusp %depth) 
-	     (< (distance-to-cursor self) 350))
-      (with-fields (x y width height) self
-	(multiple-value-bind (x0 y0)
-	    (ecase (direction-to-cursor self)
-	      (:up (values x (- y height)))
-	      (:down (values x (+ y height)))
-	      (:left (values (- x width) y))
-	      (:right (values (+ x width) y))
-	      (:upright (values (+ x width) (- y height)))
-	      (:downright (values (+ x width) (+ y height)))
-	      (:upleft (values (- x width) (- y height)))
-	      (:downleft (values (- x width) (+ y height))))
-	  (drop-object (current-buffer) (new 'glitch (1- %depth)) x0 y0)
-	  (setf %clock 10)))))
-
 (define-method update glitch ()
-  (or (when (numberp %clock)
-	(decf %clock)
-	(when (zerop %clock)
-	  (destroy self)))
-      (progn (percent-of-time 3 
-	       (creep self)
-	       (move self (heading-to-cursor self) 14)
-	       (change-image self (random-choose *corruption-images*)))
-	     (percent-of-time 3 
-	       (set-overlay self)
-	       (later 20 (clear-overlay self))))))
+  (move self %heading (with-difficulty 1 1 1 1.5 2 3 4 4 5))
+  (incf %heading (radian-angle 0.8)) 
+  (percent-of-time 6 
+    (change-image self (random-choose *corruption-images*)))
+  (percent-of-time 3 
+    (set-overlay self)
+    (later 20 (clear-overlay self))))
       
 (define-method draw glitch ()
   (draw%super self)
@@ -507,5 +483,111 @@
 
 (define-method damage wave (thing) nil)
 
-  
+  ;;; Deadly burning gas clouds
+
+(defresource 
+    (:name "geiger1.wav" :type :sample :file "geiger1.wav" :properties (:volume 40))
+    (:name "geiger2.wav" :type :sample :file "geiger2.wav" :properties (:volume 40))
+  (:name "geiger3.wav" :type :sample :file "geiger3.wav" :properties (:volume 40))
+  (:name "geiger4.wav" :type :sample :file "geiger4.wav" :properties (:volume 40)))
+
+(defparameter *vent-sounds* '("geiger1.wav" "geiger2.wav" "geiger3.wav" "geiger4.wav"))
+
+(defresource 
+    (:name "vent.png" :type :image :file "vent.png")
+    (:name "vent2.png" :type :image :file "vent2.png")
+  (:name "vent3.png" :type :image :file "vent3.png")
+  (:name "vent4.png" :type :image :file "vent4.png")
+  (:name "vent5.png" :type :image :file "vent5.png"))
+
+(defparameter *vent-images* '("vent.png" "vent2.png" "vent3.png" "vent4.png" "vent5.png"))
+
+(define-block cloud 
+  :timer 300
+  :collision-type :passive
+  :tags '(:cloud)
+  :image "vent.png")
+
+(define-method draw cloud ()
+  (with-field-values (x y width height image) self
+    (let ((jitter (random 10)))
+      (when (> jitter 7)
+	(incf %heading (random-choose '(-0.3 0.2))))
+      (set-blending-mode :additive2)
+      (draw-image image
+		  (- x jitter)
+		  (- y jitter)
+		  :width (+ width jitter)
+		  :height (+ height jitter)
+		  :opacity 1)
+      (dotimes (n 4) 
+	(draw-box (+ x -5 (random height))
+		  (+ y -5 (random width))
+		  (+ 5 (random 8))
+		  (+ 5 (random 8))
+		  :color (random-choose '("white" "magenta"))
+		  :alpha 0.7)))))
+
+(define-method initialize cloud (&optional (size (+ 16 (random 32))))
+  (initialize%super self)
+  (resize self size size))
+
+(define-method update cloud ()
+  (forward self 1)
+  (decf %timer)
+  (when (evenp %timer)
+    (setf %image (random-choose *vent-images*)))
+  (when (< (distance-to-cursor self) 300)
+    (percent-of-time 4 (play-sample (random-choose *vent-sounds*))))
+  (unless (plusp %timer)
+    (destroy self)))
+
+(defresource 
+    (:name "vent-hole1.png" :type :image :file "vent-hole1.png")
+    (:name "vent-hole2.png" :type :image :file "vent-hole2.png")
+  (:name "vent-hole3.png" :type :image :file "vent-hole3.png"))
+
+(defparameter *vent-hole-images* '("vent-hole1.png" "vent-hole2.png" "vent-hole3.png"))
+
+(define-block vent 
+  :image "vent-hole1.png" :tags '(:enemy :vent) 
+  :timer 0)
+
+(define-method update vent ()
+  (with-fields (timer) self 
+    (when (plusp timer)
+      (percent-of-time 10
+	(play-sample "magenta-alert.wav")
+	(drop self (new 'bullet (heading-to-cursor self)) 20 20))
+      (decf timer))
+    (when (zerop timer)
+      (percent-of-time 3
+	(when (< (distance-to-cursor self) 350)
+	  (setf timer 20))))
+    (percent-of-time 1.5
+      (drop self (new 'cloud) 40 40))))
+
+(define-method damage vent (points) nil)
+
+(define-method draw vent ()
+  (with-field-values (x y height width) self
+    (draw-box x y width height :color "black")
+    (let ((border (+ 5 (random 20))))
+      (draw-box (+ x border)
+		(+ y border)
+	        (- width (* 2 border))
+		(- height (* 2 border))
+		:color 
+		(random-choose '("yellow" "orange" "magenta" "HotPink" "red")))
+      (set-blending-mode :additive2)
+      (draw-image (random-choose *vent-hole-images*) 
+		  %x %y)
+      (set-blending-mode :alpha))))
+
+(define-method collide vent (thing)
+  (when (robotp thing)
+    (die thing))
+  (when (brickp thing)
+    (destroy self)))
+
 

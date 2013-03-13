@@ -1,15 +1,21 @@
-** TODO display message when paused
-** TODO shield pickup
-** TODO definitely add paddles/enemies/things to right and left margins  
+** DONE make glitches useful
+   CLOSED: [2013-03-13 Wed 12:12]
 
 * TODO RELEASE 0.7
+** TODO [#A] definitely add guns/paddles/enemies/things to right and left margins on 4-color levels
+** TODO [#A] ENDING
+** TODO import bombs and vents from xalcyon
+
 ** TODO tweak level design, retest
+
 
 * TODO RELEASE 0.8
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
 ** TODO [#A] HELP SCREEN
-** TODO [#A] ENDING
 ** TODO [#A] Verify ps3 gamepad support
+** TODO [#B] display message when paused
+** TODO [#C] shield pickup
+
 
 * TODO RELEASE 0.9
 ** TODO [#A] BUGFIX: press against nested gate to "cheat"
