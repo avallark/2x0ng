@@ -4,6 +4,8 @@
 
 (define-block robot 
   (alive :initform t)
+  (shielded :initform nil)
+  (shield-clock :initform 0)
   (hearing-distance :initform 650)
   (body-color :initform "white")
   (color :initform "white")
@@ -25,6 +27,10 @@
 (define-method initialize robot (&optional color)
   (initialize%super self)
   (when color (setf %body-color color)))
+
+(define-method raise-shield robot ()
+  (play-sound self "go.wav")
+  (setf %shielded t %shield-clock (seconds->frames 3)))
 
 (define-method humanp robot () nil)
 
@@ -96,7 +102,6 @@
 	(values (- tx (* *ball-size* 0.5))
 		(- ty (* *ball-size* 0.5)))))))
 
-(define-method draw robot ()
   ;; (let ((heading (stick-heading self)))
   ;;   (when heading
   ;;     (multiple-value-bind (x y)
@@ -107,12 +112,17 @@
   ;; 				       :downleft)
   ;; 				       60)
   ;; 	(draw-line %x %y x y :color "cyan"))))
+
+(define-method draw robot ()
   (let ((image 
 	  (if %alive
 	      (or (robot-image %direction %walk-clock) "robot-up.png")
 	      "skull.png")))
     (draw-textured-rectangle %x %y %z %width %height (find-texture image) 
-			     :vertex-color %body-color)))
+			     :vertex-color %body-color)
+    (when %shielded 
+      (multiple-value-bind (cx cy) (center-point self)
+	(draw-circle cx cy 30 :color (random-choose '("cyan" "white")))))))
 	  
 (define-method serve robot ()
   (multiple-value-bind (x y) (serve-location self)
@@ -177,7 +187,7 @@
 (defresource "analog-death.wav" :volume 70)
 
 (define-method die robot ()
-  (when %alive
+  (when (and %alive (not %shielded))
     (when (humanp self) 
       (play-sample "analog-death.wav")
       (drop-object (current-buffer) 
@@ -212,6 +222,11 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
+  ;; possibly lower shields
+  (when %shielded
+    (decf %shield-clock)
+    (unless (plusp %shield-clock)
+      (setf %shielded nil)))
   ;; player took ball away
   (when (and %carrying (null *ball*))
     (setf %carrying nil)

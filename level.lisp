@@ -198,7 +198,7 @@
 	(vertically 
 	 (horizontally 
 	  (hazard)
-	  (singleton (new 'wall)))
+	  (singleton (bulkhead)))
 	 (gated B 
 		(vertically (hazard)
 			    (bricks 6 A)))))
@@ -220,20 +220,22 @@
 	   (padded-vertically 
 	    (horizontally
 	     (vertically 
-	      (horizontally (gated A (bricks 6 C))
-			    (hazard))
-	      (horizontally
-	       (vertically
-		(horizontally (bricks 6 B) (bricks 6 (random-choose (theme-colors))))
-		(horizontally 
-		 (gated B 
-			(horizontally 
-			 (hazard)
-			 (bricks 5 A)))
-		 (gated C
-			(requiring key
-			  (make-puzzle (rest colors))))))
-	       (hazard)))
+	      (horizontally (bricks 6 (random-color)) (singleton (bulkhead)))
+	      (vertically 
+	       (horizontally (gated A (bricks 6 C))
+			     (hazard))
+	       (horizontally
+		(vertically
+		 (horizontally (bricks 6 B) (hazard))
+		 (horizontally 
+		  (gated B 
+			 (horizontally 
+			  (hazard)
+			  (bricks 5 A)))
+		  (gated C
+			 (requiring key
+			   (make-puzzle (rest colors))))))
+		(hazard))))
 	     (hazard))
 	    (padded-vertically 
 	     (horizontally
@@ -245,7 +247,7 @@
 	     (bricks 6 (random-color))
 	     (either-way (bricks 6 (random-color)) (hazard)))))))))))
 
-(defun 2x0ng-level (&optional (level 0))
+(defun 2x0ng-level (&optional (level 1))
   (configure-level level)
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
@@ -270,8 +272,8 @@
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 2/5)
-      ;; sound the bell
-      (play-sample "go.wav")
+      ;; make player temporarily invulnerable 
+      (raise-shield robot)
       ;; give some instructions
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")

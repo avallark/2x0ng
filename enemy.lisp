@@ -48,7 +48,7 @@
 
 (define-method update tracer ()
   (percent-of-time 0.2 (setf %direction (random-direction)))
-  (move-toward self %direction %speed)
+  (move-toward self %direction (with-difficulty 1.0 1.5 1.7 1.9 2.0 2.2 2.4 2.6 2.8))
   (lay-trail self))
 
 (define-method collide tracer (thing)
@@ -187,7 +187,7 @@
      :alpha 0.2
      :color %overlay-color)))
 
-;;; The "monitor", a roving enemy that fires a spread of bullets then dashes away
+;;; The "monitor", a roving enemy 
 
 (defresource
     (:name "monitor" :type :image :file "monitor.png")
@@ -202,7 +202,7 @@
   (image :initform "monitor2"))
 
 (defun monitor-scaling-speed ()
-  (with-difficulty 1.2 1.3 1.4 1.5 1.6 1.7))
+  (with-difficulty 1.2 1.3 1.5 1.7 1.7 1.8))
 
 (define-method grow monitor ()
   (let ((size (+ %width (monitor-scaling-speed))))
@@ -243,7 +243,7 @@
     (if (< dist (with-difficulty 240 275 300 325 360 400 440 500))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self (with-difficulty 1.2 1.5 1.5 1.6 1.8 2.2 2.4)))
+	  (forward self (with-difficulty 1.2 1.5 1.7 1.8 2.0 2.2 2.4 2.5)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
 	       (move-toward self %direction (with-difficulty 1 2 2.5 3))))))
@@ -259,7 +259,7 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) (with-difficulty 1.3 1.6 2.0 2.2 2.6 2.9 3.1 3.3))
+      (progn (move self (heading-to-cursor self) (with-difficulty 1.2 1.4 2.2 2.4 2.8 3.0 3.2 3.4))
 	     (percent-of-time 25
 	       (percent-of-time 30 (play-sound self (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
@@ -320,7 +320,7 @@
 
 (define-method initialize ghost ()
   (initialize%super self)
-  (resize self 100 100))
+  (resize self 140 140))
 
 (define-method damage ghost (points)
   (decf %hp)
@@ -383,7 +383,6 @@
     ((robotp thing)
      (damage thing 1))))
 
-
 ;;; Swarming Shockers
 
 (define-block shocker
@@ -422,7 +421,7 @@
 
 (define-block hole 
   (tags :initform '(:hole))
-  (clock :initform 120)
+  (clock :initform 40)
   (image :initform "hole1.png"))
 
 (defresource "hole.wav" :volume 20)
@@ -488,9 +487,9 @@
 (define-method update wave ()
   (let ((speed
 	  (if (> (distance-to-cursor self)
-		 (with-difficulty 200 250 300 350 400 450))
-	      (with-difficulty 1 1 2 3 4)
-	      (with-difficulty 2 2 4 6 7))))
+		 (with-difficulty 200 250 300 350 400))
+	      (with-difficulty 1 1 2 2 3 3 4)
+	      (with-difficulty 2 2 3 3 5 5 6))))
     (percent-of-time 40 (setf %image (random-choose '("corruption-horz2.png" "corruption-horz.png"))))
     (forward self speed)))
 

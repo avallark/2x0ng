@@ -1,44 +1,38 @@
+** TODO display message when paused
+** TODO shield pickup
+
+* TODO RELEASE 0.7
 * TODO Lengthen difficulty curve
-** TODO Data driven ExperienceSynth TM
-** TODO [#A] extend game: do two levels at each difficulty level: one with three colors, one with four
+** TODO extend game: do two levels at each difficulty level: one with three colors, one with four
 *** TODO change level-value to use *difficulty-level* 
 *** TODO rename level-value to with-difficulty 
 *** TODO set up array of numbered levels showing what are the colors, music, hazards, wildcard
-** TODO [#A] diversify levels
-*** standard monitors-and-paddles
-*** level with no monitors, only a bunch of very fast tracers and paddles
-*** wildcards: thief ghost friendly
-*** level with lots of waves
-** TODO [#A] Algorithmically generated compile-shmup multi eye base final boss
-** TODO [#A] more colors, including PeachPuff and NavajoWhite!
-** TODO difficulty level 0 has no enemies? 
-** TODO [#A] easy music toggle switch
+** TODO tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
 
-* Bugfixes
+* TODO RELEASE 0.8
+** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
+** TODO [#A] HELP SCREEN
+** TODO [#A] ENDING
+** TODO [#A] Verify ps3 gamepad support
 
+* TODO RELEASE 0.9
+** TODO [#A] BUGFIX: press against nested gate to "cheat"
 ** TODO [#A] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
 
-* Other
+* TODO Other features
 
 ** TODO [#A] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
-** TODO [#A] tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
 ** TODO [#A] make sure thief works properly, add taunts 
-
 ** TODO [#B] do something with the corners
 ** TODO [#C] start guy in different corners 
 ** TODO [#C] always display current color name 
 ** TODO [#C] fake retro 2600 glitch lines on left side aligned with sprites 
-
-
+** TODO easy music toggle switch
 
 ** TODO [#B] make moving blocks of selected color which sprout eyes and "meep" and run away. they don't die, but you have to chase them. they turn to white smileys when you grab the color. 
 ** TODO space bar seems held down when coming back from another window
-** TODO [#A] mini story and ending!
-** TODO [#B] start in any corner
-** DONE [#A] joystick support
-   CLOSED: [2013-03-09 Sat 18:31]
 ** TODO FINAL LEVEL WITH 5 COLORS AND HYPERPADDLE GOND
 ** TODO [#C] goodie boxes, "black" is code for sparkle
 ** TODO [#C] grey gates
@@ -68,4 +62,24 @@
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: TODO
    :END:
+** DONE more colors, including PeachPuff and NavajoWhite!
+   CLOSED: [2013-03-12 Tue 20:18]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-12 Tue 20:18
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: Lengthen difficulty curve
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** TODO [#A] mini story and ending!
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-12 Tue 20:18
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.9
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** TODO [#B] start in any corner
+** DONE [#A] joystick support
+   CLOSED: [2013-03-09 Sat 18:31]
 

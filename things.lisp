@@ -147,7 +147,7 @@
 (define-block bullet 
   :radius 3
   :speed 7.2
-  :timer 60
+  :timer 200
   :blend :alpha
   :growth-rate nil
   :tags '(:bullet))
@@ -281,7 +281,11 @@
 
 (define-block (wall :super brick)
   (tags :initform '(:brick :wall))
-  (color :initform  *wall-color*))
+  (color :initform (wall-color)))
+
+(define-method initialize wall (&optional width height)
+  (when (and (numberp height) (numberp width))
+    (resize self width height)))
 
 (defun wallp (thing)
   (and (blockyp thing)

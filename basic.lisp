@@ -26,7 +26,7 @@
      "cyan" "red" "yellow")
     (:atlantis "midnight blue" "purple" 
      "green" "hot pink" "cyan")
-    (:radium "dark orange" "gold"
+    (:radium "dark olive green" "gold"
      "cyan" "chartreuse" "magenta")
     (:krez "black" "maroon2" 
      "green" "yellow" "orange")))
@@ -72,24 +72,24 @@
   (when *theme* (rest (rest *theme*))))
 
 (defparameter *levels* 
-  '((:difficulty 0 :colors 2 :hazards nil :wildcard nil)
-    (:difficulty 0 :colors 2 :hazards (hole) :wildcard nil)
-    (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcard nil)
-    (:difficulty 1 :colors 3 :hazards (hole paddle) :wildcard nil)
-    (:difficulty 2 :colors 2 :hazards (hole paddle) :wildcard ghost)
-    (:difficulty 2 :colors 3 :hazards (hole tracer) :wildcard nil)
-    (:difficulty 3 :colors 3 :hazards (tracer paddle) :wildcard nil)
-    (:difficulty 3 :colors 4 :hazards (hole paddle) :wildcard nil)
-    (:difficulty 4 :colors 3 :hazards (hole paddle) :wildcard thief)
-    (:difficulty 4 :colors 4 :hazards (hole paddle tracer) :wildcard nil)
-    (:difficulty 5 :colors 3 :hazards (glitch paddle) :wildcard nil)
-    (:difficulty 5 :colors 4 :hazards (glitch paddle hole) :wildcard nil)
-    (:difficulty 6 :colors 3 :hazards (base paddle wave) :wildcard nil)
-    (:difficulty 6 :colors 4 :hazards (base paddle tracer) :wildcard nil)
-    (:difficulty 7 :colors 3 :hazards (base hole paddle) :wildcard thief)
-    (:difficulty 7 :colors 4 :hazards (paddle tracer glitch) :wildcard ghost)
-    (:difficulty 8 :colors 3 :hazards (hole paddle base wave) :wildcard nil)
-    (:difficulty 8 :colors 4 :hazards (base) :wildcard boss)))
+  '((:difficulty 0 :colors 2 :hazards nil :wildcards nil)
+    (:difficulty 0 :colors 2 :hazards (hole) :wildcards nil) 
+    (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcards nil)
+    (:difficulty 1 :colors 3 :hazards (hole hole paddle) :wildcards nil)
+    (:difficulty 2 :colors 2 :hazards (hole hole paddle) :wildcards (ghost thief))
+    (:difficulty 2 :colors 3 :hazards (hole hole tracer) :wildcards nil)
+    (:difficulty 3 :colors 3 :hazards (tracer paddle hole) :wildcards nil)
+    (:difficulty 3 :colors 4 :hazards (hole hole paddle) :wildcards nil)
+    (:difficulty 4 :colors 3 :hazards (hole hole paddle) :wildcards (thief ghost))
+    (:difficulty 4 :colors 4 :hazards (hole hole paddle tracer) :wildcards nil)
+    (:difficulty 5 :colors 3 :hazards (glitch paddle hole) :wildcards nil)
+    (:difficulty 5 :colors 4 :hazards (glitch paddle hole hole) :wildcards (ghost thief))
+    (:difficulty 6 :colors 3 :hazards (base paddle wave) :wildcards nil)
+    (:difficulty 6 :colors 4 :hazards (base paddle tracer) :wildcards nil)
+    (:difficulty 7 :colors 3 :hazards (base hole paddle) :wildcards (thief))
+    (:difficulty 7 :colors 4 :hazards (paddle tracer glitch) :wildcards (ghost))
+    (:difficulty 8 :colors 3 :hazards (hole paddle base wave) :wildcards nil)
+    (:difficulty 8 :colors 4 :hazards (base) :wildcards (boss))))
 
 (defun level-difficulty (&optional (level *level*))
   (getf (nth level *levels*) :difficulty))
@@ -105,16 +105,23 @@
 (defun level-hazards (&optional (level *level*))
   (getf (nth level *levels*) :hazards))
 
-(defun level-wildcard (&optional (level *level*))
-  (getf (nth level *levels*) :wildcard))
+(defun level-wildcards (&optional (level *level*))
+  (getf (nth level *levels*) :wildcards))
+
+(defun bulkhead ()
+  (or (percent-of-time 50
+	(new 'wall 20 200))
+      (new 'wall 200 20)))
 
 (defun make-hazard ()
-  (let ((hazard (level-hazards)))
-    (if hazard (new hazard) (new 'wall))))
+  (let ((hazards (level-hazards)))
+    (if hazards 
+	(new (random-choose hazards))
+	(bulkhead))))
 
 (defun make-wildcard ()
-  (let ((wildcard (level-wildcard)))
-    (if wildcard (new wildcard) (new 'wall))))
+  (let ((wildcards (level-wildcards)))
+    (if wildcards (new (random-choose wildcards)) (bulkhead))))
 
 (defun configure-level (level) 
   (assert (integerp level))
