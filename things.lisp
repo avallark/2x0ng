@@ -35,6 +35,7 @@
 (defresource "resonator.png")
 (defresource "pulsator.png")
 (defresource "shocker.png")
+(defresource "shocker2.png")
 (defresource "tank-disabled.png")
 (defresource "tank-northeast.png")
 (defresource "tank-north.png")

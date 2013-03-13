@@ -277,29 +277,30 @@
 	    (skewed (gated A (bricks 6 C))
 		    (hazard)
 		    (bricks 6 B))
-	    (stacked-up-randomly 
-	     (lined-up-randomly
+	    (randomly
+	     (stacked-up-randomly 
+	      (lined-up-randomly
+	       (hazard)
+	       (gated B 
+		      (randomly (hazard)
+				(bricks 5 A)))
+	       (hazard)
+	       (bricks 6 (or *required-color* B)))
 	      (hazard)
-	      (gated B 
-		     (randomly (hazard)
-			       (bricks 5 A)))
-	      (hazard)
-	      (bricks 6 (or *required-color* B)))
-	     (hazard)
-	     (with-bulkheads
-		 (gated C
-			(requiring key
-			  (make-layer (rest colors)))))
-	     (lined-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
-	    (stacked-up-randomly
-	     (lined-up-randomly
-	      (skewed (hazard)
-		      (bricks 5 B))
-	      (hazard))
-	     (lined-up-randomly
-	      (bricks 6 (or *required-color* B))
-	      (hazard)
-	      (bricks 6 (random-color)))))))))))
+	      (with-bulkheads
+		  (gated C
+			 (requiring key
+			   (make-layer (rest colors)))))
+	      (stacked-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
+	     (stacked-up-randomly
+	      (lined-up-randomly
+	       (skewed (hazard)
+		       (bricks 5 A))
+	       (hazard))
+	      (lined-up-randomly
+	       (bricks 6 (or *required-color* B))
+	       (hazard)
+	       (bricks 6 (random-color))))))))))))
 
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))

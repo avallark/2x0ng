@@ -1,13 +1,9 @@
 ** TODO display message when paused
 ** TODO shield pickup
+** TODO definitely add paddles/enemies/things to right and left margins  
 
 * TODO RELEASE 0.7
-* TODO Lengthen difficulty curve
-** TODO extend game: do two levels at each difficulty level: one with three colors, one with four
-*** TODO change level-value to use *difficulty-level* 
-*** TODO rename level-value to with-difficulty 
-*** TODO set up array of numbered levels showing what are the colors, music, hazards, wildcard
-** TODO tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
+** TODO tweak level design, retest
 
 * TODO RELEASE 0.8
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
@@ -82,4 +78,22 @@
 ** TODO [#B] start in any corner
 ** DONE [#A] joystick support
    CLOSED: [2013-03-09 Sat 18:31]
+** DONE Lengthen difficulty curve
+   CLOSED: [2013-03-13 Wed 03:06]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-13 Wed 03:06
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+*** DONE extend game: do two levels at each difficulty level: one with three colors, one with four
+    CLOSED: [2013-03-13 Wed 03:05]
+**** DONE change level-value to use *difficulty-level* 
+     CLOSED: [2013-03-13 Wed 03:05]
+**** DONE rename level-value to with-difficulty 
+     CLOSED: [2013-03-13 Wed 03:05]
+**** DONE set up array of numbered levels showing what are the colors, music, hazards, wildcard
+     CLOSED: [2013-03-13 Wed 03:05]
+*** DONE tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
+    CLOSED: [2013-03-13 Wed 03:05]
 

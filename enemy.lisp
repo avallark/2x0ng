@@ -386,10 +386,12 @@
 ;;; Swarming Shockers
 
 (define-block shocker
+  (hp :initform 2)
   (tags :initform '(:shocker :enemy :target))
   (image :initform "shocker.png"))
 
 (define-method update shocker ()
+  (when (= %hp 1) (setf %image (random-choose '("shocker.png" "shocker2.png"))))
   (if (< (distance-to-cursor self)
 	 (with-difficulty 300 300 300 300 350 400 400 425))
       (move self 
@@ -403,9 +405,12 @@
 	(incf %heading (radian-angle (with-difficulty 2.5 2.5 2.5 2.5 2 1.5))))))
 
 (define-method damage shocker (points)
-  (make-sparks %x %y "hot pink")
-  (play-sound self "woom.wav")
-  (destroy self))
+  (play-sound self (random-choose *whack-sounds*))
+  (decf %hp)
+  (when (zerop %hp)
+    (make-sparks %x %y "hot pink")
+    (play-sound self "woom.wav")
+    (destroy self)))
 
 (define-method collide shocker (thing)
   (when (robotp thing)
@@ -454,17 +459,19 @@
   (image :initform "resonator.png")
   (hp :initform 8))
 
-(define-method damage base (points)
-  (decf %hp)
-  (play-sound self (random-choose *whack-sounds*))
-  (unless (plusp %hp)
-    (play-sound self "bigboom.wav")
-    (make-sparks %x %y "white")
-    (destroy self)))
+(define-method damage base (points))
+  ;; (decf %hp)
+  ;; (play-sound self (random-choose *whack-sounds*))
+  ;; (unless (plusp %hp)
+  ;;   (play-sound self "bigboom.wav")
+  ;;   (make-sparks %x %y "white")
+  ;;   (destroy self)))
 
 (define-method collide base (thing)
   (when (brickp thing)
     (setf %clock 100)))
+
+(defun base-clock () (with-difficulty 120 120 120 110 110 100 95 95 90))
 
 (define-method update base ()
   (when (<= %hp 7)
@@ -478,7 +485,7 @@
 	  (play-sound self "woom.wav")
 	  (setf (%heading shocker) (random (* 2 pi)))
 	  (drop self shocker)
-	  (setf clock (hole-clock)))))))
+	  (setf clock (base-clock)))))))
 
 ;;; Shockwaves
 
