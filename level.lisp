@@ -133,6 +133,12 @@
 	      (+ width amount)
 	      height))))
 
+(defun with-automatic-padding (buffer)
+  (with-border (units 3)
+    (with-padding (+ (units 1) 
+		     (random (units (with-depth 20 40))))
+      buffer)))
+
 (defun horizontally (a b)
   (percent-of-time 50 (rotatef a b))
   (arrange-beside 
@@ -144,17 +150,6 @@
   (arrange-below 
    (with-border 10 a)
    (with-border 10 b)))
-
-(defun padded (buffer)
-  (with-padding 
-    (units (with-difficulty 5 7 10 20 20 30 40 45 45))
-    buffer))
-
-(defun padded-vertically (a b)
-  (percent-of-time 50 (rotatef a b))
-  (arrange-below 
-   (padded (with-border 10 a))
-   (padded (with-border 10 b))))
 
 (defun either-way (a b)
   (funcall (or (percent-of-time 50 #'horizontally) #'vertically)
@@ -183,67 +178,120 @@
 (defun wildcard ()
   (singleton (make-wildcard)))
 
-(defun make-two-puzzle-easy (colors)
+(defun stacked-up (&rest things)
+  (assert things)
+  (if (= 1 (length things))
+      (first things)
+      (arrange-below (first things) (apply #'stacked-up (rest things)))))
+
+(defun lined-up (&rest things)
+  (assert things)
+  (if (= 1 (length things))
+      (first things)
+      (arrange-beside (first things) (apply #'lined-up (rest things)))))
+
+(defun stacked-up-randomly (&rest things)
+  (bordered (apply #'funcall #'stacked-up (derange things))))
+
+(defun lined-up-randomly (&rest things)
+  (bordered (apply #'funcall #'lined-up (derange things))))
+
+(defun randomly (&rest things)
+  (apply #'funcall (or (percent-of-time 50 #'stacked-up-randomly)
+		       #'lined-up-randomly) 
+	 things))
+
+(defun laid-out (&rest things)
+  (assert things)
+  (apply #'funcall (if (evenp *depth*)
+	     #'stacked-up
+	     #'lined-up)
+	 things))
+
+(defun mixed-up (&rest things)
+  (assert things)
+  (apply #'funcall (if (evenp *depth*)
+	     #'stacked-up-randomly
+	     #'lined-up-randomly)
+	 things))
+
+(defun mixed-down (&rest things)
+  (assert things)
+  (apply #'funcall (if (oddp *depth*)
+	     #'stacked-up-randomly
+	     #'lined-up-randomly)
+	 things))
+
+(defun skewed (&rest things)
+  (assert things)
+  (apply #'funcall #'mixed-up (mapcar #'with-automatic-padding things)))
+
+(defun with-bulkheads (buffer)
+  (trim buffer)
+  (let ((wall (singleton 
+	       (if (evenp *depth*)
+		   (new 'wall (- (%width buffer) (units 2))
+			(units 1))
+		   (new 'wall (units 1) (- (%height buffer) (units 2)))))))
+    (laid-out wall buffer (duplicate wall))))
+
+(defun make-core (colors)
+;  (assert (zerop *depth*))
   (destructuring-bind (A B) colors
-    (horizontally
-     (vertically
+    (stacked-up-randomly
+      (skewed (hazard) (bricks 6 B))
+     (lined-up-randomly 
       (hazard)
-      (horizontally 
-       (bricks 6 B) 
-       (hazard)))
-     (bordered
-      (horizontally
-       (vertically
-	(gated A (bricks 6 (or *required-color* B)))
-	(vertically 
-	 (horizontally 
-	  (hazard)
-	  (singleton (bulkhead)))
-	 (gated B 
-		(vertically (hazard)
-			    (bricks 6 A)))))
-       (let ((*puzzle-border* 12))
-	 (either-way (wildcard)
-		     (make-exit (derange (theme-colors))))))))))
+      (bordered
+	   (stacked-up-randomly 
+	    (gated A (bricks 6 (or *required-color* B)))
+	    (hazard)
+	    (mixed-up (hazard)
+		      (bricks 6 A))))
+      (let ((*puzzle-border* 12))
+	(mixed-up (wildcard)
+		    (make-exit (derange (theme-colors)))))))))
+
+(defun make-layer (colors)
+  (let ((*depth* (1- *depth*)))
+    (cond 
+      ;; with two colors, terminate the recursion
+      ((= 2 (length colors))
+       (make-core colors))
+      ;; with three or more colors, puzzify and recurse
+      ((< 2 (length colors))
+       (let ((key (random-choose colors)))
+	 (destructuring-bind (A B C &rest other-colors) 
+	     (derange colors)
+	   (stacked-up-randomly
+	    (skewed (gated A (bricks 6 C))
+		    (hazard)
+		    (bricks 6 B))
+	    (stacked-up-randomly 
+	     (lined-up-randomly
+	      (hazard)
+	      (gated B 
+		     (randomly (hazard)
+			       (bricks 5 A)))
+	      (hazard)
+	      (with-bulkheads
+		  (gated C
+			 (requiring key
+			   (make-layer (rest colors))))))
+	     (lined-up-randomly (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
+	    (stacked-up-randomly
+	     (lined-up-randomly
+	      (skewed (hazard)
+		      (bricks 5 B))
+	      (hazard))
+	     (lined-up-randomly
+	      (bricks 6 (or *required-color* B))
+	      (bricks 6 (random-color)))))))))))
 
 (defun make-puzzle (colors)
-  (cond 
-    ;; with two colors, terminate the recursion
-    ((= 2 (length colors))
-     (make-two-puzzle-easy colors))
-    ;; with three or more colors, puzzify and recurse
-    ((< 2 (length colors))
-     (let ((key (random-choose colors)))
-       (destructuring-bind (A B C &rest other-colors) (derange colors)
-	 (bordered
-	  (arrange-beside
-	   (padded-vertically 
-	    (horizontally
-	     (vertically 
-	      (horizontally (gated A (bricks 6 C))
-			    (hazard))
-	      (horizontally
-	       (vertically
-		(horizontally (bricks 6 B) (hazard))
-		(horizontally 
-		 (gated B 
-			(horizontally 
-			 (hazard)
-			 (bricks 5 A)))
-		 (gated C
-			(requiring key
-			  (make-puzzle (rest colors))))))
-	       (hazard)))
-	     (hazard))
-	    (padded-vertically 
-	     (horizontally
-	      (hazard)
-	      (bricks 5 B))
-	     (bricks 6 (or *required-color* B))))
-	   (bordered 
-	    (either-way 
-	     (bricks 6 (random-color))
-	     (either-way (bricks 6 (random-color)) (hazard)))))))))))
+  (assert (every #'stringp colors))
+  (let ((*depth* (length colors)))
+    (make-layer colors)))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)

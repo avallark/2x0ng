@@ -13,6 +13,13 @@
       (nth (1- (length args)) args)
       (nth *difficulty* args)))
 
+(defparameter *depth* 0)
+
+(defun with-depth (&rest args)
+  (if (<= (length args) *depth*)
+      (nth (1- (length args)) args)
+      (nth *depth* args)))
+
 (defparameter *two-brick-themes* 
   '((:snefru "DarkSlateBlue" "green" 
      "magenta" "cyan")
@@ -109,9 +116,7 @@
   (getf (nth level *levels*) :wildcards))
 
 (defun bulkhead ()
-  (or (percent-of-time 50
-	(new 'wall 20 200))
-      (new 'wall 200 20)))
+  (new 'wall 200 20))
 
 (defun make-hazard ()
   (let ((hazards (level-hazards)))
