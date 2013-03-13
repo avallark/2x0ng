@@ -257,10 +257,10 @@
 				  x (- y (units 4)))
 		     (drop-object (current-buffer)
 				   (new 'paddle)
-				   x (+ y (units 12)))
+				   x (+ y (units 18)))
 		     (drop-object (current-buffer)
 				   (new 'paddle)
-				   x (- y (units 12)))
+				   x (- y (units 18)))
 		     (drop-object (current-buffer) 
 				  (new 'vent) x y))))
     (lined-up garrison buffer garrison)))
@@ -323,8 +323,8 @@
 	      (with-bulkheads
 		  (gated C
 			 (requiring key
-			   (with-garrisons
-			       (make-layer (rest colors))))))
+			   (funcall (if (>= *level* 9) #'with-garrisons #'identity)
+				    (make-layer (rest colors))))))
 	      (stacked-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
 	     (stacked-up-randomly
 	      (lined-up-randomly
