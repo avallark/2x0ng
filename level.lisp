@@ -220,22 +220,20 @@
 	   (padded-vertically 
 	    (horizontally
 	     (vertically 
-	      (horizontally (bricks 6 (random-color)) (singleton (bulkhead)))
-	      (vertically 
-	       (horizontally (gated A (bricks 6 C))
-			     (hazard))
-	       (horizontally
-		(vertically
-		 (horizontally (bricks 6 B) (hazard))
-		 (horizontally 
-		  (gated B 
-			 (horizontally 
-			  (hazard)
-			  (bricks 5 A)))
-		  (gated C
-			 (requiring key
-			   (make-puzzle (rest colors))))))
-		(hazard))))
+	      (horizontally (gated A (bricks 6 C))
+			    (hazard))
+	      (horizontally
+	       (vertically
+		(horizontally (bricks 6 B) (hazard))
+		(horizontally 
+		 (gated B 
+			(horizontally 
+			 (hazard)
+			 (bricks 5 A)))
+		 (gated C
+			(requiring key
+			  (make-puzzle (rest colors))))))
+	       (hazard)))
 	     (hazard))
 	    (padded-vertically 
 	     (horizontally
