@@ -2,14 +2,11 @@
    CLOSED: [2013-03-13 Wed 12:12]
 
 * TODO RELEASE 0.7
-** TODO [#A] definitely add guns/paddles/enemies/things to right and left margins on 4-color levels
-** TODO [#A] ENDING
-** TODO import bombs and vents from xalcyon
-
 ** TODO tweak level design, retest
 
-
 * TODO RELEASE 0.8
+** TODO [#A] ENDING
+** TODO import bomb code from xalcyon
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
 ** TODO [#A] HELP SCREEN
 ** TODO [#A] Verify ps3 gamepad support
@@ -18,6 +15,7 @@
 ** TODO NOW LOADING screen
 
 * TODO RELEASE 0.9
+** TODO Music review/polish
 ** TODO [#A] BUGFIX: press against nested gate to "cheat"
 ** TODO [#A] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
@@ -102,4 +100,13 @@
      CLOSED: [2013-03-13 Wed 03:05]
 *** DONE tweak ghost (larger, slower) , make bullets bigger/chunkier/noisier
     CLOSED: [2013-03-13 Wed 03:05]
+** DONE [#A] definitely add guns/paddles/enemies/things to right and left margins on 4-color levels
+   CLOSED: [2013-03-13 Wed 14:42]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-13 Wed 14:42
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.7
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
 
