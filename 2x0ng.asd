@@ -6,4 +6,5 @@
 	       (:file "robot" :depends-on ("things"))
 	       (:file "enemy" :depends-on ("robot"))
                (:file "level" :depends-on ("robot"))
-	       (:file "2x0ng" :depends-on ("level"))))
+               (:file "story" :depends-on ("level"))
+	       (:file "2x0ng" :depends-on ("story"))))

@@ -1,6 +1,18 @@
 ** DONE make glitches useful
    CLOSED: [2013-03-13 Wed 12:12]
 ** TODO ball shouldn't target vents/clouds/bases
+** DONE draw line over apparent gaps in large gates
+   CLOSED: [2013-03-14 Thu 14:11]
+
+* TODO a simple framework for blue/white modal conversation bubbles that type in progressively like in old games.
+* TODO camera scrolls to each speaker in turn.
+* TODO with-scene
+* TODO with-dialogue <---- pull from org-voice
+
+* The Neutral Gang: Navajo White, Rosy/Sandy Brown, and Peach Puff.
+**
+* Chartreuse, Goldenrod, Alice Blue, Ghost White
+
 
 * TODO RELEASE 0.8
 ** DONE indicate direction of exit

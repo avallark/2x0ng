@@ -1,5 +1,72 @@
 (in-package :2x0ng)
 
+;;; Dialogue
+
+(defresource "robot-talk-1.png")
+(defresource "robot-talk-2.png")
+(defresource "robot-talk-3.png")
+(defresource "robot-talk-4.png")
+
+(defparameter *talking-images* 
+  '("robot-talk-1.png" "robot-talk-2.png" "robot-talk-3.png" "robot-talk-4.png")) 
+
+(defresource "balloon.png")
+(defresource "balloon2.png")
+
+(defparameter *balloon-images* 
+  '("balloon.png" "balloon2.png"))
+
+(defvar *dialogue* nil)
+
+(defvar *actor* nil)
+
+(defvar *dialogue-channel* nil)
+
+(defun talkingp (thing) 
+  (and (robotp thing)
+       (field-value :talking thing))) 
+
+(defun robot-talk-image ()
+  (random-choose *talking-images*))
+
+(defun dialogue-playing-p () 
+  (and *dialogue* (integerp *dialogue-channel*)))
+
+(defun say (actor line) 
+  (setf *dialogue*
+	(append *dialogue* (list (list actor line)))))
+
+(defun act (actor method) 
+  (setf *dialogue*
+	(append *dialogue* (list (list actor method)))))
+
+(defun stop-dialogue ()
+  (setf *dialogue* nil)
+  (halt-sample *dialogue-channel*)
+  (setf *dialogue-channel* nil)
+  (setf *actor* nil))
+
+(defun play-dialogue ()
+  (if (null *dialogue*)
+      (stop-dialogue)
+      (destructuring-bind (actor line) (pop *dialogue*)
+	(when (blockyp *actor*)
+	  (stop-talking *actor*))
+	(setf *actor* actor)
+	;; is it an audio line or an action?
+	(etypecase line
+	  (string 
+	   (begin-talking *actor* line)
+	   (setf *dialogue-channel* 
+		 (play-sample line)))
+	  (keyword 
+	   (send line *actor*))))))
+
+(defun update-dialogue ()
+  (when (and (dialogue-playing-p)
+	     (not (sdl-mixer:sample-playing-p *dialogue-channel*)))
+    (play-dialogue)))
+
 ;;; Waypoint 
 
 (define-block waypoint :image "waypoint.png" :counter 25 :collision-type :passive)
@@ -31,7 +98,9 @@
 ;;; A player, either AI or human controlled
 
 (define-block robot 
+  (leave-direction :initform nil)
   (alive :initform t)
+  (talking :initform nil)
   (shielded :initform nil)
   (shield-clock :initform 0)
   (hearing-distance :initform 650)
@@ -90,6 +159,9 @@
 (defresource "robot-right.png")
 (defresource "robot-right-rstep.png")
 
+(define-method leave robot ()
+  (setf %leave-direction :down))
+
 (defparameter *walking-right* 
   '("robot-right.png"
     "robot-right-lstep.png"
@@ -106,7 +178,7 @@
     "robot-up-lstep.png"
     "robot-up.png"
     "robot-up-rstep.png"))
-    
+        
 (defun robot-image (direction clock)
   (let ((frames
 	  (or 
@@ -122,6 +194,12 @@
 	    "robot-right.png"
 	    "robot-up.png"))))
 
+(define-method begin-talking robot (line)
+  (setf %talking t))
+
+(define-method stop-talking robot ()
+  (setf %talking nil))
+
 (define-method serve-location robot ()
   (with-fields (direction) self
     (multiple-value-bind (cx cy) (center-point self)
@@ -130,27 +208,23 @@
 	(values (- tx (* *ball-size* 0.5))
 		(- ty (* *ball-size* 0.5)))))))
 
-  ;; (let ((heading (stick-heading self)))
-  ;;   (when heading
-  ;;     (multiple-value-bind (x y)
-  ;; 	  (step-toward-heading self heading 50)
-  ;; 	(draw-line %x %y x y :color "magenta"))
-  ;;     (multiple-value-bind (x y)
-  ;; 	  (step-in-direction %x %y (or (heading-direction heading)
-  ;; 				       :downleft)
-  ;; 				       60)
-  ;; 	(draw-line %x %y x y :color "cyan"))))
-
 (define-method draw robot ()
   (let ((image 
 	  (if %alive
-	      (or (robot-image %direction %walk-clock) "robot-up.png")
+	      (or
+	       (when %talking (robot-talk-image))
+	       (robot-image %direction %walk-clock) 
+	       "robot-up.png")
 	      "skull.png")))
     (draw-textured-rectangle %x %y %z %width %height (find-texture image) 
 			     :vertex-color %body-color)
     (when %shielded 
       (multiple-value-bind (cx cy) (center-point self)
-	(draw-circle cx cy 30 :color (random-choose '("cyan" "white")))))))
+	(draw-circle cx cy 30 :color (random-choose '("cyan" "white")))))
+    (when %talking
+      (multiple-value-bind (bx by) (right-of self)
+	(draw-image (random-choose '("balloon.png" "balloon2.png"))
+		    bx (- by (units 2)))))))
 	  
 (define-method serve robot ()
   (multiple-value-bind (x y) (serve-location self)
@@ -185,16 +259,17 @@
 
 ;;; Default AI methods. 
 
-(define-method movement-direction robot ()
-  (if %carrying
-      (opposite-direction (direction-to-cursor self))
-      (if (< (distance-to-cursor self) 400)
-	  (if *ball*
-	      (direction-to-thing self *ball*)
-	      (if (> (distance-to-cursor self) 250)
-		  (opposite-direction (direction-to-cursor self))
-		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
-		      %direction))))))
+(define-method movement-direction robot () 
+  %leave-direction)
+  ;; (if %carrying
+  ;;     (opposite-direction (direction-to-cursor self))
+  ;;     (if (< (distance-to-cursor self) 400)
+  ;; 	  (if *ball*
+  ;; 	      (direction-to-thing self *ball*)
+  ;; 	      (if (> (distance-to-cursor self) 250)
+  ;; 		  (opposite-direction (direction-to-cursor self))
+  ;; 		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
+  ;; 		      %direction))))))
 
 (defvar *joystick-enabled* nil)
 
@@ -252,6 +327,7 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
+  (when (dialogue-playing-p) (update-dialogue))
   ;; possibly show waypoint
   (when (> (distance-between (find-exit) (cursor)) *waypoint-distance*)
     (decf *waypoint-clock*)
@@ -390,3 +466,15 @@
 		  (right-analog-stick-pressed-p)))
        (or (heading-direction heading) :left)))))
   
+;;; Drawing the robot
+
+  ;; (let ((heading (stick-heading self)))
+  ;;   (when heading
+  ;;     (multiple-value-bind (x y)
+  ;; 	  (step-toward-heading self heading 50)
+  ;; 	(draw-line %x %y x y :color "magenta"))
+  ;;     (multiple-value-bind (x y)
+  ;; 	  (step-in-direction %x %y (or (heading-direction heading)
+  ;; 				       :downleft)
+  ;; 				       60)
+  ;; 	(draw-line %x %y x y :color "cyan"))))

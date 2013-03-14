@@ -47,6 +47,7 @@
     (switch-to-buffer (2x0ng-level %level))))
 
 (defun begin-game (level)   
+  (stop-dialogue)
   (switch-to-buffer (loading-screen level)))
 
 (defun reset-level ()
@@ -80,8 +81,8 @@
 
 (defun help-buffer ()
   (let ((buffer (new 'help-screen)))
-    (setf (%game buffer) (current-buffer))
-    (bind-event buffer  '(:space) :resume-playing)
+    (setf (field-value :game buffer) (current-buffer))
+    (bind-event buffer '(:space) :resume-playing)
     buffer))
 
 ;;; Main program
@@ -110,7 +111,7 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-    (play-music "rekall" :loop t)
+;    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 

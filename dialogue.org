@@ -1,0 +1,63 @@
+
+#+begin_src speak :pitch "12" :speed "90" :voice "mb-en1" :wav "navajo-1.wav"
+Allow me to introduce myself. My name is Navaho White, and these
+are my lieutenants: Sandy Brown, and Peach Puff. 
+#+end_src 
+
+#+RESULTS:
+: 0
+
+#+begin_src speak :pitch "12" :speed "90" :voice "mb-en1" :wav "navajo-2.wav"
+The Neutral Gang runs this town, so you'd better watch your step if
+you want to do business around here. Or else you're more likely to get stepped on. Got it? 
+#+end_src 
+
+#+RESULTS:
+: 0
+
+#+begin_src speak :pitch "12" :speed "90" :voice "mb-us2" :wav "sandy-1.wav"
+I'm Sandy Brown, and I enforce the law here in Two Zong Town. I'll be watching you.
+Is that clear buccanneer? 
+#+end_src 
+
+#+RESULTS:
+: 0
+
+#+begin_src speak :pitch "12" :speed "90" :voice "mb-en1" :wav "navajo-3.wav"
+Now! Peach Puff! Give Mr. Gold here a few pointers. 
+Sandy Brown! Come with me, or we'll be late for Squareball practice. And quit stomping!
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src speak  :pitch "12" :speed "90" :voice "mb-fr4-en" :wav "peach-1.wav"
+Greetings. Naturally, I am the aforementioned Peach Puff and I will tell you a bit about our little town.
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src speak  :pitch "12" :speed "90" :voice "mb-fr4-en" :wav "peach-2.wav"
+You have probably already discovered that you can move with the arrow keys, or the numeric keypad. 
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src speak  :pitch "12" :speed "90" :voice "mb-fr4-en" :wav "peach-3.wav"
+To throw your bouncing Squareball, press the space bar (or the Alt key).
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src speak  :pitch "12" :speed "90" :voice "mb-fr4-en" :wav "peach-4.wav"
+Excellent! Fantastique!
+#+end_src
+
+
+#+RESULTS:
+: 0
+
+

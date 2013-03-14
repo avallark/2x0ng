@@ -318,11 +318,11 @@
 (define-method draw gate ()
   (draw-textured-rectangle %x %y %z %width %height 
 			   (find-texture "gate.png")
-			   :vertex-color %color))
-  ;; (when (> %width 500)
-  ;;   (draw-textured-rectangle %x %y %z %width %height 
-  ;; 			     (find-texture "gate2.png")
-  ;; 			     :vertex-color %color)))
+			   :vertex-color %color)
+  (when (> %width 1000)
+    (draw-textured-rectangle %x %y %z %width %height 
+  			     (find-texture "gate2.png")
+  			     :vertex-color %color)))
 
 
 (define-method paint gate (color)

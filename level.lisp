@@ -379,7 +379,7 @@
 		   (new 'bubble "Arrow keys to move. Space (or Alt) to fire. Control-R to reset." "sans-mono-bold-14")
 		   (units 8) (units 7))
       (drop-object (current-buffer) 
-		   (new 'bubble "Press Control-J to toggle joystick control, F12 to pause." "sans-mono-bold-14")
+		   (new 'bubble "PRESS F1 FOR HELP, F12 to pause, Control-J to toggle joystick control." "sans-mono-bold-14")
 		   (units 8) (units 8))
       ;;
       (trim (current-buffer))
@@ -389,6 +389,6 @@
       (move-window-to-cursor (current-buffer))
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-      (play-music (random-choose *soundtrack*) :loop t)
+;      (play-music (random-choose *soundtrack*) :loop t)
       (current-buffer))))
 
