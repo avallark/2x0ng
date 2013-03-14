@@ -72,9 +72,9 @@
 (define-method update paddle ()
   (let ((speed
 	  (if (< (distance-to-cursor self)
-		 (with-difficulty 200 250 300 350 400 450))
-	      (with-difficulty 8 10 12 14 16 17) 
-	      (with-difficulty 3 4 5 6 7 10 12 13))))
+		 (with-difficulty 200 200 250 250 300 300 350))
+	      (with-difficulty 8 8.5 9 9.5 10 10.5 11 11.5 12 12.5 13 13.5) 
+	      (with-difficulty 2 2 3 3 4 4 5 6 7 8))))
     (forward self speed)))
 
 (define-method collide paddle (thing)
@@ -178,7 +178,7 @@
   (image :initform "monitor2"))
 
 (defun monitor-scaling-speed ()
-  (with-difficulty 1.2 1.3 1.5 1.7 1.7 1.8))
+  (with-difficulty 1.1 1.2 1.25 1.3 1.35 1.4 1.45 1.5))
 
 (define-method grow monitor ()
   (let ((size (+ %width (monitor-scaling-speed))))
@@ -216,13 +216,13 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist (with-difficulty 240 275 300 325 360 400 440 500))
+    (if (< dist (with-difficulty 240 275 300 325 350 360 370 380))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self (with-difficulty 1.2 1.5 1.7 1.8 2.0 2.2 2.4 2.5)))
+	  (forward self (with-difficulty 1.0 1.2 1.4 1.6 1.8 1.8 1.9 2.0)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
-	       (move-toward self %direction (with-difficulty 1 2 2.5 3))))))
+	       (move-toward self %direction (with-difficulty 1 2 2 2.5 2.5 3))))))
 
 (defresource "grow.wav" :volume 10)
 (defresource "grow2.wav" :volume 10)
@@ -235,7 +235,7 @@
 	  (1 (random-choose '("monitor3" "monitor4")))
 	  (0 "monitor")))
   (if (= %hp 1)
-      (progn (move self (heading-to-cursor self) (with-difficulty 1.2 1.4 2.2 2.4 2.8 3.0 3.2 3.4))
+      (progn (move self (heading-to-cursor self) (with-difficulty 1.2 1.25 1.3 1.5 1.8 2.0 2.2 2.4))
 	     (percent-of-time 25
 	       (percent-of-time 30 (play-sound self (random-choose '("grow.wav" "grow2.wav"))))
 	       (grow self)))
@@ -407,7 +407,7 @@
 
 (defresource "hole.wav" :volume 20)
 
-(defun hole-clock () (with-difficulty 140 130 130 120 110 100 100 95 90))
+(defun hole-clock () (with-difficulty 140 130 130 125 120 120 115 110))
 
 (defun level-beast () 
   (if (<= *level* 5)
@@ -416,7 +416,7 @@
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   (with-difficulty 350 400 420 440 460 460 480 480))
+	   (with-difficulty 350 400 420 440 460 460))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
@@ -558,11 +558,9 @@
   :timer 0)
 
 (define-method update vent ()
+  (percent-of-time 12 (setf %image (random-choose *vent-hole-images*)))
   (with-fields (timer) self 
     (when (plusp timer)
-      (percent-of-time 10
-	(play-sample "magenta-alert.wav")
-	(drop self (new 'bullet (heading-to-cursor self)) 20 20))
       (decf timer))
     (when (zerop timer)
       (percent-of-time 3
@@ -572,21 +570,6 @@
       (drop self (new 'cloud) 40 40))))
 
 (define-method damage vent (points) nil)
-
-(define-method draw vent ()
-  (with-field-values (x y height width) self
-    (draw-box x y width height :color "black")
-    (let ((border (+ 5 (random 20))))
-      (draw-box (+ x border)
-		(+ y border)
-	        (- width (* 2 border))
-		(- height (* 2 border))
-		:color 
-		(random-choose '("yellow" "orange" "magenta" "HotPink" "red")))
-      (set-blending-mode :additive2)
-      (draw-image (random-choose *vent-hole-images*) 
-		  %x %y)
-      (set-blending-mode :alpha))))
 
 (define-method collide vent (thing)
   (when (robotp thing)

@@ -1,5 +1,33 @@
 (in-package :2x0ng)
 
+;;; Waypoint 
+
+(define-block waypoint :image "waypoint.png" :counter 25 :collision-type :passive)
+
+(defparameter *waypoint-interval* (seconds->frames 16))
+
+(defparameter *waypoint-distance* 1400)
+
+(defparameter *waypoint-clock* 0)
+
+(defun find-exit ()
+  (loop for thing being the hash-keys of (%objects (current-buffer))
+	when (exitp thing) return thing))
+
+(define-method update waypoint ()
+  (percent-of-time 30 (setf %image (random-choose '("waypoint.png" "waypoint2.png"))))
+  (decf %counter)
+  (if (zerop %counter)
+      (destroy self)
+      (let ((exit (find-exit)))
+	(if (blockyp exit)
+	    (multiple-value-bind (x y) 
+		(step-toward-heading (cursor)
+				     (heading-to-thing (cursor) exit)
+				     280)
+		(move-to self x y))
+	    (destroy self)))))
+
 ;;; A player, either AI or human controlled
 
 (define-block robot 
@@ -224,6 +252,13 @@
 ;;; Control logic driven by the above (possibly overridden) methods.
 
 (define-method update robot ()
+  ;; possibly show waypoint
+  (when (> (distance-between (find-exit) (cursor)) *waypoint-distance*)
+    (decf *waypoint-clock*)
+    (unless (plusp *waypoint-clock*)
+      (drop self (new 'waypoint))
+      (play-sound self "shield.wav")
+      (setf *waypoint-clock* *waypoint-interval*)))
   ;; possibly lower shields
   (when %shielded
     (decf %shield-clock)
@@ -296,7 +331,7 @@
 
 (define-method collide player-1-robot (thing)
   (when (exitp thing)
-    (reset-game (current-buffer) (1+ *level*)))
+    (begin-game (1+ *level*)))
   (when (or (enemyp thing) (holep thing))
     (die self))
   (when (brickp thing)

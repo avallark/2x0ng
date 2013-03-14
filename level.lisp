@@ -117,10 +117,13 @@
 	       (aref things2 (random len))))
     (coerce things2 'list)))
 
+(defvar *exit* nil)
+
 (defun make-exit (colors)
   (cond
     ((null colors)
-     (with-new-buffer (add-object (current-buffer) (new 'exit))))
+     (with-new-buffer (add-object (current-buffer) 
+				  (setf *exit* (new 'exit)))))
     ((consp colors)
      (wrap (new 'gate (first colors))
 	   (make-exit (rest colors))))))
@@ -263,7 +266,10 @@
 				   x (- y (units 18)))
 		     (drop-object (current-buffer) 
 				  (new 'vent) x y))))
-    (lined-up garrison buffer garrison)))
+    (lined-up 
+     (stacked-up garrison (bricks 3 (random-color)))
+     buffer
+     (stacked-up garrison (bricks 3 (random-color))))))
 
 (defun with-outposts (buffer)
   (trim buffer)
@@ -350,7 +356,7 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 10)
+	(puzzle (with-border (units 14)
 		  (make-puzzle (derange (level-colors))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
@@ -358,8 +364,8 @@
       (paste-from buffer puzzle)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 10 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 10 (1- (truncate (/ (%height puzzle)
+			  (+ 14 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 14 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
       ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)

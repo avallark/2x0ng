@@ -1,31 +1,36 @@
 ** DONE make glitches useful
    CLOSED: [2013-03-13 Wed 12:12]
+** TODO ball shouldn't target vents/clouds/bases
 
 * TODO RELEASE 0.8
-** TODO joystick support off by default, use control-J to activate
+** DONE indicate direction of exit
+   CLOSED: [2013-03-13 Wed 22:07]
+** DONE joystick support off by default, use control-J to activate
+   CLOSED: [2013-03-13 Wed 20:37]
 ** TODO [#A] ENDING
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
 *** TODO [#C] import bomb code from xalcyon
-** TODO [#A] HELP SCREEN
-** TODO [#A] Verify ps3 gamepad support
 ** TODO [#B] display message when paused
+** TODO [#A] Verify ps3 gamepad support
+** TODO [#A] HELP SCREEN
 ** TODO [#C] shield pickup
-** TODO NOW LOADING screen
-** TODO indicate direction of exit
+** TODO [#C] make control-J cycle through available joysticks and notify when ready
+** TODO [#C] move notification bubbles to bottom of screen black bar area
+** DONE NOW LOADING screen
+   CLOSED: [2013-03-13 Wed 21:28]
 
 * TODO RELEASE 0.9
-** TODO Music review/polish
-** TODO [#A] Fix some mice and other devices registering as useless joysticks (turn on joystick with Control-J)
-** TODO [#A] libsdl_gfx, can it be un-required?
-** TODO [#A] BUGFIX: can press against nested gate to "cheat"
-** TODO [#A] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** TODO [#A] BUGFIX: can press against nested gate to "cheat"
+** TODO [#A] Music review/polish
+** TODO [#B] libsdl_gfx, can it be un-required?
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 
 * TODO Other features
 
-** TODO [#A] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
-** TODO [#A] make sure thief works properly, add taunts 
+** TODO [#B] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
+** TODO [#B] make sure thief works properly, add taunts 
 ** TODO [#B] do something with the corners
 ** TODO [#C] start guy in different corners 
 ** TODO [#C] always display current color name 

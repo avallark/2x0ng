@@ -25,6 +25,7 @@
        (has-tag thing :enemy)))
 
 (defresource "go.wav" :volume 60)
+(defresource "shield.wav" :volume 60)
 (defresource "corruption-horz2.png")
 (defresource "corruption-horz.png")
 (defresource "drone.png")
@@ -36,6 +37,8 @@
 (defresource "pulsator.png")
 (defresource "shocker.png")
 (defresource "shocker2.png")
+(defresource "waypoint.png")
+(defresource "waypoint2.png")
 (defresource "tank-disabled.png")
 (defresource "tank-northeast.png")
 (defresource "tank-north.png")
@@ -361,7 +364,7 @@
   :color "white"
   :speed 0
   :bounces 20
-  :hits 6
+  :hits 7
   :kick-clock 0 :tags '(:ball :colored))
 
 (define-method paint ball (color)
