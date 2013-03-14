@@ -68,11 +68,30 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-    (play-music "rekall" :loop t)
+;    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
-(define-buffer 2x0ng)
+(define-buffer 2x0ng
+    (default-events 
+     :initform
+     '(((:r :control) :reset-game)
+       ((:h :control) :help)
+       ((:j :control) :toggle-joystick)
+       ;;
+       ((:x :control) :edit-cut)
+       ((:c :control) :edit-copy)
+       ((:v :control) :edit-paste)
+       ((:v :control :shift) :paste-here)
+       ((:f9) :toggle-minibuffer)
+       ((:f12) :transport-toggle-play)
+       ((:g :control) :escape)
+       ((:d :control) :drop-selection))))
+
+(define-method help 2x0ng ())
+
+(define-method toggle-joystick 2x0ng ()
+  (setf *joystick-enabled* (if *joystick-enabled* nil t)))
 
 (define-method reset-game 2x0ng (&optional (level 1))
   (setf *soundtrack* (derange *soundtrack*))

@@ -168,6 +168,8 @@
 		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
 		      %direction))))))
 
+(defvar *joystick-enabled* nil)
+
 (define-method stick-heading robot () 
   (when (humanp self)
     (or (when (left-analog-stick-pressed-p)
@@ -347,7 +349,9 @@
      ((holding-left-arrow) :left)
      ((holding-right-arrow) :right))
    (let ((heading (stick-heading self)))
-     (when (or (left-analog-stick-pressed-p)
-	       (right-analog-stick-pressed-p))
+     (when 
+	 (and *joystick-enabled*
+	      (or (left-analog-stick-pressed-p)
+		  (right-analog-stick-pressed-p)))
        (or (heading-direction heading) :left)))))
-
+  

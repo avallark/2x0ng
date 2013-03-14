@@ -354,7 +354,6 @@
 		  (make-puzzle (derange (level-colors))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
-      (bind-event buffer '(:r :control) :reset-game)
       ;;
       (paste-from buffer puzzle)
       ;; playfield border
@@ -371,18 +370,19 @@
 		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
 		   (units 8) (units 5))
       (drop-object (current-buffer) 
-		   (new 'bubble "Arrow keys to move. Space (or Alt) to fire. Control-r to reset. F12 to pause." "sans-mono-bold-14")
+		   (new 'bubble "Arrow keys to move. Space (or Alt) to fire. Control-R to reset." "sans-mono-bold-14")
 		   (units 8) (units 7))
+      (drop-object (current-buffer) 
+		   (new 'bubble "Press Control-J to toggle joystick control, F12 to pause." "sans-mono-bold-14")
+		   (units 8) (units 8))
       ;;
       (trim (current-buffer))
       ;; player 1
-      ;; (let ((y (or (percent-of-time 50 (units 4))
-      ;; 		   (- (%height buffer) (units 7)))))
       (drop-object (current-buffer) robot (units 4) (units 5))
       (set-cursor (current-buffer) robot)
       (move-window-to-cursor (current-buffer))
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-      (play-music (random-choose *soundtrack*) :loop t)
+;      (play-music (random-choose *soundtrack*) :loop t)
       (current-buffer))))
 

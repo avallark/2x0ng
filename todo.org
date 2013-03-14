@@ -1,13 +1,11 @@
 ** DONE make glitches useful
    CLOSED: [2013-03-13 Wed 12:12]
 
-* TODO RELEASE 0.7
-** TODO tweak level design, retest
-
 * TODO RELEASE 0.8
+** TODO joystick support off by default, use control-J to activate
 ** TODO [#A] ENDING
-** TODO import bomb code from xalcyon
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
+*** TODO [#C] import bomb code from xalcyon
 ** TODO [#A] HELP SCREEN
 ** TODO [#A] Verify ps3 gamepad support
 ** TODO [#B] display message when paused
@@ -17,7 +15,9 @@
 
 * TODO RELEASE 0.9
 ** TODO Music review/polish
-** TODO [#A] BUGFIX: press against nested gate to "cheat"
+** TODO [#A] Fix some mice and other devices registering as useless joysticks (turn on joystick with Control-J)
+** TODO [#A] libsdl_gfx, can it be un-required?
+** TODO [#A] BUGFIX: can press against nested gate to "cheat"
 ** TODO [#A] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
@@ -110,4 +110,14 @@
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
+
+** DONE RELEASE 0.7
+   CLOSED: [2013-03-13 Wed 19:52]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-13 Wed 19:52
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+*** TODO tweak level design, retest
 
