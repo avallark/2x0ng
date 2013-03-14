@@ -110,7 +110,7 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-;    (play-music "rekall" :loop t)
+    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 

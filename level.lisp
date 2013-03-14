@@ -389,6 +389,6 @@
       (move-window-to-cursor (current-buffer))
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-;      (play-music (random-choose *soundtrack*) :loop t)
+      (play-music (random-choose *soundtrack*) :loop t)
       (current-buffer))))
 
