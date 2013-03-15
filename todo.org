@@ -4,6 +4,8 @@
 ** DONE draw line over apparent gaps in large gates
    CLOSED: [2013-03-14 Thu 14:11]
 
+* TODO peach puff commentary "fantastique!" "incomparable" superlatif for fantastic combos, or finishing level? or "virus detected"? or occasional death lines  
+
 * TODO a simple framework for blue/white modal conversation bubbles that type in progressively like in old games.
 * TODO camera scrolls to each speaker in turn.
 * TODO with-scene

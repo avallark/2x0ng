@@ -39,7 +39,7 @@ Greetings. Naturally, I am the aforementioned Peach Puff and I will tell you a b
 : 0
 
 #+begin_src speak  :pitch "12" :speed "90" :voice "mb-fr4-en" :wav "peach-2.wav"
-You have probably already discovered that you can move with the arrow keys, or the numeric keypad. 
+You can move around town with the arrow keys, or the numeric keypad. 
 #+end_src
 
 #+RESULTS:
