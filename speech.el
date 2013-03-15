@@ -104,6 +104,7 @@
 (define-voice :peach :pitch 10 :speed 90 :voice mb-fr4-en)
 (with-voice :navajo (say :oppression "I can't stand all this oppression."))
 (with-voice :peach (say :butt "My butt hurts. Like seriously."))
+(speech-play :butt)
 
 (provide 'speech)
 ;;; speech.el ends here
