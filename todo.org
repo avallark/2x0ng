@@ -1,4 +1,10 @@
 ** TODO ball shouldn't target vents/clouds/bases
+** TODO implement LOS for ball targeting. just run a line of x/y points in between 
+** TODO Corruption color kills you if you are painted Corruption, or if you touch a Corrupt brick
+** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
+** TODO Big rooks with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
+*** TODO import bomb code from xalcyon
+
 
 * TODO RELEASE 0.85 "playtest release"
 ** TODO play all the way through and take notes on each level
@@ -7,8 +13,6 @@
 *** TODO reduce size of large levels
 
 * TODO RELEASE 0.9
-** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
-*** TODO import bomb code from xalcyon
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#A] BUGFIX: can press against nested gate to "cheat"
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank

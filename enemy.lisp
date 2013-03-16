@@ -575,4 +575,183 @@
   (when (robotp thing)
     (die thing)))
 
+;;; Sticky bombs
 
+(defun bombp (thing)
+  (has-tag thing :bomb))
+
+(defresource 
+    (:name "bomb1.png" :type :image :file "bomb1.png")
+    ;; deliberate repeat
+    (:name "bomb1.png" :type :image :file "bomb1.png")
+  (:name "bomb2.png" :type :image :file "bomb2.png")
+  (:name "bomb3.png" :type :image :file "bomb3.png")
+  (:name "bomb4.png" :type :image :file "bomb4.png"))
+
+(defparameter *bomb-images* '("bomb1.png" "bomb2.png" "bomb3.png" "bomb4.png"))
+
+(defresource
+    (:name "bomb-flash1.png" :type :image :file "bomb-flash1.png")
+    (:name "bomb-flash2.png" :type :image :file "bomb-flash2.png")
+  (:name "bomb-flash3.png" :type :image :file "bomb-flash3.png")
+  (:name "explosion.png" :type :image :file "explosion.png")
+  (:name "explosion2.png" :type :image :file "explosion2.png"))
+
+(defparameter *explosion-images*
+'("bomb-flash1.png" "bomb-flash2.png" "bomb-flash3.png" "explosion.png" "explosion2.png"))
+
+(define-block explosion :tags '(:enemy) :timer (+ 20 (random 12)) :image "explosion.png")
+
+(define-method update explosion ()
+  (decf %timer)
+  (if (zerop %timer)
+      (destroy self)
+      (progn
+	(setf %image (random-choose *explosion-images*))
+	(percent-of-time 4 (play-sample "explode.wav"))
+	(resize self (+ 16 (random 16)) (+ 16 (random 16)))
+	(move-toward self (random-direction) (+ 6 (random 8))))))
+
+(define-method collide explosion (thing)
+  (when (brickp thing) 
+    (restore-location self)))
+
+(defun make-explosion (thing &optional (size 8))
+  (multiple-value-bind (x y) (center-point thing)
+    (dotimes (n size)
+      (add-object (current-buffer) (new 'explosion) x y))))
+
+(defresource
+    (:name "bomb-ammo.png" :type :image :file "bomb-ammo.png")
+    (:name "shield-ammo.png" :type :image :file "shield-ammo.png")
+    (:name "energy-ammo.png" :type :image :file "energy-ammo.png")
+    (:name "powerup.wav" :type :sample :file "powerup.wav")
+    (:name "bombs-away.wav" :type :sample :file "bombs-away.wav" :properties (:volume 70))
+    (:name "power.wav" :type :sample :file "power.wav")
+    (:name "powerdown.wav" :type :sample :file "powerdown.wav")
+    (:name "countdown.wav" :type :sample :file "countdown.wav" :properties (:volume 40))
+    (:name "explode.wav" :type :sample :file "explode.wav" :properties (:volume 100)))
+
+(define-block bomb :timer 0 :countdown 5 
+  :tags '(:enemy :target :bomb)
+  :image "bomb4.png" :target nil
+  :stopped nil :speed 4
+  :origin nil)
+
+(define-method explode bomb ()
+  (make-explosion self)
+  (destroy self))
+
+(define-method initialize bomb (heading &key origin)
+  (initialize%super self)
+  (setf %image "bomb4.png")
+  (setf %origin origin)
+  (setf %heading heading))
+
+(define-method collide bomb (thing)
+  (cond 
+    ;; player bullets destroy bombs
+    ((is-player-bullet thing)
+     (explode self))
+    ;; bombs should not stick to who fired them
+    ((and %origin 
+	  (enemyp %origin)
+	  (enemyp thing))
+     nil)
+    ;; enemy bombs stop at player and trail
+    ((and %origin 
+	  (enemyp %origin)
+	  (or (robotp thing)
+	      (trailp thing)))
+     (setf %stopped t))
+    ;; stick to enemies
+    ((enemyp thing)
+     (setf %target thing))
+    ;; stop at walls
+    ((brickp thing)
+     (setf %stopped t)
+     (restore-location self))))
+
+(define-method update bomb () 
+  (if %target
+      ;; stick to target once touched
+      (multiple-value-bind (x y) (center-point %target)
+	(move-to self x y))
+      ;; move in straight line to find target
+      (unless %stopped
+	(forward self %speed)))
+  ;; possibly explode and/or update timer
+  (with-fields (countdown timer image) self
+    (if (zerop countdown)
+	(explode self)
+	(if (plusp timer)
+	    (decf timer)
+	    (progn
+	      (setf timer 20)
+	      (play-sample "countdown.wav")
+	      (decf countdown)
+	      (setf image (nth countdown *bomb-images*)))))))
+
+;;; A bomber guy who shoots bombs at you
+
+(defresource 
+    (:name "rook.png" :type :image :file "rook.png")
+    (:name "rook2.png" :type :image :file "rook2.png"))
+
+(defun is-rook (thing)
+  (has-tag thing :rook))
+
+(define-block rook 
+  :image "rook2.png" 
+  :hp 10
+  :tags '(:rook :enemy)
+  :timer 0
+  :fleeing nil)
+
+(define-method damage rook (points)
+  (decf %hp)
+  (play-sound self (random-choose *whack-sounds*))
+  (when (zerop %hp)
+    (make-explosion self 5)
+    (play-sound self "xplod.wav")
+    (destroy self)))
+
+(define-method fire rook (heading)
+  (drop self (new 'bomb heading :origin self)))
+
+(define-method update rook ()
+  (with-fields (timer) self
+    (setf timer (max 0 (1- timer))) 
+    (let ((dir (heading-to-cursor self))
+	  (dist (distance-to-cursor self)))
+      (cond 
+	;; shoot bomb then set flag to run away
+	((and (< dist 280) 
+	      (zerop timer))
+	 ;; don't always fire
+	 (percent-of-time 65 
+	   (play-sample "robovoxx.wav")
+	   (fire self dir))
+	 (aim self (- dir 0.52))
+	 (setf timer 90))
+	;; begin approach after staying still
+	((and (< dist 570) (zerop timer))
+	 (aim self dir)
+	 (forward self 2))
+	;; run away fast
+	((and (< dist 420) (plusp timer))
+	 (aim self (- %heading 0.03))
+	 (percent-of-time (with-difficulty 0 1.0 1.3) 
+	   (play-sample "magenta-alert.wav")
+	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
+	 (forward self 3))
+	;; otherwise do nothing
+	))))
+
+(define-method collide rook (thing)
+  (cond 
+    ((or (brickp thing) (enemyp thing))
+     (restore-location self)
+     (setf %timer 40))
+    ((robotp thing)
+     (damage thing 1))))
