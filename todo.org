@@ -1,18 +1,4 @@
-** DONE make glitches useful
-   CLOSED: [2013-03-13 Wed 12:12]
 ** TODO ball shouldn't target vents/clouds/bases
-** DONE draw line over apparent gaps in large gates
-   CLOSED: [2013-03-14 Thu 14:11]
-
-* TODO RELEASE 0.8
-** DONE indicate direction of exit
-   CLOSED: [2013-03-13 Wed 22:07]
-** DONE joystick support off by default, use control-J to activate
-   CLOSED: [2013-03-13 Wed 20:37]
-** DONE NOW LOADING screen
-   CLOSED: [2013-03-13 Wed 21:28]
-** DONE [#A] HELP SCREEN
-   CLOSED: [2013-03-16 Sat 01:48]
 
 * TODO RELEASE 0.85 "playtest release"
 ** TODO play all the way through and take notes on each level
@@ -31,6 +17,7 @@
 ** TODO [#B] display message when paused
 
 * TODO Release 1.0 "beta"
+** TODO [#A] easy music skip/toggle key
 ** TODO [#A] Music review/polish
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
@@ -148,4 +135,37 @@
    :ARCHIVE_TODO: DONE
    :END:
 *** TODO tweak level design, retest
+** DONE make glitches useful
+   CLOSED: [2013-03-13 Wed 12:12]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-16 Sat 03:16
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE draw line over apparent gaps in large gates
+   CLOSED: [2013-03-14 Thu 14:11]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-16 Sat 03:16
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+
+** DONE RELEASE 0.8
+   CLOSED: [2013-03-16 Sat 03:16]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-16 Sat 03:16
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+*** DONE indicate direction of exit
+    CLOSED: [2013-03-13 Wed 22:07]
+*** DONE joystick support off by default, use control-J to activate
+    CLOSED: [2013-03-13 Wed 20:37]
+*** DONE NOW LOADING screen
+    CLOSED: [2013-03-13 Wed 21:28]
+*** DONE [#A] HELP SCREEN
+    CLOSED: [2013-03-16 Sat 01:48]
 
