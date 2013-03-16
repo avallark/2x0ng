@@ -395,6 +395,7 @@
   (if (zerop %bounces)
       (progn (make-sparks %x %y "white")
 	     (setf *ball* nil)
+	     (paint %kicker %color)
 	     (play-sample "newball.wav")
 	     (destroy self))
       (progn
