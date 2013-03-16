@@ -75,12 +75,12 @@
 (defun speech-play (file)
   (shell-command (format "play %S" file)))
 
+(defvar *screenplay* nil)
+
 (defvar *voices* nil)
 
 (defvar *voice* nil)
-
-(setf *voices* nil)
-(setf *voice* nil)
+(defvar *voice-key* nil)
 
 (defmacro define-voice (name &rest args)
   `(push ',(cons name args) *voices*))
@@ -89,7 +89,8 @@
   (rest (assoc name *voices*)))
 
 (defmacro with-voice (voice &rest body)
-  `(let ((*voice* (voice-parameters ,voice)))
+  `(let ((*voice* (voice-parameters ,voice))
+	 (*voice-key* ,voice))
      ,@body))
 
 (defun say (key text)
@@ -97,14 +98,48 @@
 	       (substring (symbol-name key) 1)
 	       ".wav")))
     (speech-render text *voice* file)
-    (speech-play file)))
+    (speech-play file)
+    (push (cons *voice-key* file) *screenplay*)))
 
-(define-voice :sandy :pitch 9 :speed 83 :voice mb-us2)
+;;;;;;;;;;;;;;;;;;;;;
+
+(setf *voices* nil)
+(setf *voice* nil)
+(setf *voice-key* nil)
+(setf *screenplay* nil)
+
+(define-voice :sandy :pitch 14 :speed 83 :voice mb-de4-en)
 (define-voice :navajo :pitch 12 :speed 90 :voice mb-en1)
-(define-voice :peach :pitch 10 :speed 90 :voice mb-fr4-en)
-(with-voice :navajo (say :oppression "I can't stand all this oppression."))
-(with-voice :peach (say :butt "My butt hurts. Like seriously."))
-(speech-play :butt)
+(define-voice :peach :pitch 7 :speed 90 :voice mb-fr4-en)
+
+(with-voice :navajo (say :balance-of-power "So, Mister Gold. It
+seems you are attempting to upset the delicate balance of power
+between Peach Puff and myself."))
+
+(with-voice :peach (say :deception "Yes I'd say it's quite clear,
+your deception and subterfuge have been unmasked."))
+
+(with-voice :sandy (say :can-see-now "Mr. Gold, you were seen
+this morning distributing pamphlets or papers of an undetermined
+nature."))
+
+(with-voice :navajo (say :drive-us-apart "Perhaps Mr. Gold is
+trying to sow dissent in an effort to weaken the Neutral Gang's
+leadership, so that <emphasis>he</emphasis> can sieze power in Two Zong Town!"))
+
+(with-voice :peach (say :possible "I think it is quite possible,
+Mister White."))
+
+(with-voice :sandy (say :very-sad "This Commander is very
+displeased.  I can see now that you Vivids are all alike. We
+Neutrals have got to stick together, even when we cannot tell
+each other apart."))
+
+(with-voice :navajo (say :now-fight "Now you must die! One color
+will rule, so as is foretold in the Codex Chromatica! Hoist your
+Squareball! Prepare for pixellation! There is no Gold in the
+color of the glorious Tomorrow we are building here in Two Zong Town!"))
+
 
 (provide 'speech)
 ;;; speech.el ends here
