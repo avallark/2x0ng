@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2013  David O'Toole
 
-;; Author: David O'Toole <teleflopter>
+;; Author: David O'Toole <dto@blocky.io>
 ;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify

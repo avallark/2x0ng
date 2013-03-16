@@ -4,6 +4,43 @@
 ** DONE draw line over apparent gaps in large gates
    CLOSED: [2013-03-14 Thu 14:11]
 
+* TODO RELEASE 0.8
+** DONE indicate direction of exit
+   CLOSED: [2013-03-13 Wed 22:07]
+** DONE joystick support off by default, use control-J to activate
+   CLOSED: [2013-03-13 Wed 20:37]
+** DONE NOW LOADING screen
+   CLOSED: [2013-03-13 Wed 21:28]
+** DONE [#A] HELP SCREEN
+   CLOSED: [2013-03-16 Sat 01:48]
+
+* TODO RELEASE 0.85 "playtest release"
+** TODO play all the way through and take notes on each level
+** TODO unpack recursion to make custom function for 4- color level 
+*** TODO tone down garrisons a little.
+*** TODO reduce size of large levels
+
+* TODO RELEASE 0.9
+** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
+*** TODO import bomb code from xalcyon
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** TODO [#A] BUGFIX: can press against nested gate to "cheat"
+** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
+** TODO [#B] move notification bubbles to bottom of screen black bar area (including notifications)
+** TODO [#B] display message when paused
+
+* TODO Release 1.0 "beta"
+** TODO [#A] Music review/polish
+** TODO [#C] libsdl_gfx, can it be un-required?
+** TODO [#C] make control-J cycle through available joysticks and notify when ready
+** TODO [#B] ENDING MOVIE
+** TODO [#C] Verify status of ps3 gamepad support
+** TODO [#A] 32 and 64 bit binaries for all platforms.
+
+   
+* TODO Other features
+
 * TODO peach puff commentary "fantastique!" "incomparable" superlatif for fantastic combos, or finishing level? or "virus detected"? or occasional death lines  
 
 * TODO a simple framework for blue/white modal conversation bubbles that type in progressively like in old games.
@@ -14,34 +51,6 @@
 * The Neutral Gang: Navajo White, Rosy/Sandy Brown, and Peach Puff.
 **
 * Chartreuse, Goldenrod, Alice Blue, Ghost White
-
-
-* TODO RELEASE 0.8
-** DONE indicate direction of exit
-   CLOSED: [2013-03-13 Wed 22:07]
-** DONE joystick support off by default, use control-J to activate
-   CLOSED: [2013-03-13 Wed 20:37]
-** TODO [#A] ENDING
-** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
-*** TODO [#C] import bomb code from xalcyon
-** TODO [#B] display message when paused
-** TODO [#A] Verify ps3 gamepad support
-** TODO [#A] HELP SCREEN
-** TODO [#C] shield pickup
-** TODO [#C] make control-J cycle through available joysticks and notify when ready
-** TODO [#C] move notification bubbles to bottom of screen black bar area
-** DONE NOW LOADING screen
-   CLOSED: [2013-03-13 Wed 21:28]
-
-* TODO RELEASE 0.9
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#A] BUGFIX: can press against nested gate to "cheat"
-** TODO [#A] Music review/polish
-** TODO [#B] libsdl_gfx, can it be un-required?
-** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
-** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
-
-* TODO Other features
 
 ** TODO [#B] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
 ** TODO [#B] make sure thief works properly, add taunts 
