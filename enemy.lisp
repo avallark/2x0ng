@@ -118,15 +118,16 @@
 (defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 40)))
 
 (define-block glitch
-  (tags :initform '(:enemy :glitch))
+  (tags :initform '(:enemy :glitch :target))
   (clock :initform nil)
   (heading :initform (random (* pi 2)))
   (image :initform (random-choose *corruption-images*))
-  (speed :initform 1)
+  (speed :initform (random-choose '(1 1.1 1.2)))
   (overlay-color :initform nil))
 
 (define-method initialize glitch (&optional (depth 4))
   (setf %clock 30)
+  (resize self 30 30)
   (initialize%super self)
   (setf %depth depth))
 
@@ -147,7 +148,7 @@
   (setf %overlay-color nil))
 
 (define-method update glitch ()
-  (move self %heading (with-difficulty 1 1 1 1.5 2 3 4 4 5))
+  (move self %heading %speed)
   (incf %heading (radian-angle 0.8)) 
   (percent-of-time 6 
     (change-image self (random-choose *corruption-images*)))
@@ -160,7 +161,7 @@
   (set-blending-mode :additive2)
   (when %overlay-color
     (draw-box %x %y %width %height
-     :alpha 0.2
+     :alpha 0.3
      :color %overlay-color)))
 
 ;;; The "monitor", a roving enemy 
@@ -174,7 +175,7 @@
 (define-block monitor 
   (hp :initform 3) fleeing
   (direction :initform (random-choose '(:up :down)))
-  (tags :initform '(:monitor :enemy))
+  (tags :initform '(:monitor :enemy :target))
   (image :initform "monitor2"))
 
 (defun monitor-scaling-speed ()
@@ -290,7 +291,7 @@
 (define-block ghost 
   :image "ghost2.png" 
   :hp 5
-  :tags '(:ghost :enemy)
+  :tags '(:ghost :enemy :target)
   :timer 0
   :fleeing nil)
 
@@ -430,7 +431,7 @@
 ;;; Starbase 
 
 (define-block base 
-  (tags :initform '(:base :enemy :target))
+  (tags :initform '(:base :enemy))
   (clock :initform 120)
   (image :initform "resonator.png")
   (hp :initform 8))
@@ -588,7 +589,7 @@
   (:name "bomb3.png" :type :image :file "bomb3.png")
   (:name "bomb4.png" :type :image :file "bomb4.png"))
 
-(defparameter *bomb-images* '("bomb1.png" "bomb2.png" "bomb3.png" "bomb4.png"))
+(defparameter *bomb-images* '("bomb1.png" "bomb1.png" "bomb2.png" "bomb3.png" "bomb4.png"))
 
 (defresource
     (:name "bomb-flash1.png" :type :image :file "bomb-flash1.png")
@@ -644,14 +645,14 @@
 
 (define-method initialize bomb (heading &key origin)
   (initialize%super self)
-  (setf %image "bomb4.png")
+;  (setf %image "bomb4.png")
   (setf %origin origin)
   (setf %heading heading))
 
 (define-method collide bomb (thing)
   (cond 
-    ;; player bullets destroy bombs
-    ((is-player-bullet thing)
+    ;; player ball destroys bomb
+    ((ballp thing)
      (explode self))
     ;; bombs should not stick to who fired them
     ((and %origin 
@@ -690,9 +691,17 @@
 	      (setf timer 20)
 	      (play-sample "countdown.wav")
 	      (decf countdown)
-	      (setf image (nth countdown *bomb-images*)))))))
+	      (setf image (or (nth countdown *bomb-images*) "bomb4.png")))))))
 
 ;;; A bomber guy who shoots bombs at you
+
+(defresource 
+    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 60))
+    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 60))
+  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 60))
+  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 60)))
+
+(defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
 
 (defresource 
     (:name "rook.png" :type :image :file "rook.png")
@@ -703,27 +712,36 @@
 
 (define-block rook 
   :image "rook2.png" 
-  :hp 10
-  :tags '(:rook :enemy)
+  :hp 12
+  :tags '(:rook :enemy :target)
   :timer 0
+  :shield-pieces 40
   :fleeing nil)
+
+(define-method deploy-shield rook (pieces)
+  (setf %shield-pieces pieces))
 
 (define-method damage rook (points)
   (decf %hp)
-  (play-sound self (random-choose *whack-sounds*))
+  (play-sound self (random-choose *rook-sounds*))
   (when (zerop %hp)
     (make-explosion self 5)
     (play-sound self "xplod.wav")
+    (play-sound self "bigboom.wav")
     (destroy self)))
 
 (define-method fire rook (heading)
   (drop self (new 'bomb heading :origin self)))
 
 (define-method update rook ()
+  (when (< %hp 10) (setf %image (random-choose '("rook.png" "rook2.png"))))
   (with-fields (timer) self
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
 	  (dist (distance-to-cursor self)))
+      (when (and (< dist 300) (plusp %shield-pieces))
+	(drop self (new 'glitch) (/ 2 %width) (/ 2 %height))
+	(decf %shield-pieces))
       (cond 
 	;; shoot bomb then set flag to run away
 	((and (< dist 280) 
@@ -736,15 +754,15 @@
 	 (setf timer 90))
 	;; begin approach after staying still
 	((and (< dist 570) (zerop timer))
-	 (aim self dir)
-	 (forward self 2))
+	 (aim self dir))
+	 ;;(forward self 2))
 	;; run away fast
 	((and (< dist 420) (plusp timer))
 	 (aim self (- %heading 0.03))
 	 (percent-of-time (with-difficulty 0 1.0 1.3) 
 	   (play-sample "magenta-alert.wav")
-	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
-	 (forward self 3))
+	   (drop self (new 'bullet (heading-to-cursor self)) 14 14)))
+	 ;;(forward self 3))
 	;; otherwise do nothing
 	))))
 
@@ -755,3 +773,7 @@
      (setf %timer 40))
     ((robotp thing)
      (damage thing 1))))
+
+(defresource "drone.png")
+
+(define-block drone :image "drone.png")

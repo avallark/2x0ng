@@ -1,18 +1,22 @@
 ** TODO ball shouldn't target vents/clouds/bases
 ** TODO implement LOS for ball targeting. just run a line of x/y points in between 
 ** TODO Corruption color kills you if you are painted Corruption, or if you touch a Corrupt brick
+** TODO Procedural Guardian eyes with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
+** TODO growing bricks that eat space
+
+* TODO RELEASE 0.9 
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
-** TODO Big rooks with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
-*** TODO import bomb code from xalcyon
-
-
-* TODO RELEASE 0.85 "playtest release"
-** TODO play all the way through and take notes on each level
+** DONE Big rooks
+   CLOSED: [2013-03-16 Sat 17:45]
 ** TODO unpack recursion to make custom function for 4- color level 
 *** TODO tone down garrisons a little.
 *** TODO reduce size of large levels
+*** TODO resist temptation to have more than two hazard types per level
+** TODO play all the way through and take notes on each level
+** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
+** TODO gameplay variations
 
-* TODO RELEASE 0.9
+* TODO RELEASE 0.95
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#A] BUGFIX: can press against nested gate to "cheat"
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
@@ -172,4 +176,14 @@
     CLOSED: [2013-03-13 Wed 21:28]
 *** DONE [#A] HELP SCREEN
     CLOSED: [2013-03-16 Sat 01:48]
+
+** DONE import bomb code from xalcyon
+   CLOSED: [2013-03-16 Sat 17:45]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-16 Sat 17:45
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: Big rooks with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
 

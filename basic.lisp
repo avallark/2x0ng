@@ -96,7 +96,8 @@
     (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards (thief))
     (:difficulty 5 :colors 4 :hazards (paddle tracer) :wildcards (ghost))
     (:difficulty 6 :colors 3 :hazards (hole paddle base wave) :wildcards nil)
-    (:difficulty 6 :colors 2 :hazards (base tracer) :wildcards (wave ghost thief))))
+    (:difficulty 6 :colors 2 :hazards (base tracer) :wildcards (wave ghost thief))
+    (:difficulty 6 :colors 2 :hazards (rook base) :wildcards (wave))))
 
 (defun nth-level (level)
   (nth (mod level (length *levels*)) *levels*))

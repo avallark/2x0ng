@@ -107,7 +107,7 @@
 ;  :collision-type nil)
 
 (define-method collide spark (thing)
-  (when (enemyp thing) 
+  (when (and (enemyp thing) (has-method :damage thing))
     (damage thing 1)
     (destroy self)))
 
@@ -415,6 +415,7 @@
 		when (and 
 		      (blockyp thing)
 		      (enemyp thing)
+		      (has-tag thing :target)
 		      (not (trailp thing))
 		      (not (object-eq thing2 thing))
 		      (colliding-with-rectangle thing 
@@ -479,7 +480,7 @@
 	      (not (field-value :carrying thing)))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
-		    (new 'bubble (format nil "I GOT THE BALL!!" *level*) "sans-mono-bold-20")
+		    (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; bounce off bricks
