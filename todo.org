@@ -1,11 +1,13 @@
-** TODO ball shouldn't target vents/clouds/bases
+** DONE ball shouldn't target vents/clouds/bases
+   CLOSED: [2013-03-16 Sat 21:58]
 ** TODO implement LOS for ball targeting. just run a line of x/y points in between 
 ** TODO Corruption color kills you if you are painted Corruption, or if you touch a Corrupt brick
 ** TODO Procedural Guardian eyes with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
+** TODO heart of base is Brain at center, must be unlocked and defeated
 ** TODO growing bricks that eat space
 
 * TODO RELEASE 0.9 
-** TODO [#A] BOSS: Algorithmically generated compile-shmup multi eye base final boss
+** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
 ** DONE Big rooks
    CLOSED: [2013-03-16 Sat 17:45]
 ** TODO unpack recursion to make custom function for 4- color level 
@@ -23,6 +25,7 @@
 ** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
 ** TODO [#B] move notification bubbles to bottom of screen black bar area (including notifications)
 ** TODO [#B] display message when paused
+** TODO [#C] BUGFIX: screen jitter when pressing against wall 
 
 * TODO Release 1.0 "beta"
 ** TODO [#A] easy music skip/toggle key

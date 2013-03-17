@@ -86,9 +86,6 @@
 
 ;;; Radioactive corruption glitches that creep after you
 
-(defun is-glitch (thing)
-  (has-tag thing :glitch))
-
 (defresource 
     (:name "corruption1.png" :type :image :file "corruption1.png")
     (:name "corruption2.png" :type :image :file "corruption2.png")
@@ -118,7 +115,7 @@
 (defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 40)))
 
 (define-block glitch
-  (tags :initform '(:enemy :glitch :target))
+  (tags :initform '(:enemy :glitch))
   (clock :initform nil)
   (heading :initform (random (* pi 2)))
   (image :initform (random-choose *corruption-images*))
@@ -151,10 +148,10 @@
   (move self %heading %speed)
   (incf %heading (radian-angle 0.8)) 
   (percent-of-time 6 
-    (change-image self (random-choose *corruption-images*)))
-  (percent-of-time 3 
-    (set-overlay self)
-    (later 20 (clear-overlay self))))
+    (change-image self (random-choose *corruption-images*))))
+  ;; (percent-of-time 3 
+  ;;   (set-overlay self)
+  ;;   (later 20 (clear-overlay self))))
       
 (define-method draw glitch ()
   (draw%super self)
@@ -696,16 +693,17 @@
 ;;; A bomber guy who shoots bombs at you
 
 (defresource 
-    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 60))
-    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 60))
-  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 60))
-  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 60)))
+    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 160))
+    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 160))
+  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 160))
+  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 160)))
 
 (defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
 
 (defresource 
     (:name "rook.png" :type :image :file "rook.png")
-    (:name "rook2.png" :type :image :file "rook2.png"))
+    (:name "rook2.png" :type :image :file "rook2.png")
+    (:name "rook3.png" :type :image :file "rook3.png"))
 
 (defun is-rook (thing)
   (has-tag thing :rook))
@@ -715,7 +713,7 @@
   :hp 12
   :tags '(:rook :enemy :target)
   :timer 0
-  :shield-pieces 40
+  :shield-pieces 20
   :fleeing nil)
 
 (define-method deploy-shield rook (pieces)
@@ -734,17 +732,17 @@
   (drop self (new 'bomb heading :origin self)))
 
 (define-method update rook ()
-  (when (< %hp 10) (setf %image (random-choose '("rook.png" "rook2.png"))))
+  (percent-of-time 20 (setf %image (random-choose '("rook.png" "rook2.png" "rook3.png"))))
   (with-fields (timer) self
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
 	  (dist (distance-to-cursor self)))
-      (when (and (< dist 300) (plusp %shield-pieces))
+      (when (and (< dist 400) (plusp %shield-pieces))
 	(drop self (new 'glitch) (/ 2 %width) (/ 2 %height))
 	(decf %shield-pieces))
       (cond 
 	;; shoot bomb then set flag to run away
-	((and (< dist 280) 
+	((and (< dist 340) 
 	      (zerop timer))
 	 ;; don't always fire
 	 (percent-of-time 65 
@@ -774,6 +772,6 @@
     ((robotp thing)
      (damage thing 1))))
 
-(defresource "drone.png")
+;; (defresource "drone.png")
 
-(define-block drone :image "drone.png")
+;; (define-block drone :image "drone.png")

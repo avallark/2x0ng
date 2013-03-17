@@ -1,5 +1,9 @@
 (in-package :2x0ng)
 
+(defun glitchp (thing)
+  (and (blockyp thing)
+       (has-tag thing :glitch)))
+
 (defun robotp (thing)
   (and (blockyp thing)
        (has-tag thing :robot)))
@@ -449,6 +453,10 @@
     
 (define-method collide ball (thing)
   (cond 
+    ((glitchp thing)
+     (setf *ball* nil)
+     (play-sample "error.wav")
+     (destroy self))
     ;; unlock gates
     ((gatep thing)
      (setf %target nil)
