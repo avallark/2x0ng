@@ -1,6 +1,3 @@
-** DONE ball shouldn't target vents/clouds/bases
-   CLOSED: [2013-03-16 Sat 21:58]
-
 * TODO RELEASE 0.9 
 ** TODO unpack recursion to make custom function for 4- color level 
 *** TODO tone down garrisons a little.
@@ -10,8 +7,6 @@
 *** TODO things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
 *** TODO brains inside gates on boss level
-** DONE Big rooks
-   CLOSED: [2013-03-16 Sat 17:45]
 ** TODO play all the way through and take notes on each level
 
 * TODO RELEASE 0.95
@@ -188,6 +183,23 @@
    :ARCHIVE_TIME: 2013-03-16 Sat 17:45
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: Big rooks with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE ball shouldn't target vents/clouds/bases
+   CLOSED: [2013-03-16 Sat 21:58]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-18 Mon 01:26
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE Big rooks
+   CLOSED: [2013-03-16 Sat 17:45]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-18 Mon 01:26
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.9
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:

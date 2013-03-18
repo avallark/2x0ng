@@ -104,7 +104,7 @@
   (nth (mod (+ n *color-phase*) (length (theme-colors)))
        (theme-colors)))
 
-(defun bricks (size color)
+(defun bricks (color &optional (size 6))
   (with-new-buffer 
     (super-fat-row 0 0 size color)
     (trim (current-buffer))))
@@ -120,14 +120,15 @@
 (defvar *exit* nil)
 
 (defun make-exit (colors)
-  (cond
-    ((null colors)
-     (with-new-buffer (add-object (current-buffer) 
-				  (setf *exit* (new 'exit)))))
-    ((consp colors)
-     (wrap (new 'gate (first colors))
-	   (make-exit (rest colors))))))
-
+  (let ((*puzzle-border* 12))
+    (cond
+      ((null colors)
+       (with-new-buffer (add-object (current-buffer) 
+				    (setf *exit* (new 'exit)))))
+      ((consp colors)
+       (wrap (new 'gate (first colors))
+	     (make-exit (rest colors)))))))
+  
 (defun with-padding (amount buffer)
   (with-fields (height width) buffer
     (with-new-buffer 
@@ -270,9 +271,9 @@
 		     (drop-object (current-buffer) 
 				  (new 'vent) x y))))
     (lined-up 
-     (stacked-up garrison (bricks 3 (random-color)))
+     (stacked-up garrison (bricks (random-color) 3))
      buffer
-     (stacked-up garrison (bricks 3 (random-color))))))
+     (stacked-up garrison (bricks (random-color) 3)))))
 
 (defun with-outposts (buffer)
   (trim buffer)
@@ -283,22 +284,45 @@
 		     (drop-object (current-buffer) 
 				  (new 'hole)
 				  x (- y (units 4)))
-		     (drop-object (current-buffer) 
-				  (new 'hole) x y))))
+		    (when (> *difficulty* 4)
+		      (drop-object (current-buffer) 
+				   (new 'hole) x y)))))
     (lined-up outpost buffer outpost)))
 
+(defun with-fortification (buffer)
+  (cond 
+    ((> *difficulty* 5) (with-garrisons buffer))
+    ((> *difficulty* 2) (with-outposts buffer))
+    (t buffer)))
+
+(defun puzzle (colors)
+  (if (null (rest colors))
+      (make-exit (derange (theme-colors)))
+      (destructuring-bind (A B &rest other-colors) 
+	  (derange colors)
+	(mixed-up
+	 (mixed-down 
+	  (bricks (or *required-color* B))
+	  (bricks (random-color))
+	  (bricks A))
+	 (with-bulkheads (puzzle (rest colors)))
+	 (mixed-down
+	  (bricks (or *required-color* A))
+	  (bricks (random-color))
+	  (bricks B))))))
+	
 (defun make-puzzle-2 (colors)
   (destructuring-bind (A B) colors
     (stacked-up-randomly
-     (skewed (hazard) (bricks 6 B))
+     (skewed (hazard) (bricks B))
      (lined-up-randomly 
       (hazard)
       (bordered
        (stacked-up-randomly 
-	(gated A (bricks 6 (or *required-color* B)))
+	(gated A (bricks (or *required-color* B)))
 	(hazard)
 	(mixed-up (hazard)
-		  (bricks 6 A)))))
+		  (bricks A)))))
      (let ((*puzzle-border* 12))
        (mixed-up (wildcard)
 		 (make-exit (derange (theme-colors))))))))
@@ -307,44 +331,46 @@
   (assert (= 3 (length colors)))
   (let ((key (random-choose colors)))
     (destructuring-bind (A B C) (derange colors)
-      (randomly
+      (mixed-up
        ;;
-       (randomly
-	(randomly
-	 (gated A (bricks 6 C))
+       (mixed-up
+	(mixed-up
+	 (gated A (bricks C))
 	 (hazard)
-	 (bricks 6 B))
-	(randomly
-	 (with-bulkheads
-	     (gated C
-		    (requiring key (make-puzzle-2 (rest colors)))))
-	 (randomly 
-	  (randomly
+	 (bricks B))
+	(mixed-up
+	 (with-fortification
+	     (with-bulkheads
+		 (gated C
+			(requiring key (make-puzzle-2 (rest colors))))))
+	 (mixed-up 
+	  (mixed-up
 	   (hazard)
 	   (gated B 
 		  (randomly (hazard)
-			    (bricks 5 A)))
+			    (bricks A)))
 	   (hazard)
-	   (bricks 6 (or *required-color* B)))
+	   (bricks (or *required-color* B)))
 	  (hazard))))
        ;;
-       (randomly 
-	(gated B
-	       (randomly
-		(hazard) 
-		(gated (random-color) 
-		       (bricks 8 C)) 
-		(hazard) 
-		(bricks 8 A))))
+       (mixed-up 
+	(with-bulkheads
+	    (gated B
+		   (mixed-up
+		    (hazard) 
+		    (gated (random-color) 
+			   (bricks C)) 
+		    (hazard) 
+		    (bricks A)))))
 	   ;;;
-       (randomly
+       (mixed-up
 	(skewed (hazard)
-		(bricks 5 A)
+		(bricks A)
 		(hazard))
-	(randomly
-	 (bricks 6 (or *required-color* B))
+	(mixed-up
+	 (bricks (or *required-color* B))
 	 (hazard)
-	 (bricks 6 (random-color))))))))
+	 (bricks (random-color))))))))
 
 (defun make-puzzle-4 (colors)
   (assert (= 4 (length colors)))
@@ -352,22 +378,30 @@
     (destructuring-bind (A B C D) 
 	(derange colors)
       (randomly
-       (skewed (gated A (bricks 6 C))
+       (skewed (gated A (bricks C))
 	       (hazard)
-	       (bricks 6 B))
-       (with-garrisons 
-	   (make-puzzle-3 (rest colors)))
+	       (bricks B))
+       (with-bulkheads
+	   (with-garrisons 
+	       (gated A 
+		      (requiring key (make-puzzle-3 (rest colors))))))
        (stacked-up-randomly
-	(bricks 6 (or *required-color* B))
+	(bricks (or *required-color* B))
 	(hazard)
-	(gated B (bricks 6 (random-color))))))))
+	(randomly (bricks A)
+		  (bricks C))
+	(hazard)
+	(gated B (bricks D)))))))
 
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
-  (case (length colors) 
-    (2 (make-puzzle-2 colors))
-    (3 (make-puzzle-3 colors))
-    (4 (make-puzzle-4 colors))))
+  (let ((*depth* (random 2)))
+    (puzzle colors)))
+  ;; (let ((*depth* (random 2)))
+  ;;   (case (length colors) 
+  ;;     (2 (make-puzzle-2 colors))
+  ;;     (3 (make-puzzle-3 colors))
+  ;;     (4 (make-puzzle-4 colors)))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
