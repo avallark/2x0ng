@@ -220,7 +220,7 @@
 			     :vertex-color %body-color)
     (when %shielded 
       (multiple-value-bind (cx cy) (center-point self)
-	(draw-circle cx cy 30 :color (random-choose '("cyan" "white")))))
+	(draw-circle cx cy 30 :color (random-choose '("deep pink" "yellow")))))
     (when %talking
       (multiple-value-bind (bx by) (right-of self)
 	(draw-image (random-choose '("balloon.png" "balloon2.png"))
@@ -295,7 +295,7 @@
     (when (humanp self) 
       (play-sample "analog-death.wav")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "You died. Control-R to reset.") "sans-mono-bold-14")
+		   (new 'bubble (format nil "You died. Press Control-R to reset.") "sans-mono-bold-16")
 		   (+ %x (units 5))
 		   %y))
     (make-sparks %x %y %color)
@@ -406,6 +406,7 @@
 
 (define-method collide player-1-robot (thing)
   (when (exitp thing)
+    (play-sample "newball.wav")
     (begin-game (1+ *level*)))
   (when (or (enemyp thing) (holep thing))
     (die self))

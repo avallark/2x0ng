@@ -58,12 +58,12 @@
     (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 30))
     (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 30))
   (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
-  (:name "phong" :type :music :file "phong.ogg" :properties (:volume 20))
+  (:name "phong" :type :music :file "phong.ogg" :properties (:volume 10))
   (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 20))
-  (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 30))
+  (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 20))
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
-  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 40))
+  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 60))
   (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 30))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 80))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
@@ -72,13 +72,16 @@
   (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
   (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
   (:name "saga" :type :music :file "saga.ogg" :properties (:volume 20))
-  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 12))
+  (:name "frantix" :type :music :file "frantix.ogg" :properties (:volume 12))
+  (:name "metro" :type :music :file "metro.ogg" :properties (:volume 12))
+  (:name "theme" :type :music :file "theme.ogg" :properties (:volume 12))
+  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 7))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
 (defparameter *soundtrack*
   '("vedex" "remembering-xalcyon" "phong" 
-    "saga" "basswarp" 
-    "maxmacro" "bootypax" "musicbox" 
+    "saga" "basswarp" "entel" "reprise"
+    "maxmacro" "bootypax" "musicbox" "frantix" "metro" "theme"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 ;; Wrapping things about one another
@@ -312,7 +315,7 @@
 
 (defun with-fortification (buffer)
   (cond 
-    ((>= *level* 10) (with-garrisons buffer))
+    ((>= *level* 7) (with-garrisons buffer))
     ((>= *level* 3) (with-outposts buffer))
     (t buffer)))
 
@@ -460,24 +463,31 @@
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 4/7)
-      ;; give some instructions
-      (drop-object (current-buffer) 
-		   (new 'bubble (format nil "LEVEL ~S" *level*) "sans-mono-bold-22")
-		   (units 8) (units 5))
-      (drop-object (current-buffer) 
-		   (new 'bubble "Arrow keys to move. Space (or Alt) to fire. Control-R to reset." "sans-mono-bold-14")
-		   (units 8) (units 7))
-      (drop-object (current-buffer) 
-		   (new 'bubble "PRESS F1 FOR HELP, F12 to pause, Control-J to toggle joystick control." "sans-mono-bold-14")
-		   (units 8) (units 8))
       ;;
       (trim (current-buffer))
       ;; player 1
-      (drop-object (current-buffer) robot (units 4) (units 5))
+      (or (percent-of-time 50
+	    (prog1 t (drop-object (current-buffer) robot (units 4) (units 5))))
+	  (drop-object (current-buffer) robot 
+		       (- (%width (current-buffer))
+			  (units 12)) 
+		       (- (%height (current-buffer))
+			  (units 8))))
       (set-cursor (current-buffer) robot)
-      (move-window-to-cursor (current-buffer))
+      (snap-window-to-cursor (current-buffer))
+      (glide-window-to-cursor (current-buffer))
+      ;; bugfix
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-;      (play-music (random-choose *soundtrack*) :loop t)
+      ;; give some instructions
+      (drop robot
+	    (new 'bubble 
+		 (concatenate 'string
+			      (format nil "LEVEL ~S          " *level*) 
+			      "Use the arrow keys to move, spacebar (or ALT) to fire. Press F1 for help.")
+		 "sans-mono-bold-16"))
+      (when (or (null *music-toggled*) 
+		(sdl-mixer:music-playing-p))
+	(play-music (random-choose *soundtrack*) :loop t))
       (current-buffer))))
 

@@ -31,8 +31,8 @@
 (defparameter *three-brick-themes*
   '((:snafu "dark magenta" "gray20" 
      "cyan" "red" "yellow")
-    (:atlantis "midnight blue" "purple" 
-     "green" "hot pink" "cyan")
+    (:atlantis "maroon" "dodger blue" 
+     "pale green" "hot pink" "red")
     (:radium "dark olive green" "gold"
      "cyan" "chartreuse" "magenta")
     (:krez "black" "maroon2" 
@@ -45,8 +45,8 @@
      "yellow" "green" "cyan" "deep pink")
     (:zendium "gray17" "orchid"
      "deep pink" "deep sky blue" "yellow" "orange")
-    (:command "black" "yellow" 
-     "aquamarine" "deep pink" "red" "purple")))
+    (:command "saddle brown" "yellow" 
+     "aquamarine" "deep pink" "red" "green yellow")))
 
 (defparameter *boss-theme* '(:voltz "black" "black" "red" "orchid" "aquamarine"))
 
@@ -80,10 +80,10 @@
 
 (defparameter *levels* 
   '((:difficulty 0 :colors 2 :hazards nil :wildcards nil)
-    (:difficulty 0 :colors 2 :hazards (hole) :wildcards nil) 
+    (:difficulty 1 :colors 2 :hazards (hole) :wildcards nil) 
     (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcards nil)
-    (:difficulty 1 :colors 3 :hazards (hole hole paddle) :wildcards nil)
-    (:difficulty 2 :colors 3 :hazards (hole hole paddle) :wildcards (ghost thief nil))
+    (:difficulty 2 :colors 3 :hazards (hole hole paddle tracer) :wildcards nil)
+    (:difficulty 2 :colors 3 :hazards (hole tracer paddle) :wildcards (ghost thief nil))
     (:difficulty 2 :colors 3 :hazards (hole hole tracer) :wildcards nil)
     (:difficulty 3 :colors 3 :hazards (tracer paddle hole) :wildcards nil)
     (:difficulty 3 :colors 4 :hazards (hole hole paddle) :wildcards (wave nil))

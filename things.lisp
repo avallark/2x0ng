@@ -8,17 +8,30 @@
   (and (blockyp thing)
        (has-tag thing :robot)))
 
-(define-block bubble text) 
+(define-block bubble 
+  (text :initform nil) 
+  (collision-type :initform nil))
 
 (define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
   (setf %text text)
   (setf %font font)
-  (later 10.0 (destroy self)))
+  (later 12.0 (destroy self)))
 
 (define-method draw bubble ()
-  (draw-string %text %x %y 
-	       :color (random-choose '("cyan" "white"))
-	       :font %font))
+  (multiple-value-bind (top left right bottom)
+      (window-bounding-box (current-buffer))
+    (draw-box left top (- right left) (units 2) :color "black")
+    (draw-string %text 
+		 (+ left (units 1))
+		 (+ top (units 0.4))
+		 :color (random-choose '("cyan" "white"))
+		 :font %font)))
+
+(define-method update bubble ()
+  (when (cursor)
+    (multiple-value-bind (x y)
+	(right-of (cursor))
+      (move-to self x y))))
 
 (defun targetp (thing)
   (and (blockyp thing)
@@ -400,7 +413,7 @@
       (progn (make-sparks %x %y "white")
 	     (setf *ball* nil)
 	     (paint %kicker %color)
-	     (play-sample "newball.wav")
+	     (play-sample "error.wav")
 	     (destroy self))
       (progn
 	(play-sound self (random-choose *bounce-sounds*))
@@ -520,5 +533,8 @@
 
 (define-block exit
   (image :initform "exit1.png"))
+
+(define-block update exit ()
+  (percent-of-time 40 (setf %image (random-choose '("exit1.png" "exit2.png")))))
 
 (defun exitp (thing) (is-a 'exit thing))

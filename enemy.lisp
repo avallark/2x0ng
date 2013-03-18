@@ -214,10 +214,10 @@
 (define-method hunt monitor ()
   (let ((dist (distance-to-cursor self)))
     ;; hunt for player
-    (if (< dist (with-difficulty 250 275 300 325 350 360 370 380))
+    (if (< dist (with-difficulty 300 325 350 360 370 380 420))
 	(progn 
 	  (setf %heading (heading-to-cursor self))
-	  (forward self (with-difficulty 1.2 1.3 1.4 1.6 1.8 1.8 1.9 2.0)))
+	  (forward self (with-difficulty 1.3 1.4 1.6 1.8 2.0 2.1 2.2 2.3)))
 	;; patrol
 	(progn (percent-of-time 1 (choose-new-direction self))
 	       (move-toward self %direction (with-difficulty 1 2 2 2.5 2.5 3))))))

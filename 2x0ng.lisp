@@ -21,6 +21,8 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
+  (setf *default-texture-filter* :nearest)
+  (setf *use-antialiased-text* nil)
   (setf *current-directory*
 	(make-pathname
 	 :directory (pathname-directory #.#P"./"))))
@@ -82,6 +84,8 @@
 (defun help-buffer ()
   (let ((buffer (new 'help-screen)))
     (setf (field-value :game buffer) (current-buffer))
+    (bind-event buffer '(:f1) :resume-playing)
+    (bind-event buffer '(:escape) :resume-playing)
     (bind-event buffer '(:space) :resume-playing)
     buffer))
 
@@ -92,10 +96,10 @@
   (setf *window-title* "2x0ng")
   (setf *screen-width* 1080)
   (setf *screen-height* 720)
-  ;; (setf *nominal-screen-width* 1080)
-  ;; (setf *nominal-screen-height* 720)
-  (setf *nominal-screen-width* (* 1080 4))
-  (setf *nominal-screen-height* (* 720 4))
+  (setf *nominal-screen-width* 1080)
+  (setf *nominal-screen-height* 720)
+  ;; (setf *nominal-screen-width* (* 1080 4))
+  ;; (setf *nominal-screen-height* (* 720 4))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
@@ -116,10 +120,12 @@
     (start-session)))
 
 (define-buffer 2x0ng
-    (default-events 
+  (default-events 
      :initform
      '(((:r :control) :reset-game)
        ((:f1) :help)
+       ((:f10) :toggle-music) 
+       ((:f12) :transport-toggle-play)
        ((:h :control) :help)
        ((:j :control) :toggle-joystick)
        ;;
@@ -133,6 +139,14 @@
        ((:f12) :transport-toggle-play)
        ((:g :control) :escape)
        ((:d :control) :drop-selection))))
+
+(defvar *music-toggled* nil)
+
+(define-method toggle-music 2x0ng ()
+  (setf *music-toggled* t)
+  (if (sdl-mixer:music-playing-p)
+      (halt-music)
+      (play-music (random-choose *soundtrack*) :loop t)))
 
 (define-method help 2x0ng () 
   (switch-to-buffer (help-buffer)))
