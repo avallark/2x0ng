@@ -44,10 +44,10 @@
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
-(defun super-fat-row (x y length color)
+(defun super-fat-row (x y width height color)
   (let ((y0 y))
-    (dotimes (n 4)
-      (fat-brick-row x y0 length color)
+    (dotimes (n height)
+      (fat-brick-row x y0 width color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
 (defparameter *sideline-width* 2) 
@@ -105,9 +105,13 @@
        (theme-colors)))
 
 (defun bricks (color &optional (size 6))
-  (with-new-buffer 
-    (super-fat-row 0 0 size color)
-    (trim (current-buffer))))
+  (bordered
+   (with-new-buffer
+     (super-fat-row 0 0 
+		    (+ 3 (random 5))
+		    (- 6 *depth*)
+		    color)
+     (trim (current-buffer)))))
 
 (defun derange (things)
   (let ((len (length things))
@@ -129,7 +133,7 @@
        (wrap (new 'gate (first colors))
 	     (make-exit (rest colors)))))))
   
-(defun with-padding (amount buffer)
+(defun with-hpadding (amount buffer)
   (with-fields (height width) buffer
     (with-new-buffer 
       (paste-from (current-buffer) buffer amount 0) 
@@ -137,11 +141,21 @@
 	      (+ width amount)
 	      height))))
 
+(defun with-vpadding (amount buffer)
+  (with-fields (height width) buffer
+    (with-new-buffer 
+      (paste-from (current-buffer) buffer 0 amount) 
+      (resize (current-buffer)
+	      (+ width amount)
+	      height))))
+
 (defun with-automatic-padding (buffer)
   (with-border (units 2)
-    (with-padding (+ (units 1) 
-		     (random (units 15)))
-      buffer)))
+    (let ((padding (+ (units 1) 
+		      (random (units 15)))))
+      (if (evenp *depth*)
+	  (with-hpadding padding buffer)
+	  (with-vpadding padding buffer)))))
 
 (defun horizontally (a b)
   (percent-of-time 50 (rotatef a b))
@@ -216,19 +230,19 @@
   
 (defun mixed-up (&rest things)
   (assert things)
-  (let ((*depth* (1+ *depth*)))
-    (apply #'funcall (if (evenp *depth*)
-			 #'stacked-up-randomly
-			 #'lined-up-randomly)
-	   things)))
+  (let ((layout (if (evenp *depth*)
+		    #'stacked-up-randomly
+		    #'lined-up-randomly)))
+    (let ((*depth* (1+ *depth*)))
+      (apply #'funcall layout things))))
 
 (defun mixed-down (&rest things)
   (assert things)
-  (let ((*depth* (1+ *depth*)))
-    (apply #'funcall (if (oddp *depth*)
-			 #'stacked-up-randomly
-			 #'lined-up-randomly)
-	   things)))
+  (let ((layout (if (oddp *depth*)
+		    #'stacked-up-randomly
+		    #'lined-up-randomly)))
+    (let ((*depth* (1+ *depth*)))
+      (apply #'funcall layout things))))
 
 (defun skewed (&rest things)
   (assert things)
@@ -246,12 +260,14 @@
       (drop-object (current-buffer) (new 'wall (units 1) u) 0 0)
       (drop-object (current-buffer) (new 'wall (units 1) u) 0 (* 2 u)))))
 
-(defun with-bulkheads (buffer)
+(defun with-bulkheads (buffer &optional (horizontal (percent-of-time 50 t)))
   (trim buffer)
-  (let ((wall (if (oddp *depth*)
+  (let ((wall (if horizontal
 		  (horizontal-bulkhead (%width buffer))
 		  (vertical-bulkhead (%height buffer)))))
-    (laid-out (bordered wall) buffer (bordered (duplicate wall)))))
+    (if horizontal
+	(stacked-up (bordered wall) (bordered buffer) (bordered (duplicate wall)))
+	(lined-up (bordered wall) (bordered buffer) (bordered (duplicate wall))))))
 
 (defun with-garrisons (buffer)
   (trim buffer)
@@ -295,22 +311,6 @@
     ((> *difficulty* 2) (with-outposts buffer))
     (t buffer)))
 
-(defun puzzle (colors)
-  (if (null (rest colors))
-      (make-exit (derange (theme-colors)))
-      (destructuring-bind (A B &rest other-colors) 
-	  (derange colors)
-	(mixed-up
-	 (mixed-down 
-	  (bricks (or *required-color* B))
-	  (bricks (random-color))
-	  (bricks A))
-	 (with-bulkheads (puzzle (rest colors)))
-	 (mixed-down
-	  (bricks (or *required-color* A))
-	  (bricks (random-color))
-	  (bricks B))))))
-	
 (defun make-puzzle-2 (colors)
   (destructuring-bind (A B) colors
     (stacked-up-randomly
@@ -333,27 +333,25 @@
     (destructuring-bind (A B C) (derange colors)
       (mixed-up
        ;;
-       (mixed-up
-	(mixed-up
-	 (gated A (bricks C))
-	 (hazard)
-	 (bricks B))
+       (mixed-down
+	(gated A (bricks C))
+	(hazard)
+	(bricks B)
 	(mixed-up
 	 (with-fortification
 	     (with-bulkheads
 		 (gated C
 			(requiring key (make-puzzle-2 (rest colors))))))
 	 (mixed-up 
-	  (mixed-up
-	   (hazard)
-	   (gated B 
-		  (randomly (hazard)
-			    (bricks A)))
-	   (hazard)
-	   (bricks (or *required-color* B)))
-	  (hazard))))
+	  (hazard)
+	  (gated B 
+		 (randomly (hazard)
+			   (bricks A)))
+	  (hazard)
+	  (bricks (or *required-color* B)))
+	  (hazard)))
        ;;
-       (mixed-up 
+       (mixed-down 
 	(with-bulkheads
 	    (gated B
 		   (mixed-up
@@ -363,7 +361,7 @@
 		    (hazard) 
 		    (bricks A)))))
 	   ;;;
-       (mixed-up
+       (mixed-down
 	(skewed (hazard)
 		(bricks A)
 		(hazard))
@@ -371,6 +369,7 @@
 	 (bricks (or *required-color* B))
 	 (hazard)
 	 (bricks (random-color))))))))
+
 
 (defun make-puzzle-4 (colors)
   (assert (= 4 (length colors)))
@@ -396,12 +395,10 @@
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
   (let ((*depth* (random 2)))
-    (puzzle colors)))
-  ;; (let ((*depth* (random 2)))
-  ;;   (case (length colors) 
-  ;;     (2 (make-puzzle-2 colors))
-  ;;     (3 (make-puzzle-3 colors))
-  ;;     (4 (make-puzzle-4 colors)))))
+    (case (length colors) 
+      (2 (make-puzzle-2 colors))
+      (3 (make-puzzle-3 colors))
+      (4 (make-puzzle-4 colors)))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)

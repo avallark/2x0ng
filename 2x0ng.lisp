@@ -94,8 +94,8 @@
   (setf *screen-height* 720)
   ;; (setf *nominal-screen-width* 1080)
   ;; (setf *nominal-screen-height* 720)
-  (setf *nominal-screen-width* (* 1080 2))
-  (setf *nominal-screen-height* (* 720 2))
+  (setf *nominal-screen-width* (* 1080 4))
+  (setf *nominal-screen-height* (* 720 4))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
