@@ -369,40 +369,45 @@
 	 (bricks (or *required-color* C))
 	 (hazard)
 	 (bricks (random-color))))))))
+
+(defun make-puzzle-3 (colors)
+  (apply #'mixed-up
+	 (puzzle-3-components colors)))
   
 (defun make-puzzle-4 (colors)
   (assert (= 4 (length colors)))
   (let ((key (random-choose colors)))
     (destructuring-bind (A B C D) 
 	(derange colors)
-      (destructuring-bind
-	  (P Q R) (puzzle-3-components (list A B C))
-	;; (let ((sector-1
-	;; 	(lined-up-randomly
-	;; 	 (gated A (bricks C))
-	;; 	 (hazard)
-	;; 	 (bricks D)
-	;; 	 (bricks (random-color))
-	;; 	 (hazard)
-	;; 	 (bricks B)))
-	;;     (sector-2 
-	;;       (lined-up-randomly
-	;;        (bricks (or *required-color* B))
-	;;        (hazard)
-	;;        (randomly (bricks A)
-	;; 		 (hazard)
-	;; 		 (bricks C))
-	;;        (bricks (random-color))
-	;;        (hazard)
-	;;        (gated B (bricks D)))))
-	(percent-of-time 50 (rotatef sector-1 sector-2))
-	(stacked-up
-	 sector-1
-	 (with-bulkheads
-	     (with-fortification 
-		 (gated A 
-			(requiring key (make-puzzle-3 (rest colors))))))
-	 sector-2)))))
+      (destructuring-bind (P Q R) 
+	  (requiring key
+	    (puzzle-3-components (list A B C)))
+	(mixed-up
+	 (mixed-down
+	  (bricks (or *required-color* B))
+	  (hazard)
+	  (randomly (bricks A)
+		    (hazard)
+		    (bricks C))
+	  (hazard))
+	 (mixed-down
+	  (skewed 
+	   (bricks (random-color))
+	   (hazard)
+	   (bricks D))
+	  (gated B P)
+	  (gated A 
+		 (with-fortifications
+		     (with-bulkheads Q))))
+	 (mixed-up
+	  (mixed-down
+	   (gated A (bricks C))
+	   (hazard)
+	   (bricks D)
+	   (with-bulkheads R)
+	   (bricks (random-color))
+	   (hazard)
+	   (bricks B))))))))
 
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
