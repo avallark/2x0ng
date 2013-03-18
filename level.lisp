@@ -137,9 +137,9 @@
 	      height))))
 
 (defun with-automatic-padding (buffer)
-  (with-border (units 3)
+  (with-border (units 2)
     (with-padding (+ (units 1) 
-		     (random (units 25)))
+		     (random (units 15)))
       buffer)))
 
 (defun horizontally (a b)
@@ -284,72 +284,90 @@
 				  (new 'hole) x y))))
     (lined-up outpost buffer outpost)))
 
-(defun make-core (colors)
-;  (assert (zerop *depth*))
-  (destructuring-bind (A B) colors
-    (stacked-up-randomly
-      (skewed (hazard) (bricks 6 B))
-     (lined-up-randomly 
-      (hazard)
-      (bordered
-	   (stacked-up-randomly 
-	    (gated A (bricks 6 (or *required-color* B)))
-	    (hazard)
-	    (mixed-up (hazard)
-		      (bricks 6 A))))
-      (let ((*puzzle-border* 12))
-	(mixed-up (wildcard)
-		    (make-exit (derange (theme-colors)))))))))
+(defun make-puzzle-2 (colors)
+  (let ((*depth* (1+ *depth*)))
+    (destructuring-bind (A B) colors
+      (randomly
+       (skewed (hazard) (bricks 6 B))
+       (randomly 
+	(hazard)
+	(bordered
+	 (randomly 
+	  (gated A (bricks 6 (or *required-color* B)))
+	  (hazard)
+	  (mixed-up (hazard)
+		    (bricks 6 A)))))
+       (let ((*puzzle-border* 12))
+	 (mixed-up (wildcard)
+		   (make-exit (derange (theme-colors)))))))))
 
-(defun make-layer (colors)
-  (let ((*depth* (1- *depth*)))
-    (cond 
-      ;; with two colors, terminate the recursion
-      ((= 2 (length colors))
-       (make-core colors))
-      ;; with three or more colors, puzzify and recurse
-      ((< 2 (length colors))
-       (let ((key (random-choose colors)))
-	 (destructuring-bind (A B C &rest other-colors) 
-	     (derange colors)
-	   (stacked-up-randomly
-	    (skewed (gated A (bricks 6 C))
-		    (hazard)
-		    (bricks 6 B))
+(defun make-puzzle-3 (colors)
+  (assert (= 3 (length colors)))
+  (let ((*depth* (1+ *depth*)))
+    (let ((key (random-choose colors)))
+      (destructuring-bind (A B C) (derange colors)
+	(stacked-up-randomly
+	 ;;
+	 (lined-up-randomly
+	  (stacked-up-randomly
+	   (gated A (bricks 6 C))
+	   (hazard)
+	   (bricks 6 B))
+	  (lined-up-randomly
+	   (with-bulkheads
+	       (gated C
+		      (requiring key (make-puzzle-2 (rest colors)))))
+	   (stacked-up-randomly 
 	    (randomly
-	     (stacked-up-randomly 
-	      (lined-up-randomly
-	       (hazard)
-	       (gated B 
-		      (randomly (hazard)
-				(bricks 5 A)))
-	       (hazard)
-	       (bricks 6 (or *required-color* B)))
-	      (hazard)
-	      (with-bulkheads
-		  (gated C
-			 (requiring key
-			   (funcall (if (>= *level* 9) #'with-garrisons #'identity)
-				    (make-layer (rest colors))))))
-	      (stacked-up-randomly (hazard) (gated (random-color) (bricks 8 C)) (hazard) (bricks 8 (random-color))))
-	     (stacked-up-randomly
-	      (lined-up-randomly
-	       (skewed (hazard)
-		       (bricks 5 A))
-	       (hazard))
-	      (lined-up-randomly
-	       (bricks 6 (or *required-color* B))
-	       (hazard)
-	       (bricks 6 (random-color))))))))))))
+	     (hazard)
+	     (gated B 
+		    (randomly (hazard)
+			      (bricks 5 A)))
+	     (hazard)
+	     (bricks 6 (or *required-color* B)))
+	    (hazard))))
+	 ;;
+	 (stacked-up-randomly 
+	  (gated B
+		 (skewed
+		  (hazard) 
+		  (gated (random-color) 
+			 (bricks 8 C)) 
+		  (hazard) 
+		  (bricks 8 A))))
+	   ;;;
+	 (stacked-up-randomly
+	  (skewed (hazard)
+		  (bricks 5 A)
+		  (hazard))
+	  (stacked-up-randomly
+	   (bricks 6 (or *required-color* B))
+	   (hazard)
+	   (bricks 6 (random-color)))))))))
+
+(defun make-puzzle-4 (colors)
+  (assert (= 4 (length colors)))
+  (let ((*depth* (1+ *depth*)))
+    (let ((key (random-choose colors)))
+      (destructuring-bind (A B C D) 
+	  (derange colors)
+	(randomly
+	 (skewed (gated A (bricks 6 C))
+		 (hazard)
+		 (bricks 6 B))
+	 (with-garrisons 
+	     (make-puzzle-3 (rest colors)))
+	 (stacked-up-randomly
+	  (bricks 6 (or *required-color* B))
+	  (hazard)
+	  (gated B (bricks 6 (random-color)))))))))
 
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
-  (let ((*depth* (length colors))
-	(puzzle (make-layer colors)))
-    (case (length colors) 
-      (2 puzzle)
-      (3 (with-outposts puzzle))
-      (4 (with-garrisons puzzle)))))
+  (case (length colors) 
+    (2 (make-puzzle-2 colors))
+    (3 (make-puzzle-3 colors))
+    (4 (make-puzzle-4 colors))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)

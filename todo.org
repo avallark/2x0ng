@@ -1,28 +1,26 @@
 ** DONE ball shouldn't target vents/clouds/bases
    CLOSED: [2013-03-16 Sat 21:58]
-** TODO implement LOS for ball targeting. just run a line of x/y points in between 
-** TODO Corruption color kills you if you are painted Corruption, or if you touch a Corrupt brick
-** TODO Procedural Guardian eyes with LOS targeting lasers and bombs and mega sweep laser that leaves sparks
-** TODO heart of base is Brain at center, must be unlocked and defeated
-** TODO growing bricks that eat space
 
 * TODO RELEASE 0.9 
-** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
-** DONE Big rooks
-   CLOSED: [2013-03-16 Sat 17:45]
 ** TODO unpack recursion to make custom function for 4- color level 
 *** TODO tone down garrisons a little.
 *** TODO reduce size of large levels
 *** TODO resist temptation to have more than two hazard types per level
+** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
+*** TODO things that fire vertical and horizontal bullets, and can only be destroyed from corners
+**** TODO these replace gas vents in low-level garrisons
+*** TODO brains inside gates on boss level
+** DONE Big rooks
+   CLOSED: [2013-03-16 Sat 17:45]
 ** TODO play all the way through and take notes on each level
-** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
-** TODO gameplay variations
 
 * TODO RELEASE 0.95
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#A] BUGFIX: can press against nested gate to "cheat"
 ** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
 ** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
+** TODO [#B] ball should delay before reappearing 
+** TODO [#B] implement LOS for ball targeting. just run a line of x/y points in between 
 ** TODO [#B] move notification bubbles to bottom of screen black bar area (including notifications)
 ** TODO [#B] display message when paused
 ** TODO [#C] BUGFIX: screen jitter when pressing against wall 
@@ -39,16 +37,9 @@
    
 * TODO Other features
 
-* TODO peach puff commentary "fantastique!" "incomparable" superlatif for fantastic combos, or finishing level? or "virus detected"? or occasional death lines  
+** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
+** TODO gameplay variations
 
-* TODO a simple framework for blue/white modal conversation bubbles that type in progressively like in old games.
-* TODO camera scrolls to each speaker in turn.
-* TODO with-scene
-* TODO with-dialogue <---- pull from org-voice
-
-* The Neutral Gang: Navajo White, Rosy/Sandy Brown, and Peach Puff.
-**
-* Chartreuse, Goldenrod, Alice Blue, Ghost White
 
 ** TODO [#B] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
 ** TODO [#B] make sure thief works properly, add taunts 
@@ -72,6 +63,17 @@
 ** TODO [#C] growing corruption/mismunch areas that eat color
 ** TODO [#C] enemies that merge to form larger ships like in space fury 
 ** TODO [#C] francophone voicesynthesis taunts you when you die
+
+* TODO peach puff commentary "fantastique!" "incomparable" superlatif for fantastic combos, or finishing level? or "virus detected"? or occasional death lines  
+
+* TODO a simple framework for blue/white modal conversation bubbles that type in progressively like in old games.
+* TODO camera scrolls to each speaker in turn.
+* TODO with-scene
+* TODO with-dialogue <---- pull from org-voice
+
+* The Neutral Gang: Navajo White, Rosy/Sandy Brown, and Peach Puff.
+**
+* Chartreuse, Goldenrod, Alice Blue, Ghost White
 
 * Archived Entries
 ** DONE [#A] remove the large blank areas around the puzzle

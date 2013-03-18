@@ -260,16 +260,15 @@
 ;;; Default AI methods. 
 
 (define-method movement-direction robot () 
-  %leave-direction)
-  ;; (if %carrying
-  ;;     (opposite-direction (direction-to-cursor self))
-  ;;     (if (< (distance-to-cursor self) 400)
-  ;; 	  (if *ball*
-  ;; 	      (direction-to-thing self *ball*)
-  ;; 	      (if (> (distance-to-cursor self) 250)
-  ;; 		  (opposite-direction (direction-to-cursor self))
-  ;; 		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
-  ;; 		      %direction))))))
+  (if %carrying
+      (opposite-direction (direction-to-cursor self))
+      (if (< (distance-to-cursor self) 400)
+  	  (if *ball*
+  	      (direction-to-thing self *ball*)
+  	      (if (> (distance-to-cursor self) 250)
+  		  (opposite-direction (direction-to-cursor self))
+  		  (or (percent-of-time 3 (setf %direction (random-choose *directions*)))
+  		      %direction))))))
 
 (defvar *joystick-enabled* nil)
 

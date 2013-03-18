@@ -92,10 +92,10 @@
   (setf *window-title* "2x0ng")
   (setf *screen-width* 1080)
   (setf *screen-height* 720)
-  (setf *nominal-screen-width* 1080)
-  (setf *nominal-screen-height* 720)
-  ;; (setf *nominal-screen-width* (* 1080 4))
-  ;; (setf *nominal-screen-height* (* 720 4))
+  ;; (setf *nominal-screen-width* 1080)
+  ;; (setf *nominal-screen-height* 720)
+  (setf *nominal-screen-width* (* 1080 4))
+  (setf *nominal-screen-height* (* 720 4))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
@@ -123,6 +123,8 @@
        ((:h :control) :help)
        ((:j :control) :toggle-joystick)
        ;;
+       ((:x :alt) :command-prompt)
+       ((:f6) :regenerate)
        ((:x :control) :edit-cut)
        ((:c :control) :edit-copy)
        ((:v :control) :edit-paste)
@@ -134,6 +136,8 @@
 
 (define-method help 2x0ng () 
   (switch-to-buffer (help-buffer)))
+
+(define-method regenerate 2x0ng () (reset-level))
 
 (define-method toggle-joystick 2x0ng ()
   (setf *joystick-enabled* (if *joystick-enabled* nil t)))

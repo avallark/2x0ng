@@ -693,12 +693,24 @@
 ;;; A bomber guy who shoots bombs at you
 
 (defresource 
-    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 160))
-    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 160))
-  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 160))
-  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 160)))
+    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 260))
+    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 260))
+  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 260))
+  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 260)))
 
 (defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
+
+(defresource 
+    (:name "alien-1.wav" :type :sample :file "alien-1.wav" :properties (:volume 120))
+    (:name "alien-2.wav" :type :sample :file "alien-2.wav" :properties (:volume 120))
+  (:name "alien-3.wav" :type :sample :file "alien-3.wav" :properties (:volume 120))
+  (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 120))
+  (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 120))
+  (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 120))
+  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 120)))
+
+(defparameter *alien-sounds*
+'("alien-1.wav" "alien-2.wav" "alien-3.wav" "alien-4.wav" "alien-5.wav" "alien-6.wav" "alien-7.wav"))
 
 (defresource 
     (:name "rook.png" :type :image :file "rook.png")
@@ -746,6 +758,7 @@
 	      (zerop timer))
 	 ;; don't always fire
 	 (percent-of-time 65 
+	   (percent-of-time 75 (play-sound self (random-choose *alien-sounds*)))
 	   (play-sample "robovoxx.wav")
 	   (fire self dir))
 	 (aim self (- dir 0.52))
