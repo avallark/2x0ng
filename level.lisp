@@ -330,7 +330,7 @@
        ;;
        (randomly 
 	(gated B
-	       (skewed
+	       (randomly
 		(hazard) 
 		(gated (random-color) 
 		       (bricks 8 C)) 
