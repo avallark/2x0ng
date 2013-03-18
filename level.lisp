@@ -251,16 +251,16 @@
   (apply #'funcall #'mixed-up (mapcar #'with-automatic-padding things)))
 
 (defun horizontal-bulkhead (width)		   
-  (let ((u (/ width 3)))
+  (let ((u (/ width 5)))
     (with-new-buffer
-      (drop-object (current-buffer) (new 'wall u (units 1)) 0 0)
-      (drop-object (current-buffer) (new 'wall u (units 1)) (* 2 u) 0))))
+      (drop-object (current-buffer) (new 'wall (* 2 u) (units 1)) 0 0)
+      (drop-object (current-buffer) (new 'wall (* 2 u) (units 1)) (* 3 u) 0))))
 
 (defun vertical-bulkhead (width)		   
-  (let ((u (/ width 3)))
+  (let ((u (/ width 5)))
     (with-new-buffer
-      (drop-object (current-buffer) (new 'wall (units 1) u) 0 0)
-      (drop-object (current-buffer) (new 'wall (units 1) u) 0 (* 2 u)))))
+      (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 0)
+      (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 (* 3 u)))))
 
 (defun with-bulkheads (buffer &optional (horizontal (percent-of-time 50 t)))
   (trim buffer)
@@ -300,6 +300,9 @@
 	 (y (/ height 2))
 	 (outpost (with-new-buffer 
 		     (drop-object (current-buffer) 
+				  (new 'paddle)
+				  x (- y (units 6)))
+		     (drop-object (current-buffer) 
 				  (new 'hole)
 				  x (- y (units 4)))
 		    (when (> *difficulty* 4)
@@ -309,8 +312,8 @@
 
 (defun with-fortification (buffer)
   (cond 
-    ((> *difficulty* 5) (with-garrisons buffer))
-    ((> *difficulty* 2) (with-outposts buffer))
+    ((>= *level* 10) (with-garrisons buffer))
+    ((>= *level* 3) (with-outposts buffer))
     (t buffer)))
 
 (defun make-puzzle-2 (colors)
@@ -382,40 +385,60 @@
       (destructuring-bind (P Q R) 
 	  (requiring key
 	    (puzzle-3-components (list A B C)))
-	(mixed-up
-	 (mixed-down
-	  (bricks (or *required-color* B))
-	  (hazard)
-	  (randomly (bricks A)
-		    (hazard)
-		    (bricks C))
-	  (hazard))
-	 (mixed-down
-	  (skewed 
-	   (bricks (random-color))
-	   (hazard)
-	   (bricks D))
-	  (gated B P)
-	  (gated A 
-		 (with-fortifications
-		     (with-bulkheads Q))))
+	(mixed-down 
 	 (mixed-up
-	  (mixed-down
-	   (gated A (bricks C))
+	  ;; sector 1
+	  (skewed
+	   (gated A 
+		  (mixed-up 
+		   (bricks key)
+		   (hazard)))
+	   (randomly (bricks B)
+		     (hazard)
+		     (bricks D))
+	   (hazard))
+	  ;; sector 2
+	  (gated C
+		 (with-bulkheads
+		     (with-fortification
+			 (mixed-down (bricks key)
+				     (hazard)
+				     (bricks (random-color)))))))
+	 ;; sector 3
+	 (with-bulkheads
+	     (gated key
+		    (mixed-down
+		     (skewed 
+		      (bricks (random-color))
+		      (hazard)
+		      (bricks D))
+		     (gated B P)
+		     (randomly
+		      (bricks D)
+		      (gated A 
+			     (with-fortification Q))))))
+	 ;; sector 3
+	 (mixed-up
+	  (skewed
+	   (gated C (bricks A))
 	   (hazard)
-	   (bricks D)
+	   (bricks B)
 	   (with-bulkheads R)
-	   (bricks (random-color))
-	   (hazard)
-	   (bricks B))))))))
-
+	   (bricks (random-color)))
+	  (gated A
+		 (skewed
+		  (hazard)
+		  (bricks key)
+		  (hazard)
+		  (bricks C)))))))))
+  
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
   (let ((*depth* (random 2)))
     (case (length colors) 
       (2 (make-puzzle-2 colors))
       (3 (make-puzzle-3 colors))
-      (4 (make-puzzle-4 colors)))))
+      (4 (with-bulkheads (with-fortification (make-puzzle-4 colors)))))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
