@@ -502,7 +502,7 @@
 (defparameter *vent-images* '("vent.png" "vent2.png" "vent3.png" "vent4.png" "vent5.png"))
 
 (define-block cloud 
-  :timer 300
+  :timer 400
   :collision-type :passive
   :tags '(:cloud)
   :image "vent.png")
@@ -628,7 +628,7 @@
     (:name "bombs-away.wav" :type :sample :file "bombs-away.wav" :properties (:volume 70))
     (:name "power.wav" :type :sample :file "power.wav")
     (:name "powerdown.wav" :type :sample :file "powerdown.wav")
-    (:name "countdown.wav" :type :sample :file "countdown.wav" :properties (:volume 40))
+    (:name "countdown.wav" :type :sample :file "countdown.wav" :properties (:volume 30))
     (:name "explode.wav" :type :sample :file "explode.wav" :properties (:volume 100)))
 
 (define-block bomb :timer 0 :countdown 5 
@@ -702,13 +702,13 @@
 (defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
 
 (defresource 
-    (:name "alien-1.wav" :type :sample :file "alien-1.wav" :properties (:volume 80))
-    (:name "alien-2.wav" :type :sample :file "alien-2.wav" :properties (:volume 80))
-  (:name "alien-3.wav" :type :sample :file "alien-3.wav" :properties (:volume 80))
-  (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 80))
-  (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 80))
-  (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 80))
-  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 80)))
+    (:name "alien-1.wav" :type :sample :file "alien-1.wav" :properties (:volume 20))
+    (:name "alien-2.wav" :type :sample :file "alien-2.wav" :properties (:volume 20))
+  (:name "alien-3.wav" :type :sample :file "alien-3.wav" :properties (:volume 20))
+  (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 20))
+  (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 20))
+  (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 20))
+  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 2\0)))
 
 (defparameter *alien-sounds*
 '("alien-1.wav" "alien-2.wav" "alien-3.wav" "alien-4.wav" "alien-5.wav" "alien-6.wav" "alien-7.wav"))
@@ -725,7 +725,7 @@
   :image "rook2.png" 
   :hp 12
   :tags '(:rook :enemy :target)
-  :timer 0
+  :timer 40
   :shield-pieces 20
   :fleeing nil)
 
@@ -750,7 +750,7 @@
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
 	  (dist (distance-to-cursor self)))
-      (when (and (< dist 400) (plusp %shield-pieces))
+      (when (and (zerop %timer) (< dist 400) (plusp %shield-pieces))
 	(drop self (new 'glitch) (/ 2 %width) (/ 2 %height))
 	(decf %shield-pieces))
       (cond 

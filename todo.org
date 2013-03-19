@@ -1,5 +1,6 @@
 * TODO RELEASE 0.9 
 
+** TODO shoudl have to defeat all boss enemies to progress
 ** TODO restrict 4-color levels to vertical layout 
 ** TODO unpack recursion to make custom function for 4- color level 
 *** TODO tone down garrisons a little.
