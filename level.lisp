@@ -390,26 +390,36 @@
       (destructuring-bind (P Q R) 
 	  (requiring key
 	    (puzzle-3-components (list A B C)))
-	(mixed-down 
-	  ;;
-	  (mixed-up 	 
-	   (gated B P)
-	   (skewed 
-	    (gated A 
-		   (mixed-up 
-		    (bricks key)
-		    (hazard)))
-	    (mixed-up (bricks B)
-		      (hazard)
-		      (bricks D))
-	    (hazard)))
-	  (mixed-up
+	(let ((sector-1 
+		(mixed-down
+		 (bricks (random-color))
+		 (gated D
+			(skewed
+			 (hazard)
+			 (bricks key)
+			 (hazard)
+			 (bricks C)))))
+	      (sector-2 
+		(mixed-down 	 
+		 (skewed 
+		  (gated A 
+			 (mixed-up 
+			  (bricks key)
+			  (hazard)))
+		  (mixed-up (bricks B)
+			    (hazard)
+			    (bricks D))
+		  (hazard)))))
+	  (percent-of-time 50 (rotatef sector-1 sector-2))
+	  (mixed-up 
+	   sector-1
 	   (gated C
-		  (mixed-up 
+		  (mixed-down 
 		   (with-bulkheads
 		       (with-fortification
 			   (mixed-down (bricks key)
 				       (hazard)
+				       (gated B P)
 				       R
 				       (bricks (random-color)))))
 		   (skewed
@@ -417,18 +427,11 @@
 		    (gated C (bricks key))
 		    (hazard)
 		    (bricks B))))
-	   (mixed-up
+	   (mixed-down 
 	    (with-bulkheads
 		(gated key
-		       (with-fortification Q)))))
-	  (mixed-up
-	   (bricks (random-color))
-	   (gated D
-		  (skewed
-		   (hazard)
-		   (bricks key)
-		   (hazard)
-		   (bricks C)))))))))
+		       (with-fortification Q)))
+	    sector-2)))))))
   
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
