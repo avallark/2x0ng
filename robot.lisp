@@ -205,8 +205,8 @@
     (multiple-value-bind (cx cy) (center-point self)
       (multiple-value-bind (tx ty) 
 	  (step-in-direction cx cy direction (units 0.7))
-	(values (- tx (* *ball-size* 0.5))
-		(- ty (* *ball-size* 0.5)))))))
+	(values (- tx (* *ball-size* 0.4))
+		(- ty (* *ball-size* 0.4)))))))
 
 (define-method draw robot ()
   (let ((image 
@@ -406,7 +406,9 @@
 
 (define-method collide player-1-robot (thing)
   (when (exitp thing)
-    (play-sample "newball.wav")
+    (when (blockyp *ball*)
+      (destroy *ball*)
+      (setf *ball* nil))
     (begin-game (1+ *level*)))
   (when (or (enemyp thing) (holep thing))
     (die self))

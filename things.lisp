@@ -485,6 +485,7 @@
 	   (when (plusp %hits)
 	     (find-enemy self thing)))
      (when %target (setf %seeking nil))
+     (when (zerop %hits) (setf %seeking t))
      (bounce self))
     ;; stop at robot unless it's the guy who just kicked it.
     ;; helps avoid ball getting stuck.

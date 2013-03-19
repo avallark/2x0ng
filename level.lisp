@@ -59,6 +59,8 @@
     (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 30))
   (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
   (:name "phong" :type :music :file "phong.ogg" :properties (:volume 10))
+  (:name "flyby" :type :music :file "flyby.ogg" :properties (:volume 10))
+  (:name "sparqq" :type :music :file "sparqq.ogg" :properties (:volume 10))
   (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 20))
   (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 20))
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
@@ -80,7 +82,7 @@
 
 (defparameter *soundtrack*
   '("vedex" "remembering-xalcyon" "phong" 
-    "saga" "basswarp" "entel" "reprise"
+    "saga" "basswarp" "entel" "reprise" "flyby" "sparqq"
     "maxmacro" "bootypax" "musicbox" "frantix" "metro" "theme"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
@@ -389,51 +391,44 @@
 	  (requiring key
 	    (puzzle-3-components (list A B C)))
 	(mixed-down 
-	 (mixed-up
-	  ;; sector 1
-	  (skewed
-	   (gated A 
-		  (mixed-up 
-		   (bricks key)
-		   (hazard)))
-	   (randomly (bricks B)
-		     (hazard)
-		     (bricks D))
-	   (hazard))
-	  ;; sector 2
-	  (gated C
-		 (with-bulkheads
-		     (with-fortification
-			 (mixed-down (bricks key)
-				     (hazard)
-				     (bricks (random-color)))))))
-	 ;; sector 3
-	 (with-bulkheads
-	     (gated key
-		    (mixed-down
-		     (skewed 
-		      (bricks (random-color))
+	  ;;
+	  (mixed-up 	 
+	   (gated B P)
+	   (skewed 
+	    (gated A 
+		   (mixed-up 
+		    (bricks key)
+		    (hazard)))
+	    (mixed-up (bricks B)
 		      (hazard)
 		      (bricks D))
-		     (gated B P)
-		     (randomly
-		      (bricks D)
-		      (gated A 
-			     (with-fortification Q))))))
-	 ;; sector 3
-	 (mixed-up
-	  (skewed
-	   (gated C (bricks A))
-	   (hazard)
-	   (bricks B)
-	   (with-bulkheads R)
-	   (bricks (random-color)))
-	  (gated A
-		 (skewed
-		  (hazard)
-		  (bricks key)
-		  (hazard)
-		  (bricks C)))))))))
+	    (hazard)))
+	  (mixed-up
+	   (gated C
+		  (mixed-up 
+		   (with-bulkheads
+		       (with-fortification
+			   (mixed-down (bricks key)
+				       (hazard)
+				       R
+				       (bricks (random-color)))))
+		   (skewed
+		    (bricks D)
+		    (gated C (bricks key))
+		    (hazard)
+		    (bricks B))))
+	   (mixed-up
+	    (with-bulkheads
+		(gated key
+		       (with-fortification Q)))))
+	  (mixed-up
+	   (bricks (random-color))
+	   (gated D
+		  (skewed
+		   (hazard)
+		   (bricks key)
+		   (hazard)
+		   (bricks C)))))))))
   
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
@@ -448,7 +443,7 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 14)
+	(puzzle (with-border (units 8)
 		  (make-puzzle (derange (level-colors))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
@@ -456,8 +451,8 @@
       (paste-from buffer puzzle)
       ;; playfield border
       (wall-around-region -1 2 
-			  (+ 14 (truncate (/ (%width puzzle) (units 1))))
-			  (+ 14 (1- (truncate (/ (%height puzzle)
+			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
+			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
       ;; adjust scrolling parameters
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)

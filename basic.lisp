@@ -45,7 +45,7 @@
      "yellow" "green" "cyan" "deep pink")
     (:zendium "gray17" "orchid"
      "deep pink" "deep sky blue" "yellow" "orange")
-    (:command "saddle brown" "yellow" 
+    (:command "dim gray" "yellow" 
      "aquamarine" "deep pink" "red" "green yellow")))
 
 (defparameter *boss-theme* '(:voltz "black" "black" "red" "orchid" "aquamarine"))

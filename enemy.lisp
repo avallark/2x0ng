@@ -244,6 +244,7 @@
 (define-method collide monitor (thing)
   (when (not (or (enemyp thing) (holep thing)))
     (restore-location self)
+    (when (robotp thing) (die thing))
     ;; (when %fleeing (setf %fleeing nil))
     (choose-new-direction self)))
 
@@ -320,7 +321,7 @@
 (define-method update ghost ()
   (change-image self (ghost-image %hp))
   ;; chatter sound
-  (percent-of-time (- 40 (* 5 %hp)) (play-sound self "datanoise.wav"))
+  (percent-of-time 6 (play-sound self "datanoise.wav"))
   (with-fields (timer) self
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
@@ -484,10 +485,10 @@
   ;;; Deadly burning gas clouds
 
 (defresource 
-    (:name "geiger1.wav" :type :sample :file "geiger1.wav" :properties (:volume 40))
-    (:name "geiger2.wav" :type :sample :file "geiger2.wav" :properties (:volume 40))
-  (:name "geiger3.wav" :type :sample :file "geiger3.wav" :properties (:volume 40))
-  (:name "geiger4.wav" :type :sample :file "geiger4.wav" :properties (:volume 40)))
+    (:name "geiger1.wav" :type :sample :file "geiger1.wav" :properties (:volume 10))
+    (:name "geiger2.wav" :type :sample :file "geiger2.wav" :properties (:volume 10))
+  (:name "geiger3.wav" :type :sample :file "geiger3.wav" :properties (:volume 10))
+  (:name "geiger4.wav" :type :sample :file "geiger4.wav" :properties (:volume 10)))
 
 (defparameter *vent-sounds* '("geiger1.wav" "geiger2.wav" "geiger3.wav" "geiger4.wav"))
 
@@ -540,7 +541,7 @@
   (when (evenp %timer)
     (setf %image (random-choose *vent-images*)))
   (when (< (distance-to-cursor self) 300)
-    (percent-of-time 4 (play-sample (random-choose *vent-sounds*))))
+    (percent-of-time 8 (play-sample (random-choose *vent-sounds*))))
   (unless (plusp %timer)
     (destroy self)))
 
@@ -701,13 +702,13 @@
 (defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
 
 (defresource 
-    (:name "alien-1.wav" :type :sample :file "alien-1.wav" :properties (:volume 120))
-    (:name "alien-2.wav" :type :sample :file "alien-2.wav" :properties (:volume 120))
-  (:name "alien-3.wav" :type :sample :file "alien-3.wav" :properties (:volume 120))
-  (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 120))
-  (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 120))
-  (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 120))
-  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 120)))
+    (:name "alien-1.wav" :type :sample :file "alien-1.wav" :properties (:volume 80))
+    (:name "alien-2.wav" :type :sample :file "alien-2.wav" :properties (:volume 80))
+  (:name "alien-3.wav" :type :sample :file "alien-3.wav" :properties (:volume 80))
+  (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 80))
+  (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 80))
+  (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 80))
+  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 80)))
 
 (defparameter *alien-sounds*
 '("alien-1.wav" "alien-2.wav" "alien-3.wav" "alien-4.wav" "alien-5.wav" "alien-6.wav" "alien-7.wav"))

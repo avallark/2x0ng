@@ -50,7 +50,9 @@
 
 (defun begin-game (level)   
   (stop-dialogue)
-  (switch-to-buffer (loading-screen level)))
+  (switch-to-buffer (loading-screen level))
+  (play-sample "newball.wav"))
+
 
 (defun reset-level ()
   (begin-game *level*))
@@ -96,10 +98,10 @@
   (setf *window-title* "2x0ng")
   (setf *screen-width* 1080)
   (setf *screen-height* 720)
-  (setf *nominal-screen-width* 1080)
-  (setf *nominal-screen-height* 720)
-  ;; (setf *nominal-screen-width* (* 1080 4))
-  ;; (setf *nominal-screen-height* (* 720 4))
+  ;; (setf *nominal-screen-width* 1080)
+  ;; (setf *nominal-screen-height* 720)
+  (setf *nominal-screen-width* (* 1080 5))
+  (setf *nominal-screen-height* (* 720 5))
   
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
