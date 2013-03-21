@@ -1,43 +1,38 @@
-* TODO RELEASE 0.9 
 
+* TODO RELEASE 0.95
+** TODO improve diagonal firing w/joystick? 
+** TODO never have red box with red gate
+** TODO proximity crowding beep alarm? 
+** TODO show gate dir indicator for a bit longer/larger
+** TODO ball should not get stuck on thief corpse
+** TODO fix character jitter during scrolling
+** TODO eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** TODO [#A] BUGFIX: can press against nested gate to "cheat"
+** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+** TODO [#B] ball should delay before reappearing 
+** TODO [#B] implement LOS for ball targeting. just run a line of x/y points in between 
+** TODO [#B] display message when paused
 ** TODO shoudl have to defeat all boss enemies to progress
-** TODO restrict 4-color levels to vertical layout 
-** TODO unpack recursion to make custom function for 4- color level 
-*** TODO tone down garrisons a little.
-*** TODO reduce size of large levels
-*** TODO resist temptation to have more than two hazard types per level
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
 *** TODO things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
 *** TODO brains inside gates on boss level
 ** TODO play all the way through and take notes on each level
 
-* TODO RELEASE 0.95
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#A] BUGFIX: can press against nested gate to "cheat"
-** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
-** TODO [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
-** TODO [#B] ball should delay before reappearing 
-** TODO [#B] implement LOS for ball targeting. just run a line of x/y points in between 
-** TODO [#B] move notification bubbles to bottom of screen black bar area (including notifications)
-** TODO [#B] display message when paused
-** TODO [#C] BUGFIX: screen jitter when pressing against wall 
-
 * TODO Release 1.0 "beta"
-** TODO [#A] easy music skip/toggle key
 ** TODO [#A] Music review/polish
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
 ** TODO [#B] ENDING MOVIE
 ** TODO [#C] Verify status of ps3 gamepad support
 ** TODO [#A] 32 and 64 bit binaries for all platforms.
+** TODO make sure window title is properly set
 
-   
 * TODO Other features
 
 ** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
 ** TODO gameplay variations
-
 
 ** TODO [#B] free imprisoned white friendlies to open a white gate! escort friendly to exit right behind you
 ** TODO [#B] make sure thief works properly, add taunts 
@@ -203,6 +198,74 @@
    :ARCHIVE_TIME: 2013-03-18 Mon 01:26
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.9
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] easy music skip/toggle key
+   CLOSED: [2013-03-20 Wed 01:52]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:52
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: Release 1.0 "beta"
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** TODO resist temptation to have more than two hazard types per level
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:53
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.9/unpack recursion to make custom function for 4- color level
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: TODO
+   :END:
+** DONE reduce size of large levels
+   CLOSED: [2013-03-20 Wed 01:52]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:53
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.9/unpack recursion to make custom function for 4- color level
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE RELEASE 0.9
+   CLOSED: [2013-03-20 Wed 01:52]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:53
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+
+*** DONE restrict 4-color levels to vertical layout 
+    CLOSED: [2013-03-20 Wed 01:52]
+*** DONE unpack recursion to make custom function for 4- color level 
+    CLOSED: [2013-03-20 Wed 01:52]
+**** DONE tone down garrisons a little.
+     CLOSED: [2013-03-20 Wed 01:52]
+** DONE [#B] BUGFIX: fix crash when collisions with *ball* and changing levels at same time
+   CLOSED: [2013-03-20 Wed 01:54]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:54
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.95
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#B] move notification bubbles to bottom of screen black bar area (including notifications)
+   CLOSED: [2013-03-20 Wed 01:53]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:54
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.95
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#C] BUGFIX: screen jitter when pressing against wall
+   CLOSED: [2013-03-20 Wed 01:54]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-20 Wed 01:54
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.95
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
