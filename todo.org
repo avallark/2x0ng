@@ -1,7 +1,9 @@
 * TODO RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
 ** DONE [#A] show gate dir indicator for a bit longer/larger
    CLOSED: [2013-03-21 Thu 21:46]
-** TODO [#A] Require defeating all boss enemies to progress; bosses highlighted with flashing target indicator
+** DONE [#A] Require defeating all boss enemies to progress;
+   CLOSED: [2013-03-22 Fri 01:16]
+** TODO [#A] bosses highlighted with flashing target indicator
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks 
 *** TODO [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
 ** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
