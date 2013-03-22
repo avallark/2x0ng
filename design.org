@@ -1,3 +1,7 @@
+* TODO play solarfox , thunderground, deadly discs, Data age (warplock, airlock, encounter at l-5), china syndrome
+
+* TODO play Solaris 2600, jinks 7800, ixion 2600, gravitar 2600, Radar Lok
+
 * Reactopong
 
 Reactopong is a game of quick reactions and think-ahead strategy. An

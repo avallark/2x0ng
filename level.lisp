@@ -458,7 +458,7 @@
 			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
       ;; adjust scrolling parameters
-      (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
+      (setf (%window-scrolling-speed buffer) *robot-speed*
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 4/7)
       ;;
@@ -484,8 +484,8 @@
 			      (format nil "LEVEL ~S          " *level*) 
 			      "Use the arrow keys to move, spacebar (or ALT) to fire. Press F1 for help.")
 		 "sans-mono-bold-16"))
-      (when (or (null *music-toggled*) 
-		(sdl-mixer:music-playing-p))
-	(play-music (random-choose *soundtrack*) :loop t))
+      ;; (when (or (null *music-toggled*) 
+      ;; 		(sdl-mixer:music-playing-p))
+      ;; 	(play-music (random-choose *soundtrack*) :loop t))
       (current-buffer))))
 

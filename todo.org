@@ -1,4 +1,5 @@
 
+
 * TODO RELEASE 0.95
 ** TODO improve diagonal firing w/joystick? 
 ** TODO never have red box with red gate
@@ -21,6 +22,7 @@
 ** TODO play all the way through and take notes on each level
 
 * TODO Release 1.0 "beta"
+** TODO disable mouse and terminal view
 ** TODO [#A] Music review/polish
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
