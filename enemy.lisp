@@ -629,12 +629,12 @@
     (:name "power.wav" :type :sample :file "power.wav")
     (:name "powerdown.wav" :type :sample :file "powerdown.wav")
     (:name "countdown.wav" :type :sample :file "countdown.wav" :properties (:volume 30))
-    (:name "explode.wav" :type :sample :file "explode.wav" :properties (:volume 100)))
+    (:name "explode.wav" :type :sample :file "explode.wav" :properties (:volume 50)))
 
 (define-block bomb :timer 0 :countdown 5 
   :tags '(:enemy :target :bomb)
   :image "bomb4.png" :target nil
-  :stopped nil :speed 4
+  :stopped nil :speed 5
   :origin nil)
 
 (define-method explode bomb ()
@@ -657,12 +657,15 @@
 	  (enemyp %origin)
 	  (enemyp thing))
      nil)
-    ;; enemy bombs stop at player and trail
+    ;; enemy bombs stop at trail
     ((and %origin 
 	  (enemyp %origin)
-	  (or (robotp thing)
-	      (trailp thing)))
+	  (trailp thing))
      (setf %stopped t))
+    ;; kill player
+    ((robotp thing)
+     (setf %stopped t)
+     (die thing))
     ;; stick to enemies
     ((enemyp thing)
      (setf %target thing))
