@@ -129,7 +129,7 @@
 (defvar *exit* nil)
 
 (defun make-exit (colors)
-  (let ((*puzzle-border* 12))
+  (let ((*puzzle-border* 18))
     (cond
       ((null colors)
        (with-new-buffer (add-object (current-buffer) 
