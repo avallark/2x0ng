@@ -753,7 +753,7 @@
     (setf timer (max 0 (1- timer))) 
     (let ((dir (heading-to-cursor self))
 	  (dist (distance-to-cursor self)))
-      (when (and (zerop %timer) (< dist 400) (plusp %shield-pieces))
+      (when (and (= 0 (mod %timer 4)) (< dist 800) (plusp %shield-pieces))
 	(drop self (new 'glitch) (/ 2 %width) (/ 2 %height))
 	(decf %shield-pieces))
       (cond 
