@@ -711,7 +711,7 @@
   (:name "alien-4.wav" :type :sample :file "alien-4.wav" :properties (:volume 20))
   (:name "alien-5.wav" :type :sample :file "alien-5.wav" :properties (:volume 20))
   (:name "alien-6.wav" :type :sample :file "alien-6.wav" :properties (:volume 20))
-  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 2\0)))
+  (:name "alien-7.wav" :type :sample :file "alien-7.wav" :properties (:volume 20)))
 
 (defparameter *alien-sounds*
 '("alien-1.wav" "alien-2.wav" "alien-3.wav" "alien-4.wav" "alien-5.wav" "alien-6.wav" "alien-7.wav"))
