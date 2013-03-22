@@ -44,6 +44,11 @@
       (fat-brick-row x y0 length color)
       (incf y0 (* *unit* *fat-brick-height*)))))
 
+(defun themed-row-buffer (length)
+  (with-new-buffer
+    (themed-row 0 0 length)
+    (trim (current-buffer))))
+
 (defun super-fat-row (x y width height color)
   (let ((y0 y))
     (dotimes (n height)
@@ -432,6 +437,21 @@
 		(gated key
 		       (with-fortification Q)))
 	    sector-2)))))))
+
+(defun make-reactor-level ()
+  (stacked-up 
+   (with-automatic-padding (singleton (new 'barrier)))
+   (themed-row-buffer 28)
+   (with-automatic-padding (singleton (new 'barrier)))
+   (with-automatic-padding (singleton (new 'reactor)))
+   (with-automatic-padding (singleton (new 'barrier)))
+   (themed-row-buffer 28)
+   (with-automatic-padding (singleton (new 'paddle)))
+   (with-automatic-padding (singleton (new 'reactor)))
+   (with-automatic-padding (singleton (new 'paddle)))
+   (themed-row-buffer 28)
+   (with-automatic-padding (singleton (new 'barrier)))
+   (with-automatic-padding (singleton (new 'exit)))))
   
 (defun make-puzzle (colors)
   (assert (every #'stringp colors))
@@ -439,7 +459,8 @@
     (case (length colors) 
       (2 (make-puzzle-2 colors))
       (3 (make-puzzle-3 colors))
-      (4 (with-bulkheads (with-fortification (make-puzzle-4 colors)))))))
+      (4 (with-bulkheads (with-fortification (make-puzzle-4 colors))))
+      (5 (with-bulkheads (make-reactor-level))))))
 
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)

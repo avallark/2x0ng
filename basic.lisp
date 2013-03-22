@@ -48,7 +48,7 @@
     (:command "dim gray" "yellow" 
      "aquamarine" "deep pink" "red" "green yellow")))
 
-(defparameter *boss-theme* '(:voltz "black" "black" "red" "orchid" "aquamarine"))
+(defparameter *boss-theme* '(:voltz "black" "gray30" "orchid" "medium orchid" "dark orchid" "deep pink" "green yellow"))
 
 (defparameter *themes* 
   (append *two-brick-themes* *three-brick-themes*
@@ -93,11 +93,11 @@
     (:difficulty 4 :colors 4 :hazards (paddle hole hole) :wildcards (ghost thief))
     (:difficulty 4 :colors 3 :hazards (base paddle wave) :wildcards nil)
     (:difficulty 5 :colors 4 :hazards (base paddle tracer) :wildcards nil)
-    (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards (thief))
-    (:difficulty 5 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost))
+    (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards (rook nil))
+    (:difficulty 5 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
     (:difficulty 6 :colors 3 :hazards (hole paddle base wave) :wildcards (nil rook))
     (:difficulty 6 :colors 2 :hazards (tracer wave) :wildcards (ghost))
-    (:difficulty 6 :colors 3 :hazards (paddle rook) :wildcards (rook))))
+    (:difficulty 6 :colors 5 :special t)))
 
 (defun nth-level (level)
   (nth (mod level (length *levels*)) *levels*))
@@ -105,13 +105,17 @@
 (defun level-difficulty (&optional (level *level*))
   (getf (nth-level level) :difficulty))
 
+(defun special-level-p (&optional (level *level*))
+  (getf (nth-level level) :special))
+
 (defun level-theme (&optional (level *level*))
   (random-choose 
    (mapcar #'car
 	   (ecase (getf (nth-level level) :colors)
 	     (2 *two-brick-themes*)
 	     (3 *three-brick-themes*)
-	     (4 *four-brick-themes*)))))
+	     (4 *four-brick-themes*)
+	     (5 '((:voltz)))))))
 
 (defun level-hazards (&optional (level *level*))
   (getf (nth-level level) :hazards))

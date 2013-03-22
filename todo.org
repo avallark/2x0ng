@@ -2,6 +2,8 @@
 ** TODO [#A] bosses highlighted with flashing target indicator
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks 
 *** TODO [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
+*** TODO smiley white paddle that follows you when you touch it :)
+
 ** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
 ** TODO [#B] ball should delay before reappearing 

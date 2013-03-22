@@ -52,6 +52,15 @@
 (defresource "resonator-on.png")
 (defresource "resonator.png")
 (defresource "pulsator.png")
+(defresource "reactor1.png")
+(defresource "reactor2.png")
+(defresource "reactor3.png")
+(defresource "reactor4.png")
+(defresource "reactor5.png")
+(defresource "reactor6.png")
+(defresource "reactor7.png")
+(defresource "reactor8.png")
+(defresource "reactor9.png")
 (defresource "shocker.png")
 (defresource "shocker2.png")
 (defresource "waypoint.png")
@@ -111,11 +120,12 @@
 
 (defparameter *color-sounds* '("color1.wav" "color2.wav" "color3.wav"))
 
-(defparameter *bonux-sounds*
-  (defresource 
-      (:name "bonux1.wav" :type :sample :file "bonux1.wav" :properties (:volume 12))
-      (:name "bonux2.wav" :type :sample :file "bonux2.wav" :properties (:volume 12))
-    (:name "bonux3.wav" :type :sample :file "bonux3.wav" :properties (:volume 12))))
+(defresource 
+    (:name "bonux1.wav" :type :sample :file "bonux1.wav" :properties (:volume 22))
+    (:name "bonux2.wav" :type :sample :file "bonux2.wav" :properties (:volume 22))
+  (:name "bonux3.wav" :type :sample :file "bonux3.wav" :properties (:volume 22)))
+
+(defparameter *bonux-sounds* '("bonux1.wav" "bonux2.wav" "bonux3.wav"))
 
 ;;; Sparkle explosion cloud fx
 
@@ -193,6 +203,10 @@
 
 (define-method collide bullet (thing)
   (cond 
+    ((brickp thing)
+     (destroy self))
+    ((barrierp thing)
+     (destroy self))
     ;; let bullets pass through clouds
     ((has-tag thing :cloud)
      nil)
@@ -505,6 +519,9 @@
 		    (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
+    ;; barriers
+    ((barrierp thing)
+     (bounce self))
     ;; bounce off bricks
     ((brickp thing)
      (setf %target nil)

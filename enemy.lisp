@@ -84,6 +84,30 @@
 
 (define-method damage paddle (thing) nil)
 
+;;; Moving barriers
+
+(defun barrierp (thing)
+  (and (blockyp thing) (has-tag thing :barrier)))
+
+(define-block barrier :tags '(:enemy :barrier) :heading (random-choose (list pi 0.0)))
+
+(define-method initialize barrier ()
+  (initialize%super self)
+  (resize self 200 16))
+
+(define-method draw barrier ()
+  (draw-box %x %y %width %height :color (random-choose '("cyan" "deep sky blue"))))
+
+(define-method update barrier ()
+  (forward self (with-difficulty 2 2 3 3 4 4)))
+
+(define-method collide barrier (thing)
+  (when (or (brickp thing) (wallp thing))
+    (restore-location self)
+    (setf %heading (- %heading pi))))
+
+(define-method damage barrier (thing) nil)
+
 ;;; Radioactive corruption glitches that creep after you
 
 (defresource 
@@ -789,6 +813,60 @@
     ((robotp thing)
      (damage thing 1))))
 
-;; (defresource "drone.png")
 
-;; (define-block drone :image "drone.png")
+(defparameter *reactor-images* 
+  '("reactor1.png" "reactor2.png" "reactor3.png" "reactor4.png" "reactor5.png" "reactor6.png" "reactor7.png" "reactor8.png" "reactor9.png"))
+
+(defparameter *reactor-speed* 1)
+
+(define-block reactor 
+  (tags :initform '(:enemy :boss))
+  (image :initform "reactor1.png")
+  (angle :initform (radian-angle 2))
+  (hp :initform 30)
+  (image-index :initform 0)
+  (heading :initform (random (* 2 pi)))
+  (fire-heading :initform (random (* 2 pi)))
+  (counter :initform 0))
+
+(define-method initialize reactor ()
+  (initialize%super self)
+  (resize self 80 80))
+
+(define-method draw reactor ()
+  (draw-box %x %y %width %height :color (random-choose '("magenta" "hot pink")))
+  (draw-textured-rectangle %x %y %z %width %height (find-texture %image)
+			   :vertex-color (random-choose '("cyan" "yellow"))))
+  
+(define-method update reactor ()
+  (percent-of-time 2
+    (play-sound self (random-choose *bonux-sounds*))
+    (setf %angle (random-choose '(-0.7 0.7 -0.4 0.4))))
+  (percent-of-time 12 (play-sound self (random-choose *vent-sounds*)))
+  (with-fields (image fire-heading heading image-index counter width height) self
+    (decf counter)
+    (unless (plusp counter)
+      (setf counter *reactor-speed*)
+      (setf image-index 
+	    (mod (1- image-index) 
+		 (length *reactor-images*)))
+      (drop self (new 'bullet fire-heading :radius 10)
+	    (/ width 2) (/ height 2))
+      (incf fire-heading %angle)
+      (incf heading (radian-angle 2))
+      (forward self 5)
+      (setf image (nth image-index *reactor-images*)))))
+
+(define-method damage reactor (points)
+  (decf %hp)
+  (play-sound self (random-choose *rook-sounds*))
+  (unless (plusp %hp)
+    (play-sound self "bigboom.wav")
+    (play-sound self "explode.wav")
+    (destroy self)))
+
+(define-method collide reactor (thing)
+  (when (or (brickp thing) (barrierp thing) (wallp thing))
+    (restore-location self)
+    (setf %heading (- %heading (/ pi 2)))))
+      
