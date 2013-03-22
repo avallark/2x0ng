@@ -457,8 +457,8 @@
 			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
 			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
-      ;; adjust scrolling parameters
-      (setf (%window-scrolling-speed buffer) *robot-speed*
+      ;; adjust scrolling parameters 
+      (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5
 	    (%vertical-scrolling-margin buffer) 4/7)
       ;;
