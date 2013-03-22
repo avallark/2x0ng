@@ -291,7 +291,7 @@
     (when (humanp self) 
       (play-sample "analog-death.wav")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "You died. Press Control-R to reset.") "sans-mono-bold-16")
+		   (new 'bubble (format nil "You died. Press Control-R to reset, or F1 for help.") "sans-mono-bold-16")
 		   (+ %x (units 5))
 		   %y))
     (make-sparks %x %y %color)
