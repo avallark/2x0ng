@@ -348,24 +348,25 @@
   (when %alive
     (resize self (* 2 *unit*) (* 2 *unit*))
     (with-fields (step-clock kick-clock) self
-      ;; don't move on every frame
       (when (plusp step-clock)
 	(decf step-clock))
       ;; find out what direction the AI or human wants to go
       (let ((direction (movement-direction self))
 	    (kick-button (strong-kick-p self)))
+	(when direction 
+	  ;; move in the movement direction
+	  (move-toward self direction (/ *robot-speed* 2))
+	  (setf %direction direction)
+	  ;; possibly kick, lock firing dir when held
+	  (unless (holding-fire)
+	    (setf %kick-direction direction)))
 	(if direction
 	    ;; controller is pushing in a direction
-	    ;; don't move on every frame
 	    (when (zerop step-clock)
+	    ;; don't animate on every frame
 	      (setf step-clock *robot-step-frames*)
 	      ;; possibly make footstep sounds
-	      (make-footstep-sounds self)
-	      ;; move in the movement direction
-	      (move-toward self direction *robot-speed*)
-	      (setf %direction direction)
-	      (unless (holding-fire)
-		(setf %kick-direction direction)))
+	      (make-footstep-sounds self))
 	    ;; not pushing. allow movement immediately
 	    (setf step-clock 0 %walk-clock 0))
 	;; update animation
