@@ -1,36 +1,38 @@
-
-
-* TODO RELEASE 0.95
-** TODO improve diagonal firing w/joystick? 
-** TODO never have red box with red gate
-** TODO proximity crowding beep alarm? 
-** TODO show gate dir indicator for a bit longer/larger
-** TODO ball should not get stuck on thief corpse
-** TODO fix character jitter during scrolling
-** TODO eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#A] BUGFIX: can press against nested gate to "cheat"
-** TODO [#B] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
-** TODO [#B] ball should delay before reappearing 
-** TODO [#B] implement LOS for ball targeting. just run a line of x/y points in between 
-** TODO [#B] display message when paused
-** TODO shoudl have to defeat all boss enemies to progress
-** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
-*** TODO things that fire vertical and horizontal bullets, and can only be destroyed from corners
+* TODO RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
+** DONE [#A] show gate dir indicator for a bit longer/larger
+   CLOSED: [2013-03-21 Thu 21:46]
+** TODO [#A] Require defeating all boss enemies to progress; bosses highlighted with flashing target indicator
+** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks 
+*** TODO [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
+** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
-*** TODO brains inside gates on boss level
-** TODO play all the way through and take notes on each level
+** TODO [#B] ball should delay before reappearing 
+** TODO [#B] improve notifications so that stuff never draws over them 
+** TODO [#B] display message when paused
+** TODO [#C] proximity crowding beep alarm? 
+
+* TODO RELEASE 0.92
+** TODO [#A] BUGFIX: ball should not get stuck on thief corpse
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** DONE [#A] BUGFIX: can press against nested gate to "cheat"
+   CLOSED: [2013-03-22 Fri 00:23]
+** TODO [#A] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+** TODO [#B] eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
+** TODO [#B] never have red box with red gate
+** TODO [#B] display message when joystick on/off
+** TODO [#C] improve diagonal firing w/joystick? 
+** TODO [#C] joystick select screen is a dudescreen
 
 * TODO Release 1.0 "beta"
-** TODO disable mouse and terminal view
+** TODO [#A] disable mouse and terminal view
 ** TODO [#A] Music review/polish
+** TODO [#A] 32 and 64 bit binaries for all platforms.
+** TODO [#A] make sure window title is properly set
+** TODO [#B] ENDING MOVIE
+** TODO [#B] Verify status of ps3 gamepad support
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
-** TODO [#B] ENDING MOVIE
-** TODO [#C] Verify status of ps3 gamepad support
-** TODO [#A] 32 and 64 bit binaries for all platforms.
-** TODO make sure window title is properly set
-
+ 
 * TODO Other features
 
 ** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
@@ -268,6 +270,24 @@
    :ARCHIVE_TIME: 2013-03-20 Wed 01:54
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.95
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE fix character jitter during scrolling
+   CLOSED: [2013-03-21 Thu 21:16]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-21 Thu 21:17
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE play all the way through and take notes on each level
+   CLOSED: [2013-03-21 Thu 21:18]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-21 Thu 21:18
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
