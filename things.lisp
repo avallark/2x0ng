@@ -491,7 +491,7 @@
     ;; helps avoid ball getting stuck.
     ((and (robotp thing) (humanp thing))
      ;; player catches ball
-     (unless (recently-kicked-by self thing)
+     (when (not (recently-kicked-by self thing))
        (paint thing (color-of *ball*))
        (destroy self)
        (setf *ball* nil)))
