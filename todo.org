@@ -6,10 +6,7 @@
 
 ** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
-** TODO [#B] ball should delay before reappearing 
-** TODO [#B] improve notifications so that stuff never draws over them 
-** TODO [#B] display message when paused
-** TODO [#C] proximity crowding beep alarm? 
+** TODO [#B] slowed down xioforms music for boss
 
 * TODO RELEASE 0.92
 ** TODO [#A] BUGFIX: ball should not get stuck on thief corpse
@@ -20,6 +17,11 @@
 ** TODO [#B] display message when joystick on/off
 ** TODO [#C] improve diagonal firing w/joystick? 
 ** TODO [#C] joystick select screen is a dudescreen
+** TODO [#B] ball should delay before reappearing 
+** TODO [#B] improve notifications so that stuff never draws over them 
+** TODO [#B] display message when paused
+** TODO [#C] proximity crowding beep alarm? 
+
 
 * TODO Release 1.0 "beta"
 ** TODO [#A] disable mouse and terminal view

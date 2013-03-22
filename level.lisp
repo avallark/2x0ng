@@ -61,7 +61,7 @@
 
 (defresource
     (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 30))
-    (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 30))
+    (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 40))
   (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
   (:name "phong" :type :music :file "phong.ogg" :properties (:volume 10))
   (:name "flyby" :type :music :file "flyby.ogg" :properties (:volume 10))
@@ -71,7 +71,7 @@
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
   (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 60))
-  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 30))
+  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 20))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 80))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
@@ -85,11 +85,12 @@
   (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 7))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
-(defparameter *soundtrack*
-  '("vedex" "remembering-xalcyon" "phong" 
-    "saga" "basswarp" "entel" "reprise" "flyby" "sparqq"
+(defparameter *soundtrack* '("vedex" "phong"
+    "saga" "basswarp" "entel" "reprise" "flyby" "sparqq" "vrov"
     "maxmacro" "bootypax" "musicbox" "frantix" "metro" "theme"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
+
+(defparameter *boss-music* "xioforms")
 
 ;; Wrapping things about one another
 
@@ -505,8 +506,8 @@
 			      (format nil "LEVEL ~S          " *level*) 
 			      "Use the arrow keys to move, spacebar (or ALT) to fire. Press F1 for help.")
 		 "sans-mono-bold-16"))
-      ;; (when (or (null *music-toggled*) 
-      ;; 		(sdl-mixer:music-playing-p))
-      ;; 	(play-music (random-choose *soundtrack*) :loop t))
+      (when (or (null *music-toggled*) 
+      		(sdl-mixer:music-playing-p))
+      	(play-music (random-choose *soundtrack*) :loop t))
       (current-buffer))))
 
