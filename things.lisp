@@ -533,9 +533,29 @@
 (defresource "exit2.png")
 
 (define-block exit
-  (image :initform "exit1.png"))
+  (open :initform nil)
+  (image :initform "exit2.png"))
 
-(define-block update exit ()
-  (percent-of-time 40 (setf %image (random-choose '("exit1.png" "exit2.png")))))
+(defun bossp (thing)
+  (and (blockyp thing)
+       (has-tag thing :boss)))
+
+(defun boss-remaining-p ()
+  (loop for thing being the hash-keys of (%objects (current-buffer))
+	when (bossp thing) return thing))
+
+(define-method update exit ()
+  (with-fields (image open) self
+    (if (boss-remaining-p) 
+	(setf open nil image "exit2.png")
+	(setf open t image "exit1.png"))))
+
+(defun find-exit ()
+  (loop for thing being the hash-keys of (%objects (current-buffer))
+	when (exitp thing) return thing))
 
 (defun exitp (thing) (is-a 'exit thing))
+
+(defun exit-open-p ()
+  (let ((exit (find-exit)))
+    (and exit (%open exit))))

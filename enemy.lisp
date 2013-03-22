@@ -724,7 +724,7 @@
 (define-block rook 
   :image "rook2.png" 
   :hp 12
-  :tags '(:rook :enemy :target)
+  :tags '(:rook :enemy :target :boss)
   :timer 40
   :shield-pieces 20
   :fleeing nil)

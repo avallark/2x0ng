@@ -69,17 +69,13 @@
 
 ;;; Waypoint 
 
-(define-block waypoint :image "waypoint.png" :counter 25 :collision-type :passive)
+(define-block waypoint :image "waypoint.png" :counter 35 :collision-type :passive)
 
 (defparameter *waypoint-interval* (seconds->frames 16))
 
-(defparameter *waypoint-distance* 1400)
+(defparameter *waypoint-distance* 1200)
 
 (defparameter *waypoint-clock* 0)
-
-(defun find-exit ()
-  (loop for thing being the hash-keys of (%objects (current-buffer))
-	when (exitp thing) return thing))
 
 (define-method update waypoint ()
   (percent-of-time 30 (setf %image (random-choose '("waypoint.png" "waypoint2.png"))))
@@ -405,7 +401,8 @@
 	    '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))))
 
 (define-method collide player-1-robot (thing)
-  (when (exitp thing)
+  (when (and (exitp thing) 
+	     (exit-open-p))
     (when (blockyp *ball*)
       (destroy *ball*)
       (setf *ball* nil))
