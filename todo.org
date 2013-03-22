@@ -1,8 +1,4 @@
 * TODO RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
-** DONE [#A] show gate dir indicator for a bit longer/larger
-   CLOSED: [2013-03-21 Thu 21:46]
-** DONE [#A] Require defeating all boss enemies to progress;
-   CLOSED: [2013-03-22 Fri 01:16]
 ** TODO [#A] bosses highlighted with flashing target indicator
 ** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks 
 *** TODO [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
@@ -16,8 +12,6 @@
 * TODO RELEASE 0.92
 ** TODO [#A] BUGFIX: ball should not get stuck on thief corpse
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** DONE [#A] BUGFIX: can press against nested gate to "cheat"
-   CLOSED: [2013-03-22 Fri 00:23]
 ** TODO [#A] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
 ** TODO [#B] eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
 ** TODO [#B] never have red box with red gate
@@ -290,6 +284,42 @@
    :ARCHIVE_TIME: 2013-03-21 Thu 21:18
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.91
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] show gate dir indicator for a bit longer/larger
+   CLOSED: [2013-03-21 Thu 21:46]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-22 Fri 01:35
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] Require defeating all boss enemies to progress;
+   CLOSED: [2013-03-22 Fri 01:16]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-22 Fri 01:35
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE spruce up help screen
+   CLOSED: [2013-03-22 Fri 01:35]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-22 Fri 01:35
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] BUGFIX: can press against nested gate to "cheat"
+   CLOSED: [2013-03-22 Fri 00:23]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-22 Fri 01:36
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
