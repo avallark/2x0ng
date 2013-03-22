@@ -697,10 +697,10 @@
 ;;; A bomber guy who shoots bombs at you
 
 (defresource 
-    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 260))
-    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 260))
-  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 260))
-  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 260)))
+    (:name "blaagh.wav" :type :sample :file "blaagh.wav" :properties (:volume 20))
+    (:name "blaagh2.wav" :type :sample :file "blaagh2.wav" :properties (:volume 20))
+  (:name "blaagh3.wav" :type :sample :file "blaagh3.wav" :properties (:volume 20))
+  (:name "blaagh4.wav" :type :sample :file "blaagh4.wav" :properties (:volume 20)))
 
 (defparameter *rook-sounds* '("blaagh.wav" "blaagh2.wav" "blaagh3.wav" "blaagh4.wav"))
 
