@@ -822,7 +822,7 @@
 (define-block reactor 
   (tags :initform '(:enemy :boss))
   (image :initform "reactor1.png")
-  (angle :initform (radian-angle 2))
+  (angle :initform (radian-angle 10))
   (hp :initform 30)
   (image-index :initform 0)
   (heading :initform (random (* 2 pi)))
@@ -839,13 +839,13 @@
 			   :vertex-color (random-choose '("cyan" "yellow"))))
   
 (define-method update reactor ()
-  (percent-of-time 2
-    (play-sound self (random-choose *bonux-sounds*))
-    (setf %angle (random-choose '(-0.7 0.7 -0.4 0.4))))
-  (percent-of-time 12 (play-sound self (random-choose *vent-sounds*)))
   (with-fields (image fire-heading heading image-index counter width height) self
     (decf counter)
     (unless (plusp counter)
+      (percent-of-time 2
+	(play-sound self (random-choose *bonux-sounds*))
+	(setf %angle (random-choose '(-0.7 0.7 -0.4 0.4))))
+      (percent-of-time 12 (play-sound self (random-choose *vent-sounds*)))
       (setf counter *reactor-speed*)
       (setf image-index 
 	    (mod (1- image-index) 
@@ -868,5 +868,6 @@
 (define-method collide reactor (thing)
   (when (or (brickp thing) (barrierp thing) (wallp thing))
     (restore-location self)
+    (setf %counter 3)
     (setf %heading (- %heading (/ pi 2)))))
       
