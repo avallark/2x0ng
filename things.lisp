@@ -431,7 +431,8 @@
 	     (destroy self))
       (progn
 	(play-sound self (random-choose *bounce-sounds*))
-	(restore-location self)
+	(unless (zerop %last-x)
+	  (restore-location self))
 	(setf %heading 
 	      (if %seeking
 		  (opposite-heading %heading)
