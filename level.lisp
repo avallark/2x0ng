@@ -445,12 +445,14 @@
    (with-automatic-padding (singleton (new 'barrier)))
    (themed-row-buffer 28)
    (with-automatic-padding (singleton (new 'barrier)))
-   (with-automatic-padding (singleton (new 'reactor)))
+   (with-bulkheads
+       (stacked-up
+	(themed-row-buffer 28)
+	(with-automatic-padding (singleton (new 'reactor)))
+	(with-automatic-padding (singleton (new 'barrier)))
+	(with-automatic-padding (singleton (new 'reactor)))
+	(themed-row-buffer 28)))
    (with-automatic-padding (singleton (new 'barrier)))
-   (themed-row-buffer 28)
-   (with-automatic-padding (singleton (new 'paddle)))
-   (with-automatic-padding (singleton (new 'reactor)))
-   (with-automatic-padding (singleton (new 'paddle)))
    (themed-row-buffer 28)
    (with-automatic-padding (singleton (new 'barrier)))
    (with-automatic-padding (singleton (new 'exit)))))
@@ -509,6 +511,6 @@
 		 "sans-mono-bold-16"))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))
-      	(play-music (random-choose *soundtrack*) :loop t))
+      	(play-music (random-choose (level-music)) :loop t))
       (current-buffer))))
 
