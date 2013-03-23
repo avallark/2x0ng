@@ -1,17 +1,11 @@
-* TODO RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
-** TODO [#A] bosses highlighted with flashing target indicator
-** TODO [#A] BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks 
-*** TODO [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
-*** TODO smiley white paddle that follows you when you touch it :)
-
-** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
-**** TODO these replace gas vents in low-level garrisons
-** TODO [#B] slowed down xioforms music for boss
+* TODO RELEASE 0.91 FEATURECOMPLETE
 
 * TODO RELEASE 0.92
+** TODO [#A] bosses highlighted with flashing target indicator
+** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
+**** TODO these replace gas vents in low-level garrisons
 ** TODO [#A] BUGFIX: ball should not get stuck on thief corpse
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#A] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
 ** TODO [#B] eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
 ** TODO [#B] never have red box with red gate
 ** TODO [#B] display message when joystick on/off
@@ -21,7 +15,6 @@
 ** TODO [#B] improve notifications so that stuff never draws over them 
 ** TODO [#B] display message when paused
 ** TODO [#C] proximity crowding beep alarm? 
-
 
 * TODO Release 1.0 "beta"
 ** TODO [#A] disable mouse and terminal view
@@ -324,6 +317,43 @@
    :ARCHIVE_TIME: 2013-03-22 Fri 01:36
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] special slow laid-out horz/vert paddles that you must use to protect yourself during boss fight
+   CLOSED: [2013-03-23 Sat 01:48]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-23 Sat 01:48
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!/BOSS: Algorithmically generated compile-shmup Kobodeluxe multi eye base final boss with gray bricks
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#B] slowed down xioforms music for boss
+   CLOSED: [2013-03-23 Sat 01:37]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-23 Sat 01:48
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 BOSS VERSION W AWESOME BOSS MUSIC!
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] BUGFIX: fix sometimes ball disappears behind block when firing at point-blank
+   CLOSED: [2013-03-23 Sat 01:37]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-23 Sat 01:48
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+
+** DONE tighten up 4-color levels
+   CLOSED: [2013-03-23 Sat 01:50]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-23 Sat 01:51
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.91 FEATURECOMPLETE
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:

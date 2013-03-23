@@ -100,7 +100,7 @@
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
   (setf *nominal-screen-height* 720)
-  ;; (setf *nominal-screen-width* (* 1080 5))
+  ;; (setf *nominal-screen-width* (* 1280 5))
   ;; (setf *nominal-screen-height* (* 720 5))
   
   (setf *scale-output-to-window* t) 

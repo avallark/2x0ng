@@ -89,7 +89,10 @@
 (defun barrierp (thing)
   (and (blockyp thing) (has-tag thing :barrier)))
 
-(define-block barrier :tags '(:enemy :barrier) :heading (random-choose (list pi 0.0)))
+(define-block barrier 
+  :tags '(:enemy :barrier) 
+  :speed (random-choose (list 3 4))
+  :heading (random-choose (list pi 0.0)))
 
 (define-method initialize barrier ()
   (initialize%super self)
@@ -99,7 +102,7 @@
   (draw-box %x %y %width %height :color (random-choose '("cyan" "deep sky blue"))))
 
 (define-method update barrier ()
-  (forward self (with-difficulty 2 2 3 3 4 4)))
+  (forward self %speed))
 
 (define-method collide barrier (thing)
   (when (or (brickp thing) (wallp thing))
@@ -854,6 +857,7 @@
 	    (/ width 2) (/ height 2))
       (incf fire-heading %angle)
       (incf heading (radian-angle 2))
+      (percent-of-time 1 (setf heading (random (* 2 pi))))
       (forward self 5)
       (setf image (nth image-index *reactor-images*)))))
 

@@ -398,47 +398,42 @@
 	  (requiring key
 	    (puzzle-3-components (list A B C)))
 	(let ((sector-1 
-		(mixed-down
+		(skewed
 		 (bricks (random-color))
-		 (gated D
-			(skewed
-			 (hazard)
-			 (bricks key)
-			 (hazard)
-			 (bricks C)))))
+		 (bricks C)
+		 (hazard)
+		 (bricks key)
+		 (hazard)
+		 (bricks D)))
 	      (sector-2 
 		(mixed-down 	 
-		 (skewed 
 		  (gated A 
 			 (mixed-up 
+			  (hazard)
+			  (bricks C)
 			  (bricks key)
 			  (hazard)))
-		  (mixed-up (bricks B)
-			    (hazard)
-			    (bricks D))
-		  (hazard)))))
+		  (skewed (bricks B)
+			  (hazard)
+			  (bricks A)
+			  (bricks D))
+		  (hazard))))
 	  (percent-of-time 50 (rotatef sector-1 sector-2))
-	  (mixed-up 
+	  (laid-out 
 	   sector-1
 	   (gated C
-		  (mixed-down 
+		  (mixed-down 		 
+		   (gated B P)
 		   (with-bulkheads
 		       (with-fortification
 			   (mixed-down (bricks key)
 				       (hazard)
-				       (gated B P)
 				       R
-				       (bricks (random-color)))))
-		   (skewed
-		    (bricks D)
-		    (gated C (bricks key))
-		    (hazard)
-		    (bricks B))))
-	   (mixed-down 
-	    (with-bulkheads
-		(gated key
-		       (with-fortification Q)))
-	    sector-2)))))))
+				       (bricks (random-color)))))))
+	   (with-bulkheads
+	       (gated key
+		      (with-fortification Q)))
+	   sector-2))))))
 
 (defun make-reactor-level ()
   (stacked-up 
@@ -448,9 +443,11 @@
    (with-bulkheads
        (stacked-up
 	(themed-row-buffer 28)
+	(with-automatic-padding (singleton (new 'barrier)))
 	(with-automatic-padding (singleton (new 'reactor)))
 	(with-automatic-padding (singleton (new 'barrier)))
 	(with-automatic-padding (singleton (new 'reactor)))
+	(with-automatic-padding (singleton (new 'barrier)))
 	(themed-row-buffer 28)))
    (with-automatic-padding (singleton (new 'barrier)))
    (themed-row-buffer 28)
@@ -463,7 +460,7 @@
     (case (length colors) 
       (2 (make-puzzle-2 colors))
       (3 (make-puzzle-3 colors))
-      (4 (with-bulkheads (with-fortification (make-puzzle-4 colors))))
+      (4 (with-fortification (make-puzzle-4 colors)))
       (5 (with-bulkheads (make-reactor-level))))))
 
 (defun 2x0ng-level (&optional (level 1))
