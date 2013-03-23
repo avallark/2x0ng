@@ -80,24 +80,30 @@
 
 (defparameter *levels* 
   '((:difficulty 0 :colors 2 :hazards nil :wildcards nil)
+    ;; 1
     (:difficulty 1 :colors 2 :hazards (hole) :wildcards nil) 
     (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcards nil)
     (:difficulty 2 :colors 3 :hazards (hole hole paddle tracer) :wildcards nil)
     (:difficulty 2 :colors 3 :hazards (hole tracer paddle) :wildcards (ghost thief nil))
+    ;; 5
     (:difficulty 2 :colors 3 :hazards (hole hole tracer) :wildcards nil)
     (:difficulty 3 :colors 3 :hazards (tracer paddle hole) :wildcards nil)
     (:difficulty 3 :colors 4 :hazards (hole hole paddle) :wildcards (wave nil))
     (:difficulty 3 :colors 3 :hazards (hole hole paddle) :wildcards (thief ghost))
-    (:difficulty 4 :colors 4 :hazards (hole hole paddle tracer) :wildcards nil)
-    (:difficulty 4 :colors 3 :hazards (wave paddle hole) :wildcards nil)
-    (:difficulty 4 :colors 4 :hazards (paddle hole hole) :wildcards (ghost thief))
-    (:difficulty 4 :colors 3 :hazards (base paddle wave) :wildcards nil)
-    (:difficulty 5 :colors 4 :hazards (base paddle tracer) :wildcards nil)
-    (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards (rook nil))
+    (:difficulty 4 :colors 3 :hazards (paddle tracer) :wildcards (rook))
+    ;; 10
+    (:difficulty 4 :colors 4 :hazards (wave paddle hole) :wildcards nil)
+    (:difficulty 4 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
+    (:difficulty 5 :colors 3 :hazards (base paddle wave) :wildcards (ghost wave nil))
+    (:difficulty 5 :colors 4 :music ("remembering-xalcyon") 
+     :hazards (base paddle tracer) :wildcards (rook))
+    (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards nil)
+    ;; 15
     (:difficulty 5 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
     (:difficulty 6 :colors 3 :hazards (hole paddle base wave) :wildcards (nil rook))
     (:difficulty 6 :colors 2 :hazards (tracer wave) :wildcards (ghost))
-    (:difficulty 6 :colors 5 :special t)))
+    (:difficulty 6 :colors 5 
+     :music ("xioforms"))))
 
 (defun nth-level (level)
   (nth (mod level (length *levels*)) *levels*))
@@ -105,8 +111,9 @@
 (defun level-difficulty (&optional (level *level*))
   (getf (nth-level level) :difficulty))
 
-(defun special-level-p (&optional (level *level*))
-  (getf (nth-level level) :special))
+(defun level-music (&optional (level *level*))
+  (or (getf (nth-level level) :music)
+      *soundtrack*))
 
 (defun level-theme (&optional (level *level*))
   (random-choose 
