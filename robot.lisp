@@ -71,9 +71,9 @@
 
 (define-block waypoint :image "waypoint.png" :counter 35 :collision-type :passive)
 
-(defparameter *waypoint-interval* (seconds->frames 16))
+(defparameter *waypoint-interval* (seconds->frames 12))
 
-(defparameter *waypoint-distance* 1200)
+(defparameter *waypoint-distance* 800)
 
 (defparameter *waypoint-clock* 0)
 
