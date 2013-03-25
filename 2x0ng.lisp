@@ -176,8 +176,7 @@
 	 (+ x (/ width 2) -16) 
 	 (- y (units 0.3) (image-height "boss-tag.png"))
 	 :blend :additive 
-	 :opacity (+ 0.5 (sin (* 0.3 *updates*))))))))
-
+	 :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
   (loop for thing being the hash-keys of %objects do
     (when (bubblep thing) (draw thing))))
 
