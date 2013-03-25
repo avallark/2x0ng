@@ -64,21 +64,22 @@
     (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 60))
   (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
   (:name "phong" :type :music :file "phong.ogg" :properties (:volume 10))
-  (:name "flyby" :type :music :file "flyby.ogg" :properties (:volume 10))
-  (:name "sparqq" :type :music :file "sparqq.ogg" :properties (:volume 10))
+  (:name "flyby" :type :music :file "flyby.ogg" :properties (:volume 30))
+  (:name "sparqq" :type :music :file "sparqq.ogg" :properties (:volume 30))
   (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 20))
   (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 20))
   (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
   (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
   (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 60))
-  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 90))
+  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 24))
   (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 60))
   (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
   (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
   (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
-  (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 50))
+  (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 80))
   (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
   (:name "saga" :type :music :file "saga.ogg" :properties (:volume 20))
+  (:name "nexttime" :type :music :file "nexttime.ogg" :properties (:volume 80))
   (:name "beatup" :type :music :file "beatup.ogg" :properties (:volume 40))
   (:name "frantix" :type :music :file "frantix.ogg" :properties (:volume 12))
   (:name "metro" :type :music :file "metro.ogg" :properties (:volume 12))
@@ -86,7 +87,7 @@
   (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 7))
   (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
 
-(defparameter *soundtrack* '("vedex" "phong" "beatup"
+(defparameter *soundtrack* '("vedex" "phong"
     "saga" "basswarp" "entel" "reprise" "flyby" "sparqq" "vrov"
     "maxmacro" "bootypax" "musicbox" "frantix" "theme"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
@@ -438,19 +439,19 @@
 (defun make-reactor-level ()
   (stacked-up 
    (with-automatic-padding (singleton (new 'barrier)))
-   (themed-row-buffer 28)
+   (themed-row-buffer 40)
    (with-automatic-padding (singleton (new 'barrier)))
    (with-bulkheads
        (stacked-up
-	(themed-row-buffer 28)
-	(with-automatic-padding (singleton (new 'barrier)))
-	(with-automatic-padding (singleton (new 'reactor)))
-	(with-automatic-padding (singleton (new 'barrier)))
-	(with-automatic-padding (singleton (new 'reactor)))
-	(with-automatic-padding (singleton (new 'barrier)))
-	(themed-row-buffer 28)))
+	(themed-row-buffer 40)
+	 (singleton (new 'barrier))
+	(singleton (new 'reactor))
+	(singleton (new 'barrier))
+	(singleton (new 'reactor))
+	(singleton (new 'barrier))
+	(themed-row-buffer 40)))
    (with-automatic-padding (singleton (new 'barrier)))
-   (themed-row-buffer 28)
+   (themed-row-buffer 40)
    (with-automatic-padding (singleton (new 'barrier)))
    (with-automatic-padding (singleton (new 'exit)))))
   
@@ -463,13 +464,20 @@
       (4 (with-fortification (make-puzzle-4 colors)))
       (5 (with-bulkheads (make-reactor-level))))))
 
+(defun pad-to-window (buffer)
+  (prog1 buffer
+    (with-fields (width height) buffer
+      (setf width (max width *screen-width*))
+      (setf height (max height *screen-height*)))))
+
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
 	(puzzle (with-border (units 8)
-		  (make-puzzle (derange (level-colors))))))
+		  (pad-to-window
+		   (make-puzzle (derange (level-colors)))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
       ;;

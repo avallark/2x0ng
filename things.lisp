@@ -8,7 +8,12 @@
   (and (blockyp thing)
        (has-tag thing :robot)))
 
+(defun bubblep (thing)
+  (and (blockyp thing)
+       (has-tag thing :bubble)))
+
 (define-block bubble 
+  (tags :initform '(:bubble))
   (text :initform nil) 
   (collision-type :initform nil))
 

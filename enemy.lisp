@@ -874,4 +874,86 @@
     (restore-location self)
     (setf %counter 3)
     (setf %heading (- %heading (/ pi 2)))))
-      
+
+;;; Biclops
+
+(defresource "biclops.png")
+(defresource "biclops2.png")
+
+(defresource "gond1.wav" :volume 30)
+(defresource "gond2.wav" :volume 30)
+
+(defresource
+    (:name "wreckage1.png" :type :image :file "wreckage1.png")
+    (:name "wreckage2.png" :type :image :file "wreckage2.png")
+  (:name "wreckage3.png" :type :image :file "wreckage3.png")
+  (:name "wreckage4.png" :type :image :file "wreckage4.png"))
+
+(defparameter *wreckage-images* '("wreckage1.png" "wreckage2.png" "wreckage4.png" "wreckage3.png"))
+
+(define-block wreckage
+  :tags '(:enemy)
+  :stopped nil
+  :heading (random (* 2 pi))
+  :speed (+ 1 (random 2.5))
+  :image (random-choose *wreckage-images*))
+
+(define-method initialize wreckage (&optional (heading (random (* 2 pi))))
+  (initialize%super self)
+  (setf %heading heading))
+
+(define-method update wreckage ()
+  (unless %stopped
+    (forward self (with-difficulty 1.5 2 2.5 3 3.5 4))))
+
+(define-method collide wreckage (thing)
+  (when (robotp thing)
+    (die thing))
+  (when (brickp thing)
+    (restore-location self)
+    (setf %stopped t)))
+
+(defun biclopsp (thing)
+  (and (blockyp thing)
+       (has-tag thing :biclops)))
+
+(define-block biclops
+  (tags :initform '(:enemy :biclops :boss))
+  (direction :initform (random-choose '(:up :down :left :right)))
+  (clock :initform 5)
+  (hp :initform 10)
+  (image :initform "biclops.png"))
+
+(define-method update biclops ()
+  (percent-of-time 2 (setf %image (random-choose '("biclops.png" "biclops2.png"))))
+  (unless (minusp %clock) (decf %clock))
+  (unless (plusp %clock)
+    (when (> (with-difficulty 300 400 500) (distance-to-cursor self))
+      (percent-of-time (with-difficulty 1 1.5 1.7 2.0 2.2 2.4)
+	(drop self (new 'wreckage (heading-to-cursor self)) 10 2)))
+    (percent-of-time 3 (setf %direction (random-direction)))
+    (move-toward self %direction (with-difficulty 1 1.8 2.5 3))))
+
+(define-method collide biclops (thing)
+  (when (robotp thing)
+    (damage thing 1))
+  (when (brickp thing)
+    (restore-location self)
+    (setf %clock 5)
+    (setf %direction (random-choose '(:upleft :upright :downleft :downright :up :down :left :right)))))
+
+(define-method damage biclops (points)
+  (decf %hp points)
+  (setf %clock 12)
+  (play-sound self (random-choose '("gond1.wav" "gond2.wav")))
+  (if (plusp %hp)
+      (play-sound self (random-choose *whack-sounds*))
+      (progn 
+	(play-sound self "bigboom.wav")
+	(play-sound self "xplod.wav")
+	(multiple-value-bind (x y) (center-point self)
+	  (make-sparks x y)
+	  (percent-of-time (with-difficulty 10 20 30) (make-explosion self 12))
+	  (dotimes (n 7)
+	    (drop self (new 'wreckage) (random 30) (random 30)))
+	  (destroy self)))))

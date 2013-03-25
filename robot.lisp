@@ -290,6 +290,7 @@
   (when (and %alive (not %shielded))
     (when (humanp self) 
       (play-sample "analog-death.wav")
+      (play-music "nexttime")
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "You died. Press Control-R to reset, or F1 for help.") "sans-mono-bold-16")
 		   (+ %x (units 5))

@@ -21,6 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
+  (setf *window-title* "2x0ng v0.92")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -95,7 +96,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *window-title* "2x0ng")
+  (setf *window-title* "2x0ng v0.92")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
@@ -106,7 +107,7 @@
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
-  
+
   (setf *frame-rate* 30)
   (setf *dt* 33)
   
@@ -161,5 +162,17 @@
 (define-method reset-game 2x0ng (&optional (level 1))
   (setf *soundtrack* (derange *soundtrack*))
   (begin-game level))
+
+(defresource "boss-tag.png")
+
+(define-method draw 2x0ng ()
+  (buffer%draw self)
+  ;; (loop for thing being the hash-keys of %objects do
+  ;;   (when (has-tag thing :boss) 
+  ;;     (with-fields (x y width) thing
+  ;; 	(draw-image "boss-tag.png" (+ x (/ width 2) -16) 
+  ;; 		    (- y (units 0.3) (image-height "boss-tag.png"))))))
+  (loop for thing being the hash-keys of %objects do
+    (when (bubblep thing) (draw thing))))
 
 ;;; 2x0ng.lisp ends here

@@ -1,27 +1,31 @@
 * TODO RELEASE 0.91 FEATURECOMPLETE
 
 * TODO RELEASE 0.92
+** TODO [#B] interactive tutorial 
+** TODO [#A] more late-game playtesting and buildup
 ** TODO [#A] bosses highlighted with flashing target indicator
-** TODO [#A] things that fire vertical and horizontal bullets, and can only be destroyed from corners
+** TODO [#B] bring up boss moan sounds volume, some are too quiet
+** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
-** TODO [#A] BUGFIX: ball should not get stuck on thief corpse
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#B] eliminate image loading stutter by pre-drawing all objects once with loading screen shown on top of that
+** TODO [#B] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
 ** TODO [#B] never have red box with red gate
 ** TODO [#B] display message when joystick on/off
-** TODO [#C] improve diagonal firing w/joystick? 
-** TODO [#C] joystick select screen is a dudescreen
+** TODO [#B] joystick select screen
 ** TODO [#B] ball should delay before reappearing 
-** TODO [#B] improve notifications so that stuff never draws over them 
 ** TODO [#B] display message when paused
+** TODO [#C] datafiles show a story scene at the end of the level? 
+** TODO [#C] improve diagonal firing w/joystick? 
 ** TODO [#C] proximity crowding beep alarm? 
 
+
 * TODO Release 1.0 "beta"
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
 ** TODO [#A] disable mouse and terminal view
 ** TODO [#A] Music review/polish
 ** TODO [#A] 32 and 64 bit binaries for all platforms.
-** TODO [#A] make sure window title is properly set
 ** TODO [#B] ENDING MOVIE
+** TODO [#B] BUGFIX: ball should not get stuck on thief corpse 
+** TODO [#B] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
 ** TODO [#B] Verify status of ps3 gamepad support
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
@@ -354,6 +358,46 @@
    :ARCHIVE_TIME: 2013-03-23 Sat 01:51
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.91 FEATURECOMPLETE
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE eliminate black bars on small levels
+   CLOSED: [2013-03-24 Sun 16:21]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-24 Sun 17:27
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] biclops early miniboss
+   CLOSED: [2013-03-24 Sun 17:27]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-24 Sun 17:27
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+*** DONE he throws pieces of himself at you
+    CLOSED: [2013-03-24 Sun 17:27]
+*** DONE the pieces stop at any obstacle, and continue to be deadly after he's dead
+    CLOSED: [2013-03-24 Sun 17:27]
+** DONE [#A] improve notifications so that stuff never draws over them
+   CLOSED: [2013-03-24 Sun 17:28]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-24 Sun 17:28
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] make sure window title is properly set
+   CLOSED: [2013-03-24 Sun 16:14]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-24 Sun 17:28
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
