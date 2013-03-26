@@ -1,14 +1,5 @@
 * TODO RELEASE 1.0rc1
-** DONE [#A] alt-fire key change to shift
-   CLOSED: [2013-03-25 Mon 20:09]
-*** DONE update help
-    CLOSED: [2013-03-25 Mon 20:09]
-** TODO [#A] more late-game playtesting and buildup
-** TODO [#A] disable mouse and terminal view
-** TODO [#A] ending story scroll
 ** TODO [#B] disable win32 terminal
-** TODO [#B] display message when paused
-** TODO [#B] display message when joystick on/off
 
 * TODO Release 1.0 rc2
 
@@ -432,6 +423,62 @@
    :PROPERTIES:
    :ARCHIVE_TIME: 2013-03-25 Mon 20:00
    :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] alt-fire key change to shift
+   CLOSED: [2013-03-25 Mon 20:09]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+*** DONE update help
+    CLOSED: [2013-03-25 Mon 20:09]
+** DONE [#A] more late-game playtesting and buildup
+   CLOSED: [2013-03-25 Mon 21:06]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] disable mouse and terminal view
+   CLOSED: [2013-03-25 Mon 21:05]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] ending story scroll
+   CLOSED: [2013-03-25 Mon 21:06]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#B] display message wheinn paused
+   CLOSED: [2013-03-25 Mon 21:14]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#B] display message when joystick on/off
+   CLOSED: [2013-03-25 Mon 21:14]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 21:14
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 1.0rc1
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:

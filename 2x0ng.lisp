@@ -154,21 +154,29 @@
      '(((:r :control) :reset-game)
        ((:f1) :help)
        ((:f10) :toggle-music) 
-       ((:f12) :transport-toggle-play)
+       ((:f12) :toggle-pause)
        ((:h :control) :help)
        ((:j :control) :toggle-joystick)
        ;;
-       ((:f6) :regenerate)
+       ((:f6 :control) :regenerate))))
        ;;
-       ((:x :alt) :command-prompt)
-       ((:x :control) :edit-cut)
-       ((:c :control) :edit-copy)
-       ((:v :control) :edit-paste)
-       ((:v :control :shift) :paste-here)
-       ((:f9) :toggle-minibuffer)
-       ((:f12) :transport-toggle-play)
-       ((:g :control) :escape)
-       ((:d :control) :drop-selection))))
+       ;; ((:x :alt) :command-prompt)
+       ;; ((:x :control) :edit-cut)
+       ;; ((:c :control) :edit-copy)
+       ;; ((:v :control) :edit-paste)
+       ;; ((:v :control :shift) :paste-here)
+       ;; ((:f9) :toggle-minibuffer)
+       ;; ((:f12) :transport-toggle-play)
+       ;; ((:g :control) :escape)
+       ;; ((:d :control) :drop-selection))))
+
+;;; Disable mouse editing
+
+(define-method handle-point-motion 2x0ng (x y))
+(define-method press 2x0ng (x y &optional button))
+(define-method release 2x0ng (x y &optional button))
+(define-method tap 2x0ng (x y))
+(define-method alternate-tap 2x0ng (x y))
 
 (defvar *music-toggled* nil)
 
@@ -184,10 +192,24 @@
 (define-method regenerate 2x0ng () (reset-level))
 
 (define-method toggle-joystick 2x0ng ()
-  (setf *joystick-enabled* (if *joystick-enabled* nil t)))
+  (setf *joystick-enabled* (if *joystick-enabled* nil t))
+  (drop (cursor) 
+	(new 'bubble 
+	     (if *joystick-enabled* 
+		 "Joystick support on."
+		 "Joystick support off."))))
+      
+(define-method toggle-pause 2x0ng ()
+  (when (not %paused)
+    (drop (cursor) 
+	  (new 'bubble 
+	       "Game paused. Press F12 to resume play.")))
+  (transport-toggle-play self)
+  (when (not %paused)
+    (loop for thing being the hash-keys of %objects do
+      (when (bubblep thing) (destroy thing)))))
 
 (define-method reset-game 2x0ng (&optional (level 1))
-  ;; (setf *soundtrack* (derange *soundtrack*))
   (begin-game level))
 
 (defresource "boss-tag.png")
@@ -206,5 +228,6 @@
 	 :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
   (loop for thing being the hash-keys of %objects do
     (when (bubblep thing) (draw thing))))
+
 
 ;;; 2x0ng.lisp ends here
