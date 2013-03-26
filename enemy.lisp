@@ -826,7 +826,7 @@
   (tags :initform '(:enemy :boss))
   (image :initform "reactor1.png")
   (angle :initform (radian-angle 10))
-  (hp :initform 30)
+  (hp :initform 50)
   (image-index :initform 0)
   (heading :initform (random (* 2 pi)))
   (fire-heading :initform (random (* 2 pi)))

@@ -89,7 +89,7 @@
 
 (defparameter *soundtrack* '("vedex" "phong"
     "saga" "basswarp" "entel" "reprise" "flyby" "sparqq" "vrov"
-    "maxmacro" "bootypax" "musicbox" "frantix" "theme"
+    "maxmacro" "bootypax" "musicbox" "frantix" "conspiracy" "phong"
     "xiomacs" "xmrio" "rappy" "invec" "ompula"))
 
 (defparameter *boss-music* "xioforms")
@@ -445,9 +445,9 @@
        (stacked-up
 	(themed-row-buffer 40)
 	 (singleton (new 'barrier))
-	(singleton (new 'reactor))
 	(singleton (new 'barrier))
 	(singleton (new 'reactor))
+	(singleton (new 'barrier))
 	(singleton (new 'barrier))
 	(themed-row-buffer 40)))
    (with-automatic-padding (singleton (new 'barrier)))
@@ -512,7 +512,7 @@
 	    (new 'bubble 
 		 (concatenate 'string
 			      (format nil "LEVEL ~S          " *level*) 
-			      "Use the arrow keys to move, spacebar (or ALT) to fire. Press F1 for help.")
+			      "Use the arrow keys to move, spacebar (or Shift) to fire. Press F1 for help.")
 		 "sans-mono-bold-16"))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))

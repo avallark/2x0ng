@@ -1,35 +1,43 @@
-* TODO RELEASE 0.91 FEATURECOMPLETE
-
-* TODO RELEASE 0.92
-** TODO [#B] interactive tutorial 
+* TODO RELEASE 1.0rc1
+** DONE [#A] alt-fire key change to shift
+   CLOSED: [2013-03-25 Mon 20:09]
+*** DONE update help
+    CLOSED: [2013-03-25 Mon 20:09]
 ** TODO [#A] more late-game playtesting and buildup
-** TODO [#A] bosses highlighted with flashing target indicator
-** TODO [#B] bring up boss moan sounds volume, some are too quiet
-** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
-**** TODO these replace gas vents in low-level garrisons
+** TODO [#A] disable mouse and terminal view
+** TODO [#A] ending story scroll
+** TODO [#B] disable win32 terminal
+** TODO [#B] display message when paused
+** TODO [#B] display message when joystick on/off
+
+* TODO Release 1.0 rc2
+
+** TODO [#A] BUGFIX: ball should not get stuck on thief corpse 
+** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+
+** TODO [#B] interactive tutorial 
 ** TODO [#B] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
 ** TODO [#B] never have red box with red gate
-** TODO [#B] display message when joystick on/off
-** TODO [#B] joystick select screen
-** TODO [#B] ball should delay before reappearing 
-** TODO [#B] display message when paused
+
+** TODO [#A] 32 and 64 bit binaries for all platforms.
+
+** TODO [#C] ball should delay before reappearing 
+** TODO [#C] joystick select screen
 ** TODO [#C] datafiles show a story scene at the end of the level? 
 ** TODO [#C] improve diagonal firing w/joystick? 
 ** TODO [#C] proximity crowding beep alarm? 
 
 
-* TODO Release 1.0 "beta"
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
-** TODO [#A] disable mouse and terminal view
+** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
+**** TODO these replace gas vents in low-level garrisons
 ** TODO [#A] Music review/polish
-** TODO [#A] 32 and 64 bit binaries for all platforms.
-** TODO [#B] ENDING MOVIE
-** TODO [#B] BUGFIX: ball should not get stuck on thief corpse 
-** TODO [#B] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
 ** TODO [#B] Verify status of ps3 gamepad support
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
  
+* TODO Release 1.1 
+
 * TODO Other features
 
 ** TODO Chaos color kills you if you are painted Corruption, or if you touch a Corrupt brick
@@ -398,6 +406,32 @@
    :ARCHIVE_TIME: 2013-03-24 Sun 17:28
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] bosses highlighted with flashing target indicator
+   CLOSED: [2013-03-25 Mon 19:58]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 20:00
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#B] bring up boss moan sounds volume, some are too quiet
+   CLOSED: [2013-03-25 Mon 19:58]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 20:00
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_OLPATH: RELEASE 0.92
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE RELEASE 0.91 FEATURECOMPLETE
+   CLOSED: [2013-03-25 Mon 19:57]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-03-25 Mon 20:00
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:

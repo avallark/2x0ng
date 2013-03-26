@@ -292,9 +292,8 @@
       (play-sample "analog-death.wav")
       (play-music "nexttime")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "You died. Press Control-R to reset, or F1 for help.") "sans-mono-bold-16")
-		   (+ %x (units 5))
-		   %y))
+		   (new 'bubble (format nil "You died on level ~A. Press Control-R to reset, or F1 for help." *level*)
+			"sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
     (setf %alive nil)))
@@ -392,13 +391,13 @@
 (defun holding-space ()
   (keyboard-down-p :space))     
 
-(defun holding-alt ()
-  (or (keyboard-modifier-down-p :lalt)
-      (keyboard-modifier-down-p :ralt)))
+;; (defun holding-alt ()
+;;   (or (keyboard-modifier-down-p :lalt)
+;;       (keyboard-modifier-down-p :ralt)))
 
 (defun holding-fire ()
   (or (holding-space)
-      (holding-alt)
+      (holding-shift)
       (some #'joystick-button-pressed-p
 	    '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))))
 

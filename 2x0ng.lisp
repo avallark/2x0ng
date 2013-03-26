@@ -51,9 +51,12 @@
 
 (defun begin-game (level)   
   (stop-dialogue)
-  (switch-to-buffer (loading-screen level))
-  (play-sample "newball.wav"))
-
+  ;; either win game or go to next level
+  (if (> level 18)
+      (show-ending)
+      (progn 
+	(switch-to-buffer (loading-screen level))
+	(play-sample "newball.wav"))))
 
 (defun reset-level ()
   (begin-game *level*))
@@ -71,6 +74,30 @@
 (define-method start-playing title ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
   (begin-game *level*))
+
+;;; Ending screen
+
+(defresource "ending.png")
+
+(defparameter *ending-scroll-speed* 0.4)
+
+(define-buffer ending-screen
+  (width :initform 1280)
+  (height :initform 720)
+  (background-color :initform "black"))
+
+(define-block scroll :image "ending.png")
+
+(define-method update scroll ()
+  (when (plusp %y)
+    (move-toward self :up *ending-scroll-speed*)))
+
+(defun show-ending ()
+  (switch-to-buffer (new 'ending-screen))
+  (let ((scroll (new 'scroll)))
+    (insert scroll 0 720)
+    (resize scroll 1280 720))
+  (play-music "theme" :loop t))
 
 ;;; Help screen
 
@@ -103,7 +130,6 @@
   (setf *nominal-screen-height* 720)
   ;; (setf *nominal-screen-width* (* 1280 5))
   ;; (setf *nominal-screen-height* (* 720 5))
-  
   (setf *scale-output-to-window* t) 
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
@@ -132,8 +158,9 @@
        ((:h :control) :help)
        ((:j :control) :toggle-joystick)
        ;;
-       ((:x :alt) :command-prompt)
        ((:f6) :regenerate)
+       ;;
+       ((:x :alt) :command-prompt)
        ((:x :control) :edit-cut)
        ((:c :control) :edit-copy)
        ((:v :control) :edit-paste)
@@ -160,7 +187,7 @@
   (setf *joystick-enabled* (if *joystick-enabled* nil t)))
 
 (define-method reset-game 2x0ng (&optional (level 1))
-  (setf *soundtrack* (derange *soundtrack*))
+  ;; (setf *soundtrack* (derange *soundtrack*))
   (begin-game level))
 
 (defresource "boss-tag.png")
