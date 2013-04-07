@@ -1,11 +1,64 @@
 * TODO RELEASE 1.0rc1
-** TODO [#B] disable win32 terminal
+
+* TODO play Mr. Gimmick
+http://www.hardcoregaming101.net/korea/part1/company-aproman.htm#kkoedori
+http://www.worldofspectrum.org/bestgames.html
+http://www.worldofspectrum.org/infoseek.cgi?regexp=^Rebelstar+Raiders$&pub=^Red+Shift+Ltd$&loadpics=1
+http://hardcoregaming101.net/metalstorm/metalstorm.htm
+
+** DONE [#B] disable win32 terminal
+   CLOSED: [2013-03-26 Tue 02:41]
+<dto> ok, so i want to see if i can help debug this crash that happens with my
+      games on certain 64-bit versions of Windows when using the SBCL-made
+      EXE's . i've collected several bug reports now actually , with output.
+								        [21:02]
+<dto> the first is here on 64-bit windows
+      XP. http://www.flickr.com/photos/66958843@N03/8601120762/  [21:03]
+<dto> that is the first i'd heard of this crash issue affecting anything other
+      than vanilla (unpatched) 64-bit windows 7
+<dto> http://paste.lisp.org/display/136425  [21:05]
+<dto> and here is another, on Windows Vista 64-bit (so this seems to affect
+      many versions of 64 bit windows)
+<dto> the EXE in question is here: http://blocky.io/2x0ng-win32-1.0rc1.zip
+								        [21:06]
+<dto> also the Vista 64-bit user reports that his service packs are all up to
+      date  [21:07]
+<dto> please let me know if there is anything I can to do help debug. I'm
+      stumped as it is.
+<dto> another detail---the EXE is made using the Windows EXE version of SBCL,
+      but run under Wine.  [21:09]
+>  
+Windows
+
+Problem signature:
+  Problem Event Name:	APPCRASH
+  Application Name:	2x0ng.exe
+  Application Version:	0.0.0.0
+  Application Timestamp:	510b4555
+  Fault Module Name:	StackHash_7c6a
+  Fault Module Version:	0.0.0.0
+  Fault Module Timestamp:	00000000
+  Exception Code:	c0000005
+  Exception Offset:	2244e0b4
+  OS Version:	6.0.6002.2.2.0.768.3
+  Locale ID:	1033
+  Additional Information 1:	7c6a
+  Additional Information 2:	6bebf48dad747ab9409cfbd49b6714ee
+  Additional Information 3:	de89
+  Additional Information 4:	a8535368997c7fe96688b26e20a63767
+
+Read our privacy statement:
+  http://go.microsoft.com/fwlink/?linkid=50163&clcid=0x0409
+ 
 
 * TODO Release 1.0 rc2
 
+** TODO left-handed WSAD support
+** TODO talk to SBCL peeps about win64 crashes
+
 ** TODO [#A] BUGFIX: ball should not get stuck on thief corpse 
 ** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after buffer compositions. do this very carefully.
+** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
 
 ** TODO [#B] interactive tutorial 
 ** TODO [#B] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
@@ -19,6 +72,22 @@
 ** TODO [#C] improve diagonal firing w/joystick? 
 ** TODO [#C] proximity crowding beep alarm? 
 
+** TODO colorblindness modes
+http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
+
+** MAC OSX issues
+
+*** TODO don't zip the dmg, just zip the game
+*** TODO stop spawning enemies when you die
+
+
+** DESURA questions
+*** TODO launcher.sh that sets paths
+*** TODO ask about "not commonly installed" warnings on winders
+*** TODO make help screen accessible from title
+*** TODO allow 3 lives
+
+
 
 ** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
@@ -27,6 +96,7 @@
 ** TODO [#C] libsdl_gfx, can it be un-required?
 ** TODO [#C] make control-J cycle through available joysticks and notify when ready
  
+
 * TODO Release 1.1 
 
 * TODO Other features

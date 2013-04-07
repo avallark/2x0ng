@@ -275,36 +275,45 @@
       (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 0)
       (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 (* 3 u)))))
 
+(defun make-bulkhead-buffer (horizontal size)
+  (if horizontal
+      (horizontal-bulkhead size)
+      (vertical-bulkhead size)))
+
 (defun with-bulkheads (buffer &optional (horizontal (percent-of-time 50 t)))
   (trim buffer)
-  (let ((wall (if horizontal
-		  (horizontal-bulkhead (%width buffer))
-		  (vertical-bulkhead (%height buffer)))))
-    (if horizontal
-	(stacked-up (bordered wall) (bordered buffer) (bordered (duplicate wall)))
-	(lined-up (bordered wall) (bordered buffer) (bordered (duplicate wall))))))
+  (if horizontal
+      (stacked-up (bordered (make-bulkhead-buffer t (%width buffer)))
+		  (bordered buffer) 
+		  (bordered (make-bulkhead-buffer t (%width buffer))))
+      (lined-up (bordered (make-bulkhead-buffer nil (%height buffer)))
+		(bordered buffer)
+		(bordered (make-bulkhead-buffer nil (%height buffer))))))
+
+(defun garrison (x y)
+  (with-new-buffer 
+    (drop-object (current-buffer) 
+		 (new 'base)
+		 x (- y (units 4)))
+    (drop-object (current-buffer)
+		 (new 'paddle)
+		 x (+ y (units 18)))
+    (drop-object (current-buffer)
+		 (new 'paddle)
+		 x (- y (units 18)))
+    (drop-object (current-buffer) 
+		 (new 'vent) x y)
+    (current-buffer)))
 
 (defun with-garrisons (buffer)
   (trim buffer)
   (let* ((height (%height buffer))
 	 (x (units 2))
-	 (y (/ height 2))
-	 (garrison (with-new-buffer 
-		     (drop-object (current-buffer) 
-				  (new 'base)
-				  x (- y (units 4)))
-		     (drop-object (current-buffer)
-				   (new 'paddle)
-				   x (+ y (units 18)))
-		     (drop-object (current-buffer)
-				   (new 'paddle)
-				   x (- y (units 18)))
-		     (drop-object (current-buffer) 
-				  (new 'vent) x y))))
+	 (y (/ height 2)))
     (lined-up 
-     (stacked-up garrison (bricks (random-color) 3))
+     (stacked-up (garrison x y) (bricks (random-color) 3))
      buffer
-     (stacked-up garrison (bricks (random-color) 3)))))
+     (stacked-up (garrison x y) (bricks (random-color) 3)))))
 
 (defun with-outposts (buffer)
   (trim buffer)
@@ -475,8 +484,8 @@
   (setf *ball* nil)
   (let ((robot (new 'player-1-robot "gold"))
 	(buffer (new '2x0ng))
-	(puzzle (with-border (units 8)
-		  (pad-to-window
+	(puzzle (pad-to-window
+		 (with-border (units 8)
 		   (make-puzzle (derange (level-colors)))))))
     (with-buffer buffer
       (setf (%background-color (current-buffer)) (background-color))
@@ -514,8 +523,8 @@
 			      (format nil "LEVEL ~S          " *level*) 
 			      "Use the arrow keys to move, spacebar (or Shift) to fire. Press F1 for help.")
 		 "sans-mono-bold-16"))
-      (when (or (null *music-toggled*) 
-      		(sdl-mixer:music-playing-p))
-      	(play-music (random-choose (level-music)) :loop t))
+      ;; (when (or (null *music-toggled*) 
+      ;; 		(sdl-mixer:music-playing-p))
+      ;; 	(play-music (random-choose (level-music)) :loop t))
       (current-buffer))))
 

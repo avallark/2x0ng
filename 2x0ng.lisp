@@ -21,7 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
-  (setf *window-title* "2x0ng v0.92")
+  (setf *window-title* "2x0ng v1.0rc1")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -52,12 +52,14 @@
 (defun begin-game (level)   
   (stop-dialogue)
   ;; either win game or go to next level
-  (if (> level 18)
-      (show-ending)
-      (progn 
-	(switch-to-buffer (loading-screen level))
-	(play-sample "newball.wav"))))
-
+  (let ((old-buffer (current-buffer)))
+    (if (> level 18)
+	(show-ending)
+	(progn 
+	  (switch-to-buffer (loading-screen level))
+	  (at-next-update (destroy old-buffer))
+	  (play-sample "newball.wav")))))
+  
 (defun reset-level ()
   (begin-game *level*))
 
@@ -123,7 +125,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *window-title* "2x0ng v0.92")
+  (setf *window-title* "2x0ng v1.0rc1")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
@@ -144,7 +146,7 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-    (play-music "rekall" :loop t)
+;    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
@@ -158,6 +160,8 @@
        ((:h :control) :help)
        ((:j :control) :toggle-joystick)
        ;;
+       ((:x :alt) :command-prompt)
+       ((:g :control) :escape)
        ((:f6 :control) :regenerate))))
        ;;
        ;; ((:x :alt) :command-prompt)

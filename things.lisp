@@ -368,9 +368,9 @@
 	(play-sample "gate-closing-sound.wav")
 	(destroy self))))
 
-(define-method destroy gate ()
+(define-method unlock gate ()
   (play-sample (random-choose *doorbell-sounds*))
-  (destroy%super self))
+  (destroy self))
 
 (define-method damage gate (points))
 
@@ -494,7 +494,7 @@
     ((gatep thing)
      (setf %target nil)
      (when (same-color self thing)
-       (destroy thing))
+       (unlock thing))
      (bounce self))
     ;; target and smash enemies
     ((and (enemyp thing) (not (trailp thing)))

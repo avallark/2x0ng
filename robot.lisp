@@ -324,12 +324,13 @@
 (define-method update robot ()
   (when (dialogue-playing-p) (update-dialogue))
   ;; possibly show waypoint
-  (when (> (distance-between (find-exit) (cursor)) *waypoint-distance*)
-    (decf *waypoint-clock*)
-    (unless (plusp *waypoint-clock*)
-      (drop self (new 'waypoint))
-      (play-sound self "shield.wav")
-      (setf *waypoint-clock* *waypoint-interval*)))
+  (let ((exit (find-exit)))
+    (when (and exit (> (distance-between exit (cursor)) *waypoint-distance*))
+      (decf *waypoint-clock*)
+      (unless (plusp *waypoint-clock*)
+	(drop self (new 'waypoint))
+	(play-sound self "shield.wav")
+	(setf *waypoint-clock* *waypoint-interval*))))
   ;; possibly lower shields
   (when %shielded
     (decf %shield-clock)
