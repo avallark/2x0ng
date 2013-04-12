@@ -278,6 +278,14 @@
 (define-method can-reach-ball robot ()
   (and *ball* (colliding-with self *ball*)))
 
+(define-method bounding-box robot ()
+  ;; shrink bounding box by a few px to make game more forgiving
+  (with-field-values (x y height width) self
+    (let ((margin 2))
+      (values (+ margin y) (+ margin x)
+	      (+ (- margin) x width)
+	      (+ (- margin) y height)))))
+
 (define-method collide robot (thing)
   (when (or (brickp thing) (enemyp thing) (holep thing) (cloudp thing))
     (restore-location self)))

@@ -146,7 +146,7 @@
       (load-project "2x0ng" '(:with-database nil))
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-;    (play-music "rekall" :loop t)
+    (play-music "rekall" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
@@ -190,8 +190,8 @@
   (drop (cursor) 
 	(new 'bubble 
 	     (if *red-green-color-blindness*
-		 "Red/green color blindness support ON. Full effect requires game reset."
-		 "Red/green color blindness support OFF. Full effect requires game reset."))))
+		 "Red/green color blindness support ON. Full effect requires game reset (Control-R)."
+		 "Red/green color blindness support OFF. Full effect requires game reset (Control-R)."))))
 
 (defvar *music-toggled* nil)
 

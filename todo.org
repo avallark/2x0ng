@@ -2,10 +2,17 @@
 
 * TODO Release 1.0 rc2
 
-** TODO [#A] mac-friendly keys (no F1-F12)
-** TODO [#A] color blindness support
+** DONE [#A] mac-friendly keys (no F1-F12)
+   CLOSED: [2013-04-11 Thu 23:15]
+** DONE [#A] draft R/G color blindness support
+   CLOSED: [2013-04-12 Fri 02:04]
 ** TODO [#A] shrink player hitbox just slightly
-** TODO [#A] BUGFIX: ball should not get stuck on thief corpse 
+** DONE [#A] BUGFIX: ball should not get stuck on thief corpse 
+   CLOSED: [2013-04-11 Thu 23:16]
+
+** TODO colorblindness modes
+http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
+
 ** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
 ** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
 ** TODO [#A] 64 bit linux binaries
@@ -18,9 +25,6 @@
 ** TODO [#C] ball should delay before reappearing 
 ** TODO [#C] joystick select screen
 ** TODO [#C] proximity crowding beep alarm? 
-
-** TODO colorblindness modes
-http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
 
 ** MAC OSX issues
 

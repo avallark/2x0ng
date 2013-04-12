@@ -521,10 +521,10 @@
 	    (new 'bubble 
 		 (concatenate 'string
 			      (format nil "LEVEL ~S          " *level*) 
-			      "Use the arrow keys to move, spacebar (or Shift) to fire. Press F1 for help.")
+			      "Use the arrow keys to move, spacebar (or Shift) to fire. Press Control-H for help.")
 		 "sans-mono-bold-16"))
-      ;; (when (or (null *music-toggled*) 
-      ;; 		(sdl-mixer:music-playing-p))
-      ;; 	(play-music (random-choose (level-music)) :loop t))
+      (when (or (null *music-toggled*) 
+      		(sdl-mixer:music-playing-p))
+      	(play-music (random-choose (level-music)) :loop t))
       (current-buffer))))
 

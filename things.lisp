@@ -345,6 +345,7 @@
 
 (defresource "gate.png")
 (defresource "gate2.png")
+(defresource "gate3.png")
 (defresource "gate-closing-sound.wav" :volume 150)
 
 (defresource "gate1-hash1.png")
@@ -379,13 +380,13 @@
       "gate2.png"))
 
 (defun solid-hash-image (n)
-  (if *red-green-color-blindness*
-      (ecase n
-	(1 "brick-hash1.png")
-	(2 "brick-hash2.png")
-	(3 "brick-hash3.png")
-	(4 "brick-hash4.png"))
-      "gate2.png"))
+  (or (when *red-green-color-blindness*
+	(case n
+	  (1 "brick-hash1.png")
+	  (2 "brick-hash2.png")
+	  (3 "brick-hash3.png")
+	  (4 "brick-hash4.png")))
+      "gate3.png"))
 
 (defresource "error.wav" :volume 70)
 
