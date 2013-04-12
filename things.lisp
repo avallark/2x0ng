@@ -287,8 +287,14 @@
   (when color (setf %color color)))
 
 (define-method draw brick ()
-  (set-blending-mode :alpha)
-  (draw-box %x %y %width %height :color %color))
+  (with-fields (x y z width height color) self
+    (let ((hash (color-hash color)))
+      (set-blending-mode :alpha)
+      (if (and *red-green-color-blindness* hash)
+	  (draw-textured-rectangle x y z width height
+				   (find-texture (solid-hash-image hash))
+				   :vertex-color color)
+	  (draw-box x y width height :color color)))))
 
 (defun slap (thing)
   (when (and (blockyp thing)
@@ -341,6 +347,46 @@
 (defresource "gate2.png")
 (defresource "gate-closing-sound.wav" :volume 150)
 
+(defresource "gate1-hash1.png")
+(defresource "gate1-hash2.png")
+(defresource "gate1-hash3.png")
+(defresource "gate1-hash4.png")
+(defresource "gate2-hash1.png")
+(defresource "gate2-hash2.png")
+(defresource "gate2-hash3.png")
+(defresource "gate2-hash4.png")
+(defresource "brick-hash1.png")
+(defresource "brick-hash2.png")
+(defresource "brick-hash3.png")
+(defresource "brick-hash4.png")
+
+(defun hash-image (n)
+  (if *red-green-color-blindness*
+      (ecase n
+	(1 "gate1-hash1.png")
+	(2 "gate1-hash2.png")
+	(3 "gate1-hash3.png")
+	(4 "gate1-hash4.png"))
+      "gate.png"))
+
+(defun large-hash-image (n)
+  (if *red-green-color-blindness*
+      (ecase n
+	(1 "gate2-hash1.png")
+	(2 "gate2-hash2.png")
+	(3 "gate2-hash3.png")
+	(4 "gate2-hash4.png"))
+      "gate2.png"))
+
+(defun solid-hash-image (n)
+  (if *red-green-color-blindness*
+      (ecase n
+	(1 "brick-hash1.png")
+	(2 "brick-hash2.png")
+	(3 "brick-hash3.png")
+	(4 "brick-hash4.png"))
+      "gate2.png"))
+
 (defresource "error.wav" :volume 70)
 
 (defun gatep (thing)
@@ -352,14 +398,14 @@
   (color :initform "white"))
 
 (define-method draw gate ()
-  (draw-textured-rectangle %x %y %z %width %height 
-			   (find-texture "gate.png")
-			   :vertex-color %color)
-  (when (> %width 1000)
-    (draw-textured-rectangle %x %y %z %width %height 
-  			     (find-texture "gate2.png")
-  			     :vertex-color %color)))
-
+  (with-fields (x y z width height color) self
+    (draw-textured-rectangle x y z width height 
+			     (find-texture (hash-image (color-hash color)))
+			     :vertex-color color)
+    (when (> (max height width) 700)
+      (draw-textured-rectangle x y z width height 
+			       (find-texture (large-hash-image (color-hash color)))
+			       :vertex-color color))))
 
 (define-method paint gate (color)
   (if (not (string= %color color))

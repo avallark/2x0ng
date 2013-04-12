@@ -292,7 +292,7 @@
       (play-sample "analog-death.wav")
       (play-music "nexttime")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "You died on level ~A. Press Control-R to reset, or F1 for help." *level*)
+		   (new 'bubble (format nil "You died on level ~A. Press Control-R to reset, or Control-H for help." *level*)
 			"sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
@@ -341,7 +341,7 @@
     (setf %carrying nil)
     (play-sound self "xplod.wav")
     (later 2 (die self))
-    (later 2.5 (destroy self)))
+    (later 7 (destroy self)))
   ;; carry ball
   (when (and %carrying *ball*)
     (move-to *ball* %x %y))

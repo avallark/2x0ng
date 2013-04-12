@@ -21,7 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
-  (setf *window-title* "2x0ng v1.0rc1")
+  (setf *window-title* "2x0ng v1.0rc2")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -116,7 +116,7 @@
 (defun help-buffer ()
   (let ((buffer (new 'help-screen)))
     (setf (field-value :game buffer) (current-buffer))
-    (bind-event buffer '(:f1) :resume-playing)
+    (bind-event buffer '(:h :control) :resume-playing)
     (bind-event buffer '(:escape) :resume-playing)
     (bind-event buffer '(:space) :resume-playing)
     buffer))
@@ -125,7 +125,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *window-title* "2x0ng v1.0rc1")
+  (setf *window-title* "2x0ng v1.0rc2")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
@@ -154,14 +154,14 @@
   (default-events 
      :initform
      '(((:r :control) :reset-game)
-       ((:f1) :help)
-       ((:f10) :toggle-music) 
-       ((:f12) :toggle-pause)
        ((:h :control) :help)
+       ((:m :control) :toggle-music) 
+       ((:p :control) :toggle-pause)
+       ((:leftbracket) :toggle-red-green-color-blindness)
        ((:j :control) :toggle-joystick)
        ;;
-       ((:x :alt) :command-prompt)
-       ((:g :control) :escape)
+       ;; ((:x :alt) :command-prompt)
+       ;; ((:g :control) :escape)
        ((:f6 :control) :regenerate))))
        ;;
        ;; ((:x :alt) :command-prompt)
@@ -181,6 +181,17 @@
 (define-method release 2x0ng (x y &optional button))
 (define-method tap 2x0ng (x y))
 (define-method alternate-tap 2x0ng (x y))
+
+;;; Various toggles
+
+(define-method toggle-red-green-color-blindness 2x0ng ()
+  (setf *red-green-color-blindness* 
+	(if *red-green-color-blindness* nil t))
+  (drop (cursor) 
+	(new 'bubble 
+	     (if *red-green-color-blindness*
+		 "Red/green color blindness support ON. Full effect requires game reset."
+		 "Red/green color blindness support OFF. Full effect requires game reset."))))
 
 (defvar *music-toggled* nil)
 
@@ -207,7 +218,7 @@
   (when (not %paused)
     (drop (cursor) 
 	  (new 'bubble 
-	       "Game paused. Press F12 to resume play.")))
+	       "Game paused. Press Control-P to resume play.")))
   (transport-toggle-play self)
   (when (not %paused)
     (loop for thing being the hash-keys of %objects do

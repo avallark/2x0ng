@@ -48,6 +48,14 @@
     (:command "dim gray" "yellow" 
      "aquamarine" "deep pink" "red" "green yellow")))
 
+(defvar *red-green-color-blindness* nil)
+
+(defparameter *red-green-color-blindness-theme* 
+  '("black" "gray50" "cornflower blue" "yellow" "pale green" "violet red"))
+
+(defun red-green-color-blindness-theme (&optional (colors 4))
+  (subseq *red-green-color-blindness-theme* 0 (+ 2 colors)))
+
 (defparameter *boss-theme* '(:voltz "black" "gray30" "orchid" "medium orchid" "dark orchid" "deep pink" "green yellow"))
 
 (defparameter *themes* 
@@ -62,8 +70,15 @@
 (defun theme-colors (&optional (theme *theme*))
   (rest (rest theme)))
 
+(defun color-hash (color)
+  (let ((pos (position color (theme-colors) :test 'equal)))
+    (when pos (1+ pos))))
+
 (defun set-theme (&optional (theme :wizard))
-  (setf *theme* (find-theme theme)))
+  (setf *theme* 
+	(if (consp theme) 
+	    theme
+	    (find-theme theme))))
 
 (defun random-theme () (random-choose (mapcar #'car *themes*)))
 
@@ -115,13 +130,14 @@
       *soundtrack*))
 
 (defun level-theme (&optional (level *level*))
-  (random-choose 
-   (mapcar #'car
-	   (ecase (getf (nth-level level) :colors)
-	     (2 *two-brick-themes*)
-	     (3 *three-brick-themes*)
-	     (4 *four-brick-themes*)
-	     (5 '((:voltz)))))))
+  (let ((ncolors (getf (nth-level level) :colors)))
+    (random-choose 
+     (mapcar #'car
+	     (ecase ncolors
+	       (2 *two-brick-themes*)
+	       (3 *three-brick-themes*)
+	       (4 *four-brick-themes*)
+	       (5 '((:voltz))))))))
 
 (defun level-hazards (&optional (level *level*))
   (getf (nth-level level) :hazards))
@@ -150,5 +166,10 @@
   (assert (integerp level))
   (setf *level* level)
   (setf *difficulty* (level-difficulty level))
-  (set-theme (level-theme *level*)))
-
+  (let ((ncolors (getf (nth-level level) :colors)))
+    (set-theme 
+     (if (= 5 ncolors)
+	 :voltz
+	 (if *red-green-color-blindness*
+	     (red-green-color-blindness-theme ncolors) 
+	     (level-theme *level*))))))
