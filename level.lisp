@@ -149,17 +149,17 @@
 (defvar *extra-padding* 0)
   
 (defun with-hpadding (amount buffer)
-  (with-fields (height width) buffer
+  (with-field-values (height width) buffer
     (with-new-buffer 
-      (paste-from (current-buffer) buffer amount 0) 
+      (paste-into (current-buffer) buffer amount 0) 
       (resize (current-buffer)
 	      (+ width amount *extra-padding*)
 	      height))))
 
 (defun with-vpadding (amount buffer)
-  (with-fields (height width) buffer
+  (with-field-values (height width) buffer
     (with-new-buffer 
-      (paste-from (current-buffer) buffer 0 amount) 
+      (paste-into (current-buffer) buffer 0 amount) 
       (resize (current-buffer)
 	      width
 	      (+ height amount *extra-padding*)))))
@@ -496,6 +496,7 @@
 			  (+ 8 (truncate (/ (%width puzzle) (units 1))))
 			  (+ 8 (1- (truncate (/ (%height puzzle)
 						 (units 1))))))
+      (destroy puzzle)
       ;; adjust scrolling parameters 
       (setf (%window-scrolling-speed buffer) (/ *robot-speed* 2)
 	    (%horizontal-scrolling-margin buffer) 2/5

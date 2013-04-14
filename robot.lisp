@@ -1,5 +1,8 @@
 (in-package :2x0ng)
 
+(defun report-database ()
+  (message "Database contains ~S objects." (hash-table-count blocky::*database*)))
+
 ;;; Dialogue
 
 (defresource "robot-talk-1.png")
@@ -404,6 +407,7 @@
 ;;   (or (keyboard-modifier-down-p :lalt)
 ;;       (keyboard-modifier-down-p :ralt)))
 
+
 (defun holding-fire ()
   (or (holding-space)
       (holding-shift)
@@ -430,7 +434,13 @@
       (let ((width *ball-size*)
 	    (height *ball-size*))
 	(draw-box x y width height :color "white")
-	(draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color %color)))))
+	(draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color %color)
+	(when *red-green-color-blindness*
+	  (let ((hash (color-hash %color)))
+	    (when hash
+	      (draw-textured-rectangle x y 0 width height 
+				       (find-texture (ball-hash-image hash))))))))))
+
 
 (define-method strong-kick-p player-1-robot ()
   (holding-fire))

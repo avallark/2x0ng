@@ -348,6 +348,18 @@
 (defresource "gate3.png")
 (defresource "gate-closing-sound.wav" :volume 150)
 
+(defresource "hash1.png")
+(defresource "hash2.png")
+(defresource "hash3.png")
+(defresource "hash4.png")
+
+(defun ball-hash-image (n)
+  (ecase n
+    (1 "hash1.png")
+    (2 "hash2.png")
+    (3 "hash3.png")
+    (4 "hash4.png")))
+
 (defresource "gate1-hash1.png")
 (defresource "gate1-hash2.png")
 (defresource "gate1-hash3.png")
@@ -458,6 +470,7 @@
 
 (define-method initialize ball (&optional color)
   (initialize%super self)
+;  (report-database)
   (setf *ball* self)
   (resize self *ball-size* *ball-size*)
   (when color (setf %color color)))
@@ -595,7 +608,12 @@
 (define-method draw ball ()
   (with-field-values (x y width height color) self
     (draw-box x y width height :color "white")
-    (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color color)))
+    (draw-box (+ 2 x) (+ 2 y) (- width 4) (- height 4) :color color)
+    (when *red-green-color-blindness*
+      (let ((hash (color-hash color)))
+	(when hash
+	  (draw-textured-rectangle x y 0 width height 
+				   (find-texture (ball-hash-image hash))))))))
 
 ;;; Level exit
 

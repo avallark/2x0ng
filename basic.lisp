@@ -51,10 +51,12 @@
 (defvar *red-green-color-blindness* nil)
 
 (defparameter *red-green-color-blindness-theme* 
-  '("black" "gray50" "cornflower blue" "yellow" "pale green" "violet red"))
+  '("cornflower blue" "yellow" "pale green" "violet red"))
 
 (defun red-green-color-blindness-theme (&optional (colors 4))
-  (subseq *red-green-color-blindness-theme* 0 (+ 2 colors)))
+  (append (list "black" "gray50")
+	  (subseq (derange *red-green-color-blindness-theme*) 
+		  0 colors)))
 
 (defparameter *boss-theme* '(:voltz "black" "gray30" "orchid" "medium orchid" "dark orchid" "deep pink" "green yellow"))
 

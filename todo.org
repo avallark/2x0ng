@@ -2,42 +2,48 @@
 
 * TODO Release 1.0 rc2
 
+** DONE copy/cut/paste-from fix the *clipboard* and other duplicate issues
+   CLOSED: [2013-04-13 Sat 23:49]
+
+** DONE [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
+   CLOSED: [2013-04-13 Sat 23:49]
+** DONE check task leaks
+   CLOSED: [2013-04-13 Sat 23:49]
+** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
+** TODO [#C] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
+** TODO stop spawning enemies when you die
+** TODO single black hashmark through ball in colorblind mode
+** TODO [#C] never have red box with red gate
+
 ** DONE [#A] mac-friendly keys (no F1-F12)
    CLOSED: [2013-04-11 Thu 23:15]
 ** DONE [#A] draft R/G color blindness support
    CLOSED: [2013-04-12 Fri 02:04]
-** TODO [#A] shrink player hitbox just slightly
+** DONE [#A] shrink player hitbox just slightly
+   CLOSED: [2013-04-12 Fri 02:34]
 ** DONE [#A] BUGFIX: ball should not get stuck on thief corpse 
    CLOSED: [2013-04-11 Thu 23:16]
 
 ** TODO colorblindness modes
 http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
 
-** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
-** TODO [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
 ** TODO [#A] 64 bit linux binaries
 
 ** TODO [#C] interactive tutorial 
 ** TODO [#C] non-stick walls?
-** TODO [#C] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
 ** TODO [#C] left-handed WSAD support
-** TODO [#C] never have red box with red gate
 ** TODO [#C] ball should delay before reappearing 
 ** TODO [#C] joystick select screen
 ** TODO [#C] proximity crowding beep alarm? 
 
 ** MAC OSX issues
-
 *** TODO don't zip the dmg, just zip the game
-*** TODO stop spawning enemies when you die
-
 
 ** DESURA questions
 *** TODO launcher.sh that sets paths
 *** TODO ask about "not commonly installed" warnings on winders
 *** TODO make help screen accessible from title
 *** TODO allow 3 lives
-
 
 
 ** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
