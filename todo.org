@@ -1,40 +1,66 @@
-* TODO RELEASE 1.0rc1
+** TODO fix framerate issues with CCL
+** TODO remove uses of GET-OBJECTS
+*** TODO LIST-LENGTH
+*** TODO 
 
-* TODO Release 1.0 rc2
 
-** DONE copy/cut/paste-from fix the *clipboard* and other duplicate issues
-   CLOSED: [2013-04-13 Sat 23:49]
 
-** DONE [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
-   CLOSED: [2013-04-13 Sat 23:49]
-** DONE check task leaks
-   CLOSED: [2013-04-13 Sat 23:49]
-** TODO [#A] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
+     6.86%   lx86cl  image-for-profiling         [.] LIST-LENGTH
+     5.89%   lx86cl  image-for-profiling         [.] CCL::%LOCK-RECURSIVE-LOCK-OBJECT
+     5.26%   lx86cl  image-for-profiling         [.] <Compiled-function.CCL::VALUES-SPECIFIER-TYPE.(Non-Global)..0x103D02
+     4.53%   lx86cl  image-for-profiling         [.] CCL::PLISTP
+     4.25%   lx86cl  lx86cl                      [.] _SPnthrow1value
+     3.79%   lx86cl  image-for-profiling         [.] CCL::%UNLOCK-RECURSIVE-LOCK-OBJECT
+     3.11%   lx86cl  image-for-profiling         [.] CCL::%PL-SEARCH
+     2.07%   lx86cl  image-for-profiling         [.] BLOCKY:FIND-OBJECT
+     1.78%   lx86cl  image-for-profiling         [.] GETF
+     1.74%   lx86cl  image-for-profiling         [.] CCL::%STRING-HASH
+     1.70%   lx86cl  image-for-profiling         [.] CCL::%HASH-PROBE
+     1.69%   lx86cl  image-for-profiling         [.] CCL::%%EQUALHASH
+     1.63%   lx86cl  image-for-profiling         [.] CCL::%%EQLHASH-INTERNAL
+     1.61%   lx86cl  lx86cl                      [.] _SPnmkunwind
+     1.56%   lx86cl  image-for-profiling         [.] CCL::CLASS-TYPEP
+     1.52%   lx86cl  image-for-profiling         [.] BLOCKY:FIELD-VALUE
+     1.37%   lx86cl  image-for-profiling         [.] CCL::EQ-HASH-FIND
+     1.35%   lx86cl  image-for-profiling         [.] CCL::%%TYPEP
+     1.32%   lx86cl  image-for-profiling         [.] CCL::SXHASH-AUX
+     1.27%   lx86cl  image-for-profiling         [.] EQUAL
+     1.20%   lx86cl  image-for-profiling         [.] TYPEP
+     1.14%   lx86cl  lx86cl                      [.] _SPunbind_to
+     1.02%   lx86cl  image-for-profiling         [.] BLOCKY:SEND
+     1.00%   lx86cl  lx86cl                      [.] _SPunbind_interrupt_level
+     0.99%   lx86cl  image-for-profiling         [.] GETHASH
+     0.95%   lx86cl  lx86cl                      [.] _SPbuiltin_eql
+     0.95%   lx86cl  lx86cl                      [.] _SPmisc_ref
+     0.86%   lx86cl  lx86cl                      [.] _SPmkcatch1v
+     0.84%   lx86cl  image-for-profiling         [.] 0x2026e13
+     0.82%   lx86cl  lx86cl                      [.] _SPspecrefcheck
+     0.81%   lx86cl  image-for-profiling         [.] CCL::%CLASS-CPL
+     0.81%   lx86cl  image-for-profiling         [.] CCL::%TYPEP
+     0.79%   lx86cl  image-for-profiling         [.] CCL::%GET-SPIN-LOCK
+
+** TODO [#A] Music review / final tweaks
+** TODO [#A] blue-yellow colorblindness mode
+   http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
+** TODO [#B] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)
+** TODO [#B] stop spawning enemies when you die
+** TODO [#B] Verify status of ps3 gamepad support
+** TODO [#B] 64 bit linux binaries / or just Wine version? 
 ** TODO [#C] eliminate image loading stutter by pre-drawing all textures once with loading screen shown on top of that
-** TODO stop spawning enemies when you die
-** TODO single black hashmark through ball in colorblind mode
 ** TODO [#C] never have red box with red gate
-
-** DONE [#A] mac-friendly keys (no F1-F12)
-   CLOSED: [2013-04-11 Thu 23:15]
-** DONE [#A] draft R/G color blindness support
-   CLOSED: [2013-04-12 Fri 02:04]
-** DONE [#A] shrink player hitbox just slightly
-   CLOSED: [2013-04-12 Fri 02:34]
-** DONE [#A] BUGFIX: ball should not get stuck on thief corpse 
-   CLOSED: [2013-04-11 Thu 23:16]
-
-** TODO colorblindness modes
-http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
-
-** TODO [#A] 64 bit linux binaries
+** TODO [#C] make control-J cycle through available joysticks and notify when ready
 
 ** TODO [#C] interactive tutorial 
 ** TODO [#C] non-stick walls?
-** TODO [#C] left-handed WSAD support
-** TODO [#C] ball should delay before reappearing 
-** TODO [#C] joystick select screen
-** TODO [#C] proximity crowding beep alarm? 
+
+
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] debugger invoked on a SIMPLE-ERROR in thread
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] #<THREAD "main thread" RUNNING {1004ED1893}>:
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] Error opening shared object "/Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper":
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] dlopen(/Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper, 10): no suitable image found. Did find:
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] /Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper: mach-o, but wrong architecture
+    4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] /Library/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper: mach-o, but wrong architecture.
+
 
 ** MAC OSX issues
 *** TODO don't zip the dmg, just zip the game
@@ -48,10 +74,7 @@ http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-pal
 
 ** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
-** TODO [#A] Music review/polish
-** TODO [#B] Verify status of ps3 gamepad support
 ** TODO [#C] libsdl_gfx, can it be un-required?
-** TODO [#C] make control-J cycle through available joysticks and notify when ready
  
 
 * TODO Release 1.1 
@@ -100,6 +123,10 @@ http://www.hardcoregaming101.net/korea/part1/company-aproman.htm#kkoedori
 http://www.worldofspectrum.org/bestgames.html
 http://www.worldofspectrum.org/infoseek.cgi?regexp=^Rebelstar+Raiders$&pub=^Red+Shift+Ltd$&loadpics=1
 http://hardcoregaming101.net/metalstorm/metalstorm.htm
+
+** TODO [#C] left-handed WSAD support
+** TODO [#C] joystick select screen
+** TODO [#C] proximity crowding beep alarm? 
 
 ** DONE [#B] disable win32 terminal
    CLOSED: [2013-03-26 Tue 02:41]
@@ -567,6 +594,71 @@ Read our privacy statement:
    :ARCHIVE_TIME: 2013-04-11 Thu 19:00
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_OLPATH: Release 1.0 rc2
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE copy/cut/paste-from fix the *clipboard* and other duplicate issues
+   CLOSED: [2013-04-13 Sat 23:49]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] BUGFIX: make sure old buffers/objects are destroyed after level is no longer needed. do this very carefully. for all objects made during compositions
+   CLOSED: [2013-04-13 Sat 23:49]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE check task leaks
+   CLOSED: [2013-04-13 Sat 23:49]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE single black hashmark through ball in colorblind mode
+   CLOSED: [2013-04-14 Sun 03:49]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+
+** DONE [#A] mac-friendly keys (no F1-F12)
+   CLOSED: [2013-04-11 Thu 23:15]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] draft R/G color blindness support
+   CLOSED: [2013-04-12 Fri 02:04]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] shrink player hitbox just slightly
+   CLOSED: [2013-04-12 Fri 02:34]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE [#A] BUGFIX: ball should not get stuck on thief corpse
+   CLOSED: [2013-04-11 Thu 23:16]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE
    :END:
