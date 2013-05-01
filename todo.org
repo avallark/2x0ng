@@ -1,43 +1,9 @@
-** TODO fix framerate issues with CCL
-** TODO remove uses of GET-OBJECTS
-*** TODO LIST-LENGTH
-*** TODO 
+** TODO increase border thickness at exit to prevent cheating
 
+** DONE fix framerate issues with CCL
+   CLOSED: [2013-04-17 Wed 00:42]
 
-
-     6.86%   lx86cl  image-for-profiling         [.] LIST-LENGTH
-     5.89%   lx86cl  image-for-profiling         [.] CCL::%LOCK-RECURSIVE-LOCK-OBJECT
-     5.26%   lx86cl  image-for-profiling         [.] <Compiled-function.CCL::VALUES-SPECIFIER-TYPE.(Non-Global)..0x103D02
-     4.53%   lx86cl  image-for-profiling         [.] CCL::PLISTP
-     4.25%   lx86cl  lx86cl                      [.] _SPnthrow1value
-     3.79%   lx86cl  image-for-profiling         [.] CCL::%UNLOCK-RECURSIVE-LOCK-OBJECT
-     3.11%   lx86cl  image-for-profiling         [.] CCL::%PL-SEARCH
-     2.07%   lx86cl  image-for-profiling         [.] BLOCKY:FIND-OBJECT
-     1.78%   lx86cl  image-for-profiling         [.] GETF
-     1.74%   lx86cl  image-for-profiling         [.] CCL::%STRING-HASH
-     1.70%   lx86cl  image-for-profiling         [.] CCL::%HASH-PROBE
-     1.69%   lx86cl  image-for-profiling         [.] CCL::%%EQUALHASH
-     1.63%   lx86cl  image-for-profiling         [.] CCL::%%EQLHASH-INTERNAL
-     1.61%   lx86cl  lx86cl                      [.] _SPnmkunwind
-     1.56%   lx86cl  image-for-profiling         [.] CCL::CLASS-TYPEP
-     1.52%   lx86cl  image-for-profiling         [.] BLOCKY:FIELD-VALUE
-     1.37%   lx86cl  image-for-profiling         [.] CCL::EQ-HASH-FIND
-     1.35%   lx86cl  image-for-profiling         [.] CCL::%%TYPEP
-     1.32%   lx86cl  image-for-profiling         [.] CCL::SXHASH-AUX
-     1.27%   lx86cl  image-for-profiling         [.] EQUAL
-     1.20%   lx86cl  image-for-profiling         [.] TYPEP
-     1.14%   lx86cl  lx86cl                      [.] _SPunbind_to
-     1.02%   lx86cl  image-for-profiling         [.] BLOCKY:SEND
-     1.00%   lx86cl  lx86cl                      [.] _SPunbind_interrupt_level
-     0.99%   lx86cl  image-for-profiling         [.] GETHASH
-     0.95%   lx86cl  lx86cl                      [.] _SPbuiltin_eql
-     0.95%   lx86cl  lx86cl                      [.] _SPmisc_ref
-     0.86%   lx86cl  lx86cl                      [.] _SPmkcatch1v
-     0.84%   lx86cl  image-for-profiling         [.] 0x2026e13
-     0.82%   lx86cl  lx86cl                      [.] _SPspecrefcheck
-     0.81%   lx86cl  image-for-profiling         [.] CCL::%CLASS-CPL
-     0.81%   lx86cl  image-for-profiling         [.] CCL::%TYPEP
-     0.79%   lx86cl  image-for-profiling         [.] CCL::%GET-SPIN-LOCK
+** TODO reduce size of largest levels
 
 ** TODO [#A] Music review / final tweaks
 ** TODO [#A] blue-yellow colorblindness mode
@@ -53,14 +19,12 @@
 ** TODO [#C] interactive tutorial 
 ** TODO [#C] non-stick walls?
 
-
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] debugger invoked on a SIMPLE-ERROR in thread
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] #<THREAD "main thread" RUNNING {1004ED1893}>:
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] Error opening shared object "/Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper":
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] dlopen(/Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper, 10): no suitable image found. Did find:
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] /Users/fs/dev/third_party/dto/2x0ng-build/2x0ng.app/Contents/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper: mach-o, but wrong architecture
     4/14/13 4:08:24 AM [0x0-0x263263].com.unknown[24033] /Library/Frameworks/cocoahelper.framework/Versions/A/Resources/cocoahelper: mach-o, but wrong architecture.
-
 
 ** MAC OSX issues
 *** TODO don't zip the dmg, just zip the game
@@ -70,12 +34,9 @@
 *** TODO ask about "not commonly installed" warnings on winders
 *** TODO make help screen accessible from title
 *** TODO allow 3 lives
-
-
 ** TODO [#B] things that fire vertical and horizontal bullets, and can only be destroyed from corners
 **** TODO these replace gas vents in low-level garrisons
 ** TODO [#C] libsdl_gfx, can it be un-required?
- 
 
 * TODO Release 1.1 
 
