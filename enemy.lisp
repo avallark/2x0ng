@@ -443,7 +443,7 @@
 
 (define-method update hole ()
   (when (< (distance-to-cursor self)
-	   (with-difficulty 350 400 420 440 460 460))
+	   (with-difficulty 350 400 420 430 440 450))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)
@@ -480,7 +480,7 @@
   (when (<= %hp 7)
     (setf %image (random-choose '("resonator.png" "resonator-on.png"))))
   (when (< (distance-to-cursor self)
-	   (with-difficulty 350 400 420 440 460 460 480 480))
+	   (with-difficulty 350 400 420 430 440 450))
     (with-fields (clock) self
       (decf clock)
       (when (zerop clock)

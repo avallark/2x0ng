@@ -46,7 +46,7 @@
     (:zendium "gray17" "orchid"
      "deep pink" "deep sky blue" "yellow" "orange")
     (:command "dim gray" "yellow" 
-     "aquamarine" "deep pink" "red" "green yellow")))
+     "cyan" "deep pink" "red" "green yellow")))
 
 (defvar *red-green-color-blindness* nil)
 

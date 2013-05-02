@@ -349,7 +349,7 @@
        (hazard)
        (mixed-up (hazard)
 		 (bricks A))))
-     (let ((*puzzle-border* 12))
+     (let ((*puzzle-border* 14))
        (mixed-down (wildcard)
 		   (make-exit (derange (theme-colors))))))))
 
@@ -398,6 +398,64 @@
 (defun make-puzzle-3 (colors)
   (apply #'mixed-up
 	 (puzzle-3-components colors)))
+
+(defun make-puzzle-4b (colors)
+  (assert (= 4 (length colors)))
+  (let ((key (random-choose colors)))
+    (destructuring-bind (A B C D) 
+	(derange colors)
+      (mixed-up
+       ;;
+       (mixed-down
+	(gated A (bricks C))
+	(hazard)
+	(bricks B)
+	(gated D
+	       (mixed-up
+		(mixed-up 
+		 (hazard)
+		 (gated B 
+			(randomly (hazard)
+				  (bricks A)))
+		 (hazard)
+		 (bricks (or *required-color* B)))))
+	 (bricks D)
+	 (hazard)))
+       ;;
+       (mixed-down
+	(gated D
+	       (randomly
+		(hazard) 
+		(gated (random-color) 
+		       (bricks C)) 
+		(hazard) 
+		(bricks A)))
+	(with-fortification
+	    (with-bulkheads
+		(gated C
+		       (mixed-up
+			(skewed (hazard) (bricks B))
+			(hazard)
+			(bordered
+			 (mixed-down 
+			  (gated A (bricks (or *required-color* B)))
+			  (hazard)
+			  (mixed-up (hazard)
+				    (bricks A))))
+			(let ((*puzzle-border* 14))
+			  (mixed-down (wildcard)
+				      (make-exit (derange (theme-colors)))))))))
+	;;
+	(gated B (randomly
+		  (skewed (hazard)
+			  (bricks A)
+			  (hazard))
+		  (mixed-up
+		   (bricks (or *required-color* C))
+		   (bricks B)
+		   (hazard)
+		   (bricks (random-color)))))))))
+
   
 (defun make-puzzle-4 (colors)
   (assert (= 4 (length colors)))
@@ -470,7 +528,7 @@
     (case (length colors) 
       (2 (make-puzzle-2 colors))
       (3 (make-puzzle-3 colors))
-      (4 (with-fortification (make-puzzle-4 colors)))
+      (4 (with-fortification (make-puzzle-4b colors)))
       (5 (with-bulkheads (make-reactor-level))))))
 
 (defun pad-to-window (buffer)
