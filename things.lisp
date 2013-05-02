@@ -135,9 +135,14 @@
 ;;; Sparkle explosion cloud fx
 
 (define-block spark 
-  :width 3 :height 3 :color nil)
-;  :collision-type nil)
+  :tags '(:spark)
+  :width 3 :height 3 :color nil
+  :collision-type :passive)
 
+(defun sparkp (thing)
+  (has-tag thing :spark))
+
+;; DISABLED
 (define-method collide spark (thing)
   (when (and (enemyp thing) (has-method :damage thing))
     (damage thing 1)
