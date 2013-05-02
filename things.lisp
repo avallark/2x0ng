@@ -511,7 +511,7 @@
 	(setf %kick-clock 0)
 	(setf %seeking (if %seeking nil t)))))
       
-(define-method find-enemy ball (thing2 &optional (range 180))
+(define-method find-enemy ball (thing2 &optional (range (coerce 180 'single-float)))
   (let ((enemies
 	  (loop for thing being the hash-values of (%objects (current-buffer))
 		when (and 
