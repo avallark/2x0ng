@@ -123,7 +123,7 @@
 
 ;;; Main program
 
-(defun 2x0ng (&optional (level 1))
+(defun 2x0ng (&optional (level 7))
   (setf *level* level)
   (setf *window-title* "2x0ng v1.1")
   (setf *screen-width* 1280)
