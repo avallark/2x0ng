@@ -232,19 +232,17 @@
 (defresource "boss-tag.png")
 (defresource "boss-tag2.png")
 
-(define-method draw 2x0ng ()
-  (buffer%draw self)
-  (loop for thing being the hash-keys of %objects do
-    (when (has-tag thing :boss) 
-      (with-fields (x y width) thing
-  	(draw-image 
-	 (random-choose '("boss-tag.png" "boss-tag2.png"))
-	 (+ x (/ width 2) -16) 
-	 (- y (units 0.3) (image-height "boss-tag.png"))
-	 :blend :additive 
-	 :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
-  (loop for thing being the hash-keys of %objects do
-    (when (bubblep thing) (draw thing))))
+(define-method after-draw-object 2x0ng (thing)
+  (when (has-tag thing :boss) 
+    (with-fields (x y width) thing
+      (draw-image 
+       (random-choose '("boss-tag.png" "boss-tag2.png"))
+       (+ x (/ width 2) -16) 
+       (- y (units 0.3) (image-height "boss-tag.png"))
+       :blend :additive 
+       :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
 
+
+;  (when (bubblep thing) (draw thing)))
 
 ;;; 2x0ng.lisp ends here
