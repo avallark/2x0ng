@@ -630,6 +630,8 @@
       (set-cursor (current-buffer) robot)
       (snap-window-to-cursor (current-buffer))
       (glide-window-to-cursor (current-buffer))
+      ;; allocate
+      (install-quadtree (current-buffer))
       ;; bugfix
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
