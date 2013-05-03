@@ -18,9 +18,15 @@
   (collision-type :initform nil))
 
 (define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
+  (block%initialize self)
   (setf %text text)
   (setf %font font)
+  (set-buffer-bubble self)
   (later 12.0 (destroy self)))
+
+(define-method destroy bubble ()
+  (set-buffer-bubble nil)
+  (block%destroy self))
 
 (define-method draw bubble ()
   (multiple-value-bind (top left right bottom)

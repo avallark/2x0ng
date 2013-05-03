@@ -153,6 +153,7 @@
     (start-session)))
 
 (define-buffer 2x0ng
+  (bubble :initform nil)
   (default-events 
      :initform
      '(((:r :control) :reset-game)
@@ -177,6 +178,9 @@
        ;; ((:d :control) :drop-selection))))
 
 ;;; Disable mouse editing
+
+(defun set-buffer-bubble (bubble)
+  (setf (field-value :bubble (current-buffer)) bubble))
 
 (define-method handle-point-motion 2x0ng (x y))
 (define-method press 2x0ng (x y &optional button))
@@ -242,7 +246,9 @@
        :blend :additive 
        :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
 
-
-;  (when (bubblep thing) (draw thing)))
+(define-method draw 2x0ng ()
+  (buffer%draw self)
+  (when (blockyp %bubble) (draw %bubble)))
+	
 
 ;;; 2x0ng.lisp ends here
