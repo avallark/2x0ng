@@ -530,7 +530,7 @@
 (defparameter *vent-images* '("vent.png" "vent2.png" "vent3.png" "vent4.png" "vent5.png"))
 
 (define-block cloud 
-  :timer 400
+  :timer 230
   :collision-type :passive
   :tags '(:cloud)
   :image "vent.png")
@@ -593,7 +593,7 @@
       (percent-of-time 3
 	(when (< (distance-to-cursor self) 350)
 	  (setf timer 20))))
-    (percent-of-time 0.6
+    (percent-of-time 0.3
       (drop self (new 'cloud) 40 40))))
 
 (define-method damage vent (points) nil)
