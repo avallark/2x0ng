@@ -854,8 +854,8 @@
       (setf image-index 
 	    (mod (1- image-index) 
 		 (length *reactor-images*)))
-      (drop self (new 'bullet fire-heading :radius 10)
-	    (/ width 2) (/ height 2))
+      (percent-of-time 40 (drop self (new 'bullet fire-heading :radius 10)
+				(/ width 2) (/ height 2)))
       (incf fire-heading %angle)
       (incf heading (radian-angle 2))
       (percent-of-time 1 (setf heading (random (* 2 pi))))
