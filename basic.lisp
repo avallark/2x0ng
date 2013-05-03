@@ -156,7 +156,7 @@
 	(let ((hazard (random-choose hazards)))
 	  (when hazard 
 	    (if (eq 'tracer hazard) 
-		(new (random-choose '(paddle paddle paddle tracer)))
+		(new (random-choose '(paddle paddle paddle paddle tracer)))
 		(new hazard))))
 	(bulkhead))))
 
