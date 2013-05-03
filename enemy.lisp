@@ -911,8 +911,8 @@
   (when (robotp thing)
     (die thing))
   (when (brickp thing)
-    (restore-location self)
-    (setf %stopped t)))
+    (make-sparks %x %y)
+    (destroy self)))
 
 (defun biclopsp (thing)
   (and (blockyp thing)

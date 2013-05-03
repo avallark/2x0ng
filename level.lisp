@@ -407,26 +407,25 @@
       (mixed-up
        ;;
        (mixed-down
-	(gated A (bricks C))
+	(gated A (bricks D))
 	(hazard)
-	(bricks B)
+	(bricks A)
 	(gated D
-	       (mixed-up
-		(mixed-up 
-		 (hazard)
-		 (gated B 
-			(randomly (hazard)
-				  (bricks A)))
-		 (hazard)
-		 (bricks (or *required-color* D)))))
-	 (bricks D)
-	 (hazard))
+	       (mixed-up 
+		(hazard)
+		(gated B 
+		       (randomly (hazard)
+				 (bricks C)))
+		(hazard)
+		(bricks B)))
+	(bricks D)
+	(hazard))
        ;;
        (mixed-down
-	(gated D
+	(gated B
 	       (randomly
 		(hazard) 
-		(gated (random-color) 
+		(gated A
 		       (bricks C)) 
 		(hazard) 
 		(bricks A)))
@@ -447,18 +446,16 @@
 				      (make-exit (derange (theme-colors)))))))))
 	;;
 	(mixed-down
-	 (mixed-up (gated C
-			  (skewed (bricks B) (hazard) (bricks D)))
-		   (bricks A)
-		   (gated B (randomly
-			     (skewed (hazard)
-				     (bricks A)
-				     (hazard))
-			     (mixed-up
-			      (bricks (or *required-color* C))
-			      (bricks B)
-			      (hazard)
-			      (bricks (random-color))))))))))))
+	 (skewed (bricks B) (hazard) (bricks C))
+	 (gated B (randomly
+		   (skewed (hazard)
+			   (bricks A)
+			   (hazard))
+		   (mixed-up
+		    (bricks C)
+		    (bricks B)
+		    (hazard)
+		    (bricks (random-color)))))))))))
 
   
 (defun make-puzzle-4 (colors)
