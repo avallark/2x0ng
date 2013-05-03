@@ -154,7 +154,10 @@
   (let ((hazards (level-hazards)))
     (if hazards 
 	(let ((hazard (random-choose hazards)))
-	  (when hazard (new hazard)))
+	  (when hazard 
+	    (if (eq 'tracer hazard) 
+		(new (random-choose '(paddle paddle tracer)))
+		(new hazard))))
 	(bulkhead))))
 
 (defun make-wildcard ()

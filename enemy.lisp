@@ -13,7 +13,7 @@
 (define-block trail
   (tags :initform '(:trail :enemy))
   (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
-  (counter :initform 200)
+  (counter :initform 190)
   (collision-type :initform :passive)
   (height :initform 5)
   (width :initform 5))
