@@ -407,26 +407,27 @@
       (mixed-up
        ;;
        (mixed-down
-	(gated A (bricks D))
+	(gated A (bricks C))
 	(hazard)
-	(bricks A)
+	(bricks B)
 	(gated D
-	       (mixed-up 
-		(hazard)
-		(gated B 
-		       (randomly (hazard)
-				 (bricks C)))
-		(hazard)
-		(bricks B)))
-	(bricks D)
-	(hazard))
+	       (mixed-up
+		(mixed-up 
+		 (hazard)
+		 (gated B 
+			(randomly (hazard)
+				  (bricks A)))
+		 (hazard)
+		 (bricks C))))
+	 (bricks D)
+	 (hazard)))
        ;;
        (mixed-down
-	(gated B
+	(gated D
 	       (randomly
 		(hazard) 
-		(gated A
-		       (bricks C)) 
+		(gated (random-color) 
+		       (bricks B)) 
 		(hazard) 
 		(bricks A)))
 	(with-fortification
@@ -445,17 +446,73 @@
 			  (mixed-down (wildcard)
 				      (make-exit (derange (theme-colors)))))))))
 	;;
-	(mixed-down
-	 (skewed (bricks B) (hazard) (bricks C))
-	 (gated B (randomly
-		   (skewed (hazard)
-			   (bricks A)
-			   (hazard))
-		   (mixed-up
-		    (bricks C)
-		    (bricks B)
-		    (hazard)
-		    (bricks (random-color)))))))))))
+	(gated B (randomly
+		  (skewed (hazard)
+			  (bricks A)
+			  (hazard))
+		  (mixed-up
+		   (bricks C)
+		   (bricks D)
+		   (hazard)
+		   (bricks (random-color)))))))))
+
+;; (defun make-puzzle-4b (colors)
+;;   (assert (= 4 (length colors)))
+;;   (let ((key (random-choose colors)))
+;;     (destructuring-bind (A B C D) 
+;; 	(derange colors)
+;;       (mixed-up
+;;        ;;
+;;        (mixed-down
+;; 	(gated A (bricks D))
+;; 	(hazard)
+;; 	(bricks A)
+;; 	(gated D
+;; 	       (mixed-up 
+;; 		(hazard)
+;; 		(gated B 
+;; 		       (randomly (hazard)
+;; 				 (bricks C)))
+;; 		(hazard)
+;; 		(bricks B)))
+;; 	(bricks D)
+;; 	(hazard))
+;;        ;;
+;;        (mixed-down
+;; 	(gated B
+;; 	       (randomly
+;; 		(hazard) 
+;; 		(gated A
+;; 		       (bricks C)) 
+;; 		(hazard) 
+;; 		(bricks A)))
+;; 	(with-fortification
+;; 	    (with-bulkheads
+;; 		(gated C
+;; 		       (mixed-up
+;; 			(skewed (hazard) (bricks B))
+;; 			(hazard)
+;; 			(bordered
+;; 			 (mixed-down 
+;; 			  (gated A (bricks (or *required-color* B)))
+;; 			  (hazard)
+;; 			  (mixed-up (hazard)
+;; 				    (bricks A))))
+;; 			(let ((*puzzle-border* 14))
+;; 			  (mixed-down (wildcard)
+;; 				      (make-exit (derange (theme-colors)))))))))
+;; 	;;
+;; 	(mixed-down
+;; 	 (skewed (bricks B) (hazard) (bricks C))
+;; 	 (gated B (randomly
+;; 		   (skewed (hazard)
+;; 			   (bricks A)
+;; 			   (hazard))
+;; 		   (mixed-up
+;; 		    (bricks C)
+;; 		    (bricks B)
+;; 		    (hazard)
+;; 		    (bricks (random-color)))))))))))
 
   
 (defun make-puzzle-4 (colors)
