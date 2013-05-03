@@ -574,8 +574,7 @@
 	(singleton (new 'reactor))
 	(themed-row-buffer 30)
 	(singleton (new 'barrier))
-	(singleton (new 'barrier))
-	(themed-row-buffer 30)))
+	(singleton (new 'barrier))))
    (with-automatic-padding (singleton (new 'barrier)))
    (with-automatic-padding (singleton (new 'exit)))))
   
