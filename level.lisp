@@ -454,7 +454,12 @@
 		   (bricks (or *required-color* C))
 		   (bricks B)
 		   (hazard)
-		   (bricks (random-color)))))))))
+		   (bricks (random-color)))))
+	(skewed (hazard)
+		(bricks A)
+		(hazard) 
+		(bricks C)
+		(bricks (random-color)))))))
 
   
 (defun make-puzzle-4 (colors)
