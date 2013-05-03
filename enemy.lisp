@@ -13,7 +13,7 @@
 (define-block trail
   (tags :initform '(:trail :enemy))
   (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
-  (counter :initform 180)
+  (counter :initform 200)
   (collision-type :initform :passive)
   (height :initform 5)
   (width :initform 5))
@@ -930,7 +930,7 @@
   (unless (minusp %clock) (decf %clock))
   (unless (plusp %clock)
     (when (> (with-difficulty 300 400 500) (distance-to-cursor self))
-      (percent-of-time (with-difficulty 1 1.5 1.7 2.0 2.2 2.4)
+      (percent-of-time (with-difficulty 0.6 0.8 1 1.1 1.3 1.5)
 	(drop self (new 'wreckage (heading-to-cursor self)) 10 2)))
     (percent-of-time 3 (setf %direction (random-direction)))
     (move-toward self %direction (with-difficulty 1 1.8 2.5 3))))
