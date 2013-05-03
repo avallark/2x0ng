@@ -111,8 +111,8 @@
     ;; 10
     (:difficulty 4 :colors 4 :hazards (wave paddle hole) :wildcards nil)
     (:difficulty 4 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
-    (:difficulty 5 :colors 3 :hazards (base paddle wave) :wildcards (ghost wave biclops))
-    (:difficulty 5 :colors 4 :hazards (base paddle tracer) :wildcards (rook))
+    (:difficulty 5 :colors 3 :hazards (base paddle tracer) :wildcards (ghost wave biclops))
+    (:difficulty 5 :colors 4 :hazards (base paddle wave) :wildcards (rook))
     (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards nil)
     ;; 15
     (:difficulty 5 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
