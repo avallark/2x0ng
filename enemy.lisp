@@ -757,7 +757,7 @@
   :hp 12
   :tags '(:rook :enemy :target :boss)
   :timer 40
-  :shield-pieces 20
+  :shield-pieces 10
   :fleeing nil)
 
 (define-method deploy-shield rook (pieces)
