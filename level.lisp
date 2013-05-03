@@ -418,7 +418,7 @@
 			(randomly (hazard)
 				  (bricks A)))
 		 (hazard)
-		 (bricks (or *required-color* B)))))
+		 (bricks (or *required-color* D)))))
 	 (bricks D)
 	 (hazard))
        ;;
@@ -446,15 +446,19 @@
 			  (mixed-down (wildcard)
 				      (make-exit (derange (theme-colors)))))))))
 	;;
-	(gated B (randomly
-		  (skewed (hazard)
-			  (bricks A)
-			  (hazard))
-		  (mixed-up
-		   (bricks (or *required-color* C))
-		   (bricks B)
-		   (hazard)
-		   (bricks (random-color))))))))))
+	(mixed-down
+	 (mixed-up (gated C
+			  (skewed (bricks B) (hazard) (bricks D)))
+		   (bricks A)
+		   (gated B (randomly
+			     (skewed (hazard)
+				     (bricks A)
+				     (hazard))
+			     (mixed-up
+			      (bricks (or *required-color* C))
+			      (bricks B)
+			      (hazard)
+			      (bricks (random-color))))))))))))
 
   
 (defun make-puzzle-4 (colors)
