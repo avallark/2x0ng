@@ -564,19 +564,18 @@
 (defun make-reactor-level ()
   (stacked-up 
    (with-automatic-padding (singleton (new 'barrier)))
-   (themed-row-buffer 40)
+   (themed-row-buffer 30)
    (with-automatic-padding (singleton (new 'barrier)))
    (with-bulkheads
        (stacked-up
-	(themed-row-buffer 40)
+	(themed-row-buffer 30)
 	 (singleton (new 'barrier))
 	(singleton (new 'barrier))
 	(singleton (new 'reactor))
+	(themed-row-buffer 30)
 	(singleton (new 'barrier))
 	(singleton (new 'barrier))
-	(themed-row-buffer 40)))
-   (with-automatic-padding (singleton (new 'barrier)))
-   (themed-row-buffer 40)
+	(themed-row-buffer 30)))
    (with-automatic-padding (singleton (new 'barrier)))
    (with-automatic-padding (singleton (new 'exit)))))
   
