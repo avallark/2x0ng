@@ -100,7 +100,7 @@
   (let ((scroll (new 'scroll)))
     (insert scroll 0 720)
     (resize scroll 1280 720))
-  (play-music "theme" :loop t))
+  (play-music "theme.ogg" :loop t))
 
 ;;; Help screen
 
@@ -140,16 +140,21 @@
   (setf *use-antialiased-text* nil)
 
   (setf *frame-rate* 30)
-  (setf *dt* 33)
   
   (disable-key-repeat) 
   
   (setf *font* "sans-mono-bold-11") 
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
+
+    ;; (setf *preload-images* t)
+    ;; (setf *preload-samples* t)
+    (index-pending-resources)
+    (preload-resources)
+
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
-    (play-music "rekall" :loop t)
+    (play-music "rekall.ogg" :loop t)
     (bind-event (current-buffer)  '(:space) :start-playing)
     (start-session)))
 
@@ -158,6 +163,7 @@
   (default-events 
      :initform
      '(((:r :control) :reset-game)
+       ((:q :control) :quit-game)
        ((:h :control) :help)
        ((:m :control) :toggle-music) 
        ((:p :control) :toggle-pause)
@@ -188,6 +194,10 @@
 (define-method release 2x0ng (x y &optional button))
 (define-method tap 2x0ng (x y))
 (define-method alternate-tap 2x0ng (x y))
+
+(define-method quit-game 2x0ng ()
+  (shut-down)
+  (quit))
 
 ;;; Various toggles
 

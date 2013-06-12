@@ -301,7 +301,7 @@
   (when (and %alive (not %shielded))
     (when (humanp self) 
       (play-sample "analog-death.wav")
-      (play-music "nexttime")
+      (play-music "nexttime.ogg")
       (drop-object (current-buffer) 
 		   (new 'bubble (format nil "You died on level ~A. Press Control-R to reset, or Control-H for help." *level*)
 			"sans-mono-bold-16")))

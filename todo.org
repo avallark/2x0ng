@@ -1,9 +1,7 @@
-** TODO increase border thickness at exit to prevent cheating
+** DONE increase border thickness at exit to prevent cheating
+   CLOSED: [2013-05-03 Fri 20:21]
 
-** DONE fix framerate issues with CCL
-   CLOSED: [2013-04-17 Wed 00:42]
-
-** TODO reduce size of largest levels
+** TODO [#A] Fix crash when ball strikes 5th color brick in color-blindness mode
 
 ** TODO [#A] Music review / final tweaks
 ** TODO [#A] blue-yellow colorblindness mode
@@ -619,6 +617,23 @@ Read our privacy statement:
    CLOSED: [2013-04-11 Thu 23:16]
    :PROPERTIES:
    :ARCHIVE_TIME: 2013-04-14 Sun 03:49
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+** DONE reduce size of largest levels
+   CLOSED: [2013-05-03 Fri 20:21]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-05-03 Fri 20:21
+   :ARCHIVE_FILE: ~/2x0ng/todo.org
+   :ARCHIVE_CATEGORY: todo
+   :ARCHIVE_TODO: DONE
+   :END:
+
+** DONE fix framerate issues with CCL
+   CLOSED: [2013-04-17 Wed 00:42]
+   :PROPERTIES:
+   :ARCHIVE_TIME: 2013-05-03 Fri 20:21
    :ARCHIVE_FILE: ~/2x0ng/todo.org
    :ARCHIVE_CATEGORY: todo
    :ARCHIVE_TODO: DONE

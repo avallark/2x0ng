@@ -60,37 +60,37 @@
 ;;; Music
 
 (defresource
-    (:name "remembering-xalcyon" :type :music :file "remembering-xalcyon.ogg" :properties (:volume 30))
-    (:name "xioforms" :type :music :file "xioforms.ogg" :properties (:volume 60))
-  (:name "xiomacs" :type :music :file "xiomacs.ogg" :properties (:volume 30))
-  (:name "phong" :type :music :file "phong.ogg" :properties (:volume 10))
-  (:name "flyby" :type :music :file "flyby.ogg" :properties (:volume 30))
-  (:name "sparqq" :type :music :file "sparqq.ogg" :properties (:volume 30))
-  (:name "xmrio" :type :music :file "xmrio.ogg" :properties (:volume 20))
-  (:name "rappy" :type :music :file "rappy.ogg" :properties (:volume 20))
-  (:name "invec" :type :music :file "invec.ogg" :properties (:volume 60))
-  (:name "basswarp" :type :music :file "basswarp.ogg" :properties (:volume 70))
-  (:name "bootypax" :type :music :file "bootypax.ogg" :properties (:volume 60))
-  (:name "vrov" :type :music :file "vrov.ogg" :properties (:volume 24))
-  (:name "conspiracy" :type :music :file "conspiracy.ogg" :properties (:volume 60))
-  (:name "entel" :type :music :file "entel.ogg" :properties (:volume 80))
-  (:name "maxmacro" :type :music :file "maxmacro.ogg" :properties (:volume 30))
-  (:name "vedex" :type :music :file "vedex.ogg" :properties (:volume 50))
-  (:name "rekall" :type :music :file "rekall.ogg" :properties (:volume 80))
-  (:name "musicbox" :type :music :file "musicbox.ogg" :properties (:volume 50))
-  (:name "saga" :type :music :file "saga.ogg" :properties (:volume 20))
-  (:name "nexttime" :type :music :file "nexttime.ogg" :properties (:volume 80))
-  (:name "beatup" :type :music :file "beatup.ogg" :properties (:volume 40))
-  (:name "frantix" :type :music :file "frantix.ogg" :properties (:volume 12))
-  (:name "metro" :type :music :file "metro.ogg" :properties (:volume 12))
-  (:name "theme" :type :music :file "theme.ogg" :properties (:volume 12))
-  (:name "reprise" :type :music :file "reprise.ogg" :properties (:volume 7))
-  (:name "ompula" :type :music :file "ompula.ogg" :properties (:volume 30)))
+    (:name "remembering-xalcyon.ogg" :type :music :properties (:volume 30))
+    (:name "xioforms.ogg" :type :music :properties (:volume 60))
+  (:name "xiomacs.ogg" :type :music :properties (:volume 30))
+  (:name "phong.ogg" :type :music :properties (:volume 10))
+  (:name "flyby.ogg" :type :music :properties (:volume 30))
+  (:name "sparqq.ogg" :type :music :properties (:volume 30))
+  (:name "xmrio.ogg" :type :music :properties (:volume 20))
+  (:name "rappy.ogg" :type :music :properties (:volume 20))
+  (:name "invec.ogg" :type :music :properties (:volume 60))
+  (:name "basswarp.ogg" :type :music :properties (:volume 70))
+  (:name "bootypax.ogg" :type :music :properties (:volume 60))
+  (:name "vrov.ogg" :type :music  :properties (:volume 24))
+  (:name "conspiracy.ogg" :type :music :properties (:volume 60))
+  (:name "entel.ogg" :type :music  :properties (:volume 80))
+  (:name "maxmacro.ogg" :type :music  :properties (:volume 30))
+  (:name "vedex.ogg" :type :music  :properties (:volume 50))
+  (:name "rekall.ogg" :type :music  :properties (:volume 80))
+  (:name "musicbox.ogg" :type :music  :properties (:volume 50))
+  (:name "saga.ogg" :type :music  :properties (:volume 20))
+  (:name "nexttime.ogg" :type :music  :properties (:volume 80))
+  (:name "beatup.ogg" :type :music  :properties (:volume 40))
+  (:name "frantix.ogg" :type :music :properties (:volume 12))
+  (:name "metro.ogg" :type :music  :properties (:volume 12))
+  (:name "theme.ogg" :type :music  :properties (:volume 12))
+  (:name "reprise.ogg" :type :music :properties (:volume 7))
+  (:name "ompula.ogg" :type :music  :properties (:volume 30)))
 
-(defparameter *soundtrack* '("vedex" "phong"
-    "saga" "basswarp" "entel" "reprise" "flyby" "sparqq" "vrov"
-    "maxmacro" "bootypax" "musicbox" "frantix" "conspiracy" "phong"
-    "xiomacs" "xmrio" "rappy" "invec" "ompula"))
+(defparameter *soundtrack* '("vedex.ogg" "phong.ogg"
+    "saga.ogg" "basswarp.ogg" "entel.ogg" "reprise.ogg" "flyby.ogg" "sparqq.ogg" "vrov.ogg"
+    "maxmacro.ogg" "bootypax.ogg" "musicbox.ogg" "frantix.ogg" "conspiracy.ogg" "phong.ogg"
+    "xiomacs.ogg" "xmrio.ogg" "rappy.ogg" "invec.ogg" "ompula.ogg"))
 
 (defparameter *boss-music* "xioforms")
 
