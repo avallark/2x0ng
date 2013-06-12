@@ -21,7 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
-  (setf *window-title* "2x0ng v1.2")
+  (setf *window-title* "2x0ng v1.3")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -85,6 +85,7 @@
 (defparameter *ending-scroll-speed* 0.4)
 
 (define-buffer ending-screen
+  (quadtree-depth :initform 4)
   (width :initform 1280)
   (height :initform 720)
   (background-color :initform "black"))
@@ -107,6 +108,7 @@
 (defresource "help.png")
 
 (define-buffer help-screen
+  (quadtree-depth :initform 3)
   (game :initform nil)
   (background-image :initform "help.png"))
 
@@ -126,7 +128,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *window-title* "2x0ng v1.2")
+  (setf *window-title* "2x0ng v1.3")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
