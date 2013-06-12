@@ -35,8 +35,8 @@
      "pale green" "hot pink" "red")
     (:radium "dark olive green" "gold"
      "cyan" "chartreuse" "magenta")
-    (:krez "black" "maroon2" 
-     "green" "yellow" "orange")))
+    (:krez "dark orchid" "maroon2" 
+     "green" "red" "yellow")))
 
 (defparameter *four-brick-themes*
   '((:zerk "black" "gray40" 
@@ -119,7 +119,7 @@
     (:difficulty 6 :colors 3 :hazards (hole paddle base wave) :wildcards (nil rook))
     (:difficulty 6 :colors 2 :hazards (tracer wave) :wildcards (biclops))
     (:difficulty 6 :colors 5 
-     :music ("xioforms"))))
+     :music ("xioforms.ogg"))))
 
 (defun nth-level (level)
   (nth (mod level (length *levels*)) *levels*))

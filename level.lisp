@@ -92,7 +92,7 @@
     "maxmacro.ogg" "bootypax.ogg" "musicbox.ogg" "frantix.ogg" "conspiracy.ogg" "phong.ogg"
     "xiomacs.ogg" "xmrio.ogg" "rappy.ogg" "invec.ogg" "ompula.ogg"))
 
-(defparameter *boss-music* "xioforms")
+(defparameter *boss-music* "xioforms.ogg")
 
 ;; Wrapping things about one another
 

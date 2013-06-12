@@ -369,7 +369,11 @@
     (1 "hash1.png")
     (2 "hash2.png")
     (3 "hash3.png")
-    (4 "hash4.png")))
+    (4 "hash4.png")
+    (5 "hash1.png")
+    (6 "hash2.png")
+    (7 "hash3.png")
+    (8 "hash4.png")))
 
 (defresource "gate1-hash1.png")
 (defresource "gate1-hash2.png")
