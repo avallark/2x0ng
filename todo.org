@@ -4,6 +4,7 @@
 ** TODO [#A] Fix crash when ball strikes 5th color brick in color-blindness mode
 
 ** TODO [#A] Music review / final tweaks
+
 ** TODO [#A] blue-yellow colorblindness mode
    http://www.cookbook-r.com/Graphs/Colors_%28ggplot2%29/#a-colorblind-friendly-palette
 ** TODO [#B] BUGFIX: ball getting stuck on enemy for any reason (detect when distance to enemy does not decrease)

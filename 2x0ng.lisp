@@ -21,7 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
-  (setf *window-title* "2x0ng v1.3")
+  (setf *window-title* "2x0ng v1.4")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -37,6 +37,7 @@
   (height :initform 720)
   (level :initform 1)
   (clock :initform 20)
+  (quadtree-depth :initform 4)
   (background-image :initform "loading.png"))
 
 (defun loading-screen (&optional (level 1))
@@ -53,7 +54,7 @@
   (stop-dialogue)
   ;; either win game or go to next level
   (let ((old-buffer (current-buffer)))
-    (if (> level 18)
+    (if (> level 16)
 	(show-ending)
 	(progn 
 	  (switch-to-buffer (loading-screen level))
@@ -71,8 +72,8 @@
 (defresource "title.png")
 
 (define-buffer title 
-  (quadtree-depth :initform 6)
-    (background-image :initform "title.png"))
+  (quadtree-depth :initform 4)
+  (background-image :initform "title.png"))
 
 (define-method start-playing title ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
@@ -128,7 +129,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *window-title* "2x0ng v1.3")
+  (setf *window-title* "2x0ng v1.4")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
@@ -153,6 +154,8 @@
     ;; (setf *preload-samples* t)
     (index-pending-resources)
     (preload-resources)
+
+    ;; (rebuild-quadtree '(0 0 100 100) 11)
 
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))

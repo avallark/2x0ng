@@ -40,11 +40,11 @@
 
 (defparameter *four-brick-themes*
   '((:zerk "black" "gray40" 
-     "maroon2" "green" "yellow" "orange")
+     "maroon2" "yellow green" "orange" "cornflower blue")
     (:tandy "DarkSlateBlue" "gray80" 
      "yellow" "green" "cyan" "deep pink")
     (:zendium "gray17" "orchid"
-     "deep pink" "deep sky blue" "yellow" "orange")
+     "deep pink" "deep sky blue" "chartreuse" "orange")
     (:command "dim gray" "yellow" 
      "cyan" "deep pink" "red" "green yellow")))
 
@@ -113,11 +113,9 @@
     (:difficulty 4 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
     (:difficulty 5 :colors 3 :hazards (base paddle tracer) :wildcards (ghost wave biclops))
     (:difficulty 5 :colors 4 :hazards (base paddle wave) :wildcards (rook))
-    (:difficulty 5 :colors 3 :hazards (base hole wave) :wildcards nil)
+    (:difficulty 6 :colors 3 :hazards (base hole wave) :wildcards nil)
     ;; 15
-    (:difficulty 5 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
-    (:difficulty 6 :colors 3 :hazards (hole paddle base wave) :wildcards (nil rook))
-    (:difficulty 6 :colors 2 :hazards (tracer wave) :wildcards (biclops))
+    (:difficulty 6 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
     (:difficulty 6 :colors 5 
      :music ("xioforms.ogg"))))
 
