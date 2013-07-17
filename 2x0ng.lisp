@@ -129,6 +129,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
+  (setf *lives* *initial-lives*)
   (setf *window-title* "2x0ng v1.5")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
