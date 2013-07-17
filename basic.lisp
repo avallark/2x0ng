@@ -102,8 +102,8 @@
 (defparameter *levels* 
   '((:difficulty 0 :colors 2 :hazards nil :wildcards nil)
     ;; 1
-    (:difficulty 1 :colors 2 :hazards (hole) :wildcards nil) 
-    (:difficulty 1 :colors 2 :hazards (hole paddle) :wildcards nil)
+    (:difficulty 1 :colors 2 :hazards nil :wildcards nil) 
+    (:difficulty 1 :colors 3 :hazards (hole paddle) :wildcards nil)
     (:difficulty 2 :colors 3 :hazards (hole hole paddle tracer) :wildcards nil)
     (:difficulty 2 :colors 3 :hazards (hole tracer paddle) :wildcards (ghost thief nil))
     ;; 5
@@ -152,6 +152,14 @@
 (defun bulkhead ()
   (new 'wall 200 20))
 
+(define-block nothing)
+
+(define-method draw nothing () nil)
+(define-method update nothing () (destroy self))
+
+(defun nothing ()
+  (new 'nothing))
+
 (defun make-hazard ()
   (let ((hazards (level-hazards)))
     (if hazards 
@@ -160,7 +168,7 @@
 	    (if (eq 'tracer hazard) 
 		(new (random-choose '(paddle paddle paddle paddle tracer)))
 		(new hazard))))
-	(bulkhead))))
+	(nothing))))
 
 (defun make-wildcard ()
   (let ((wildcards (level-wildcards)))

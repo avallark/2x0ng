@@ -1,5 +1,11 @@
 (in-package :2x0ng)
 
+;; Greeting
+
+(defresource "greeting.png")
+
+(define-block greeting :image "greeting.png" :collision-type nil)
+
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))
@@ -617,9 +623,11 @@
 	    (%vertical-scrolling-margin buffer) 4/7)
       ;;
       (trim (current-buffer))
-      ;; player 1
-      (or (percent-of-time 50
-	    (prog1 t (drop-object (current-buffer) robot (units 4) (units 5))))
+      ;; player 1 always goes top left on level 1
+      (if (or (= *level* 1)
+	      ;; otherwise, randomly choose a corner
+	      (percent-of-time 50 t))
+	  (drop-object (current-buffer) robot (units 4) (units 3.4))
 	  (drop-object (current-buffer) robot 
 		       (- (%width (current-buffer))
 			  (units 12)) 
@@ -633,13 +641,12 @@
       ;; bugfix
       (follow-with-camera (current-buffer) robot)
       (raise-shield robot)
-      ;; give some instructions
-      (drop robot
-	    (new 'bubble 
-		 (concatenate 'string
-			      (format nil "LEVEL ~S          " *level*) 
-			      "Use the arrow keys to move, spacebar (or Shift) to fire. Press Control-H for help.")
-		 "sans-mono-bold-16"))
+      ;; maybe show greeting or level number
+      (if (= *level* 1)
+	  (drop-object (current-buffer) (new 'greeting) (units 8) (units 2.8))
+	  (drop robot
+		(new 'bubble (format nil "LEVEL ~S        ~S LIVES REMAINING  " *level* *lives*)
+		     "sans-mono-bold-16")))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))
       	(play-music (random-choose (level-music)) :loop t))
