@@ -174,6 +174,7 @@
        ((:p :control) :toggle-pause)
        ((:leftbracket) :toggle-red-green-color-blindness)
        ((:j :control) :toggle-joystick)
+       ((:n :control) :next-joystick)
        ;;
        ;; ((:x :alt) :command-prompt)
        ;; ((:g :control) :escape)
@@ -225,6 +226,13 @@
 
 (define-method help 2x0ng () 
   (switch-to-buffer (help-buffer)))
+
+(define-method next-joystick 2x0ng ()
+  (let ((n (number-of-joysticks))
+	(i *joystick-device-number*))
+    (reset-joystick (mod (1+ i) n))
+    (drop (cursor) 
+	  (new 'bubble (format nil "Choosing joystick number ~D" *joystick-device-number*)))))
 
 (define-method regenerate 2x0ng () (reset-level))
 
