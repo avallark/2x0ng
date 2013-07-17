@@ -113,7 +113,6 @@
   (walk-clock :initform 0)
   (step-clock :initform 0)
   (kick-clock :initform 0)
-
   ;; we want to catch the beginning of firing, even if the input
   ;; polling in `update' misses it. (see below)
   (default-events :initform '(((:space) (strong-kick)))))
@@ -335,16 +334,19 @@
 
 ;;; Control logic driven by the above (possibly overridden) methods.
 
-(define-method update robot ()
-  (when (dialogue-playing-p) (update-dialogue))
+(define-method drop-waypoint-maybe robot (&optional force)
   ;; possibly show waypoint
   (let ((exit (find-exit)))
-    (when (and exit (> (distance-between exit (cursor)) *waypoint-distance*))
-      (decf *waypoint-clock*)
-      (unless (plusp *waypoint-clock*)
+    (when (or force (and exit (> (distance-between exit (cursor)) *waypoint-distance*)))
 	(drop self (new 'waypoint))
 	(play-sound self "shield.wav")
 	(setf *waypoint-clock* *waypoint-interval*))))
+
+(define-method update robot ()
+  (when (dialogue-playing-p) (update-dialogue))
+  (decf *waypoint-clock*)
+  (unless (plusp *waypoint-clock*)
+    (drop-waypoint-maybe self))
   ;; possibly lower shields
   (when %shielded
     (decf %shield-clock)

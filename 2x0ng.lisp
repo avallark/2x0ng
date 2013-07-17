@@ -170,6 +170,7 @@
      :initform
      '(((:r :control) :reset-life)
        ((:q :control) :quit-game)
+       ((:y :control) :show-waypoint)
        ((:h :control) :help)
        ((:m :control) :toggle-music) 
        ((:p :control) :toggle-pause)
@@ -279,6 +280,9 @@
        (- y (units 0.3) (image-height "boss-tag.png"))
        :blend :additive 
        :opacity (+ 0.5 (sin (* 0.3 *updates*)))))))
+
+(define-method show-waypoint 2x0ng ()
+  (drop-waypoint-maybe (cursor) :force))
 
 (define-method draw 2x0ng ()
   (buffer%draw self)
