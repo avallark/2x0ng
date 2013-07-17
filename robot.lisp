@@ -303,7 +303,10 @@
       (play-sample "analog-death.wav")
       (play-music "nexttime.ogg")
       (drop-object (current-buffer) 
-		   (new 'bubble (format nil "You died on level ~A. Press Control-R to reset, or Control-H for help." *level*)
+		   (new 'bubble 
+			(if (= *lives* 0)
+			    (format nil "You died on level ~A. GAME OVER. Press Control-R to try again." *level*)
+			    (format nil "You died on level ~A, with ~A lives remaining. Press Control-R to continue. " *level* *lives*))
 			"sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")

@@ -167,7 +167,7 @@
   (bubble :initform nil)
   (default-events 
      :initform
-     '(((:r :control) :reset-game)
+     '(((:r :control) :reset-life)
        ((:q :control) :quit-game)
        ((:h :control) :help)
        ((:m :control) :toggle-music) 
@@ -256,6 +256,15 @@
 
 (define-method reset-game 2x0ng (&optional (level 1))
   (begin-game level))
+
+(define-method reset-life 2x0ng ()
+  (if (zerop *lives*)
+      (progn 
+	(setf *lives* *initial-lives*)
+	(begin-game 1))
+      (progn
+	(decf *lives*)
+	(begin-game *level*))))
 
 (defresource "boss-tag.png")
 (defresource "boss-tag2.png")

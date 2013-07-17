@@ -1,5 +1,9 @@
 (in-package :2x0ng)
 
+(defparameter *initial-lives* 3)
+
+(defparameter *lives* *initial-lives*)
+
 (defparameter *unit* 14)
 
 (defun units (n) (* n *unit*))
