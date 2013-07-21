@@ -1,7 +1,8 @@
 (in-package :2x0ng)
 
-(defun report-database ()
-  (message "Database contains ~S objects." (hash-table-count blocky::*database*)))
+(defparameter *initial-retries* 2)
+
+(defparameter *retries* *initial-retries*)
 
 ;;; Dialogue
 
@@ -110,6 +111,7 @@
   (direction :initform :up)
   (kick-direction :initform :up)
   ;; timers
+  (retry-clock :initform (seconds->frames 8))
   (walk-clock :initform 0)
   (step-clock :initform 0)
   (kick-clock :initform 0)
@@ -303,9 +305,9 @@
       (play-music "nexttime.ogg")
       (drop-object (current-buffer) 
 		   (new 'bubble 
-			(if (= *lives* 0)
-			    (format nil "You died on level ~A. GAME OVER. Press Control-R to try again." *level*)
-			    (format nil "You died on level ~A, with ~A lives remaining. Press Control-R to continue. " *level* *lives*))
+			(if (= *retries* 0)
+			    (format nil "You died on level ~A. GAME OVER. Press Control-R to reset at level 1." *level*)
+			    (format nil "You died on level ~A. You have ~A retries remaining. Retrying..." *level* *retries*))
 			"sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
@@ -342,6 +344,13 @@
 	(play-sound self "shield.wav")
 	(setf *waypoint-clock* *waypoint-interval*))))
 
+(define-method retry-maybe robot ()
+  (when (and (not %alive)
+	     (zerop %retry-clock)
+	     (plusp *retries*))
+    (decf *retries*)
+    (setf (field-value :retrying (current-buffer)) t)))
+
 (define-method update robot ()
   (when (dialogue-playing-p) (update-dialogue))
   (decf *waypoint-clock*)
@@ -361,6 +370,11 @@
   ;; carry ball
   (when (and %carrying *ball*)
     (move-to *ball* %x %y))
+  ;; auto retry timeout
+  (when (not %alive)
+    (if (plusp %retry-clock)
+	(decf %retry-clock)
+	(retry-maybe self)))
   ;; normal update
   (when %alive
     (resize self (* 2 *unit*) (* 2 *unit*))
@@ -425,6 +439,7 @@
     (when (blockyp *ball*)
       (destroy *ball*)
       (setf *ball* nil))
+;    (destroy self)
     (begin-game (1+ *level*)))
   (when (or (enemyp thing) (holep thing))
     (die self))

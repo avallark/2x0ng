@@ -645,7 +645,7 @@
       (if (= *level* 1)
 	  (drop-object (current-buffer) (new 'greeting) (units 8) (units 2.8))
 	  (drop robot
-		(new 'bubble (format nil "LEVEL ~S        ~S LIVES REMAINING  " *level* *lives*)
+		(new 'bubble (format nil "LEVEL: ~S        RETRIES REMAINING: ~S " *level* *retries*)
 		     "sans-mono-bold-16")))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))

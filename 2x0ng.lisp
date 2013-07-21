@@ -129,7 +129,7 @@
 
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
-  (setf *lives* *initial-lives*)
+  (setf *retries* *initial-retries*)
   (setf *window-title* "2x0ng v1.5")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
@@ -166,9 +166,10 @@
 
 (define-buffer 2x0ng
   (bubble :initform nil)
+  (retrying :initform nil)
   (default-events 
      :initform
-     '(((:r :control) :reset-life)
+     '(((:r :control) :reset-game)
        ((:q :control) :quit-game)
        ((:y :control) :show-waypoint)
        ((:h :control) :help)
@@ -176,6 +177,7 @@
        ((:p :control) :toggle-pause)
        ((:leftbracket) :toggle-red-green-color-blindness)
        ((:j :control) :toggle-joystick)
+       ;;       ((:f8) :cheat)
        ((:n :control) :next-joystick)
        ;;
        ;; ((:x :alt) :command-prompt)
@@ -191,6 +193,10 @@
        ;; ((:f12) :transport-toggle-play)
        ;; ((:g :control) :escape)
        ;; ((:d :control) :drop-selection))))
+
+(define-method cheat 2x0ng ()
+  (room)
+  (next-level))
 
 ;;; Disable mouse editing
 
@@ -257,16 +263,12 @@
       (when (bubblep thing) (destroy thing)))))
 
 (define-method reset-game 2x0ng (&optional (level 1))
+  (setf *retries* *initial-retries*)
   (begin-game level))
 
-(define-method reset-life 2x0ng ()
-  (if (zerop *lives*)
-      (progn 
-	(setf *lives* *initial-lives*)
-	(begin-game 1))
-      (progn
-	(decf *lives*)
-	(begin-game *level*))))
+(define-method update 2x0ng ()
+  (buffer%update self)
+  (when %retrying (begin-game *level*)))
 
 (defresource "boss-tag.png")
 (defresource "boss-tag2.png")
