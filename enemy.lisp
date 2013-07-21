@@ -197,7 +197,7 @@
     (:name "monitor4" :type :image :file "monitor4.png"))
 
 (define-block monitor 
-  (hp :initform 3) fleeing
+  (hp :initform 3) fleeing growing
   (direction :initform (random-choose '(:up :down)))
   (tags :initform '(:monitor :enemy :target))
   (image :initform "monitor2"))
@@ -206,6 +206,7 @@
   (with-difficulty 1.1 1.2 1.25 1.3 1.35 1.4 1.45 1.5))
 
 (define-method grow monitor ()
+  (setf %growing t)
   (let ((size (+ %width (monitor-scaling-speed))))
     (when (< size 160)
       (resize self size size)
@@ -227,6 +228,24 @@
 	    (getf '(:up :left :left :down :down :right :right :up)
 		  (or %direction :up)))))
 
+(define-method bounding-box monitor ()
+  (when (null %height)
+    (resize-to-image self))
+  (with-field-values (x y width height) self
+    (let ((em (* 0.15 width)))
+      (if %growing
+	  ;; trim corners a little when big
+	  (values
+	   (cfloat (+ y em))
+	   (cfloat (+ x em))
+	   (cfloat (- (+ x width) em))
+	   (cfloat (- (+ y height) em)))
+	  (values 
+	   (cfloat y)
+	   (cfloat x)
+	   (cfloat (+ x width))
+	   (cfloat (+ y height)))))))
+	  
 (define-method flee monitor ()
   (setf %heading (+ pi (heading-to-cursor self)))
   (forward self 3.2))
