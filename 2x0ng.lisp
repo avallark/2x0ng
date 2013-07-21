@@ -156,8 +156,6 @@
     (index-pending-resources)
     (preload-resources)
 
-    ;; (rebuild-quadtree '(0 0 100 100) 11)
-
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
     (play-music "rekall.ogg" :loop t)
