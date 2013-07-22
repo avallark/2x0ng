@@ -208,8 +208,7 @@
 (define-method alternate-tap 2x0ng (x y))
 
 (define-method quit-game 2x0ng ()
-  (shut-down)
-  (quit))
+  (at-next-update (blocky:quit t)))
 
 ;;; Various toggles
 
