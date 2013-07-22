@@ -286,6 +286,5 @@
 (define-method draw 2x0ng ()
   (buffer%draw self)
   (when (blockyp %bubble) (draw %bubble)))
-	
 
 ;;; 2x0ng.lisp ends here
