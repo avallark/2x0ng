@@ -469,6 +469,7 @@
 (define-block ball 
   :kicker nil
   :target nil
+  :target-distance nil
   :seeking nil
   :height *ball-size* :width *ball-size*
   :color "white"
@@ -540,7 +541,9 @@
       (first enemies))))
 
 (define-method update ball ()
-  (when (not (blockyp %target)) (setf %target nil))
+  (when (not (blockyp %target)) 
+    (setf %target nil)
+    (setf %target-distance nil))
   (when (plusp %kick-clock)
     (decf %kick-clock))
   (with-fields (seeking heading speed kicker) self
@@ -549,7 +552,14 @@
       (setf %seeking t))
     (if (plusp speed)
 	(if %target 
-	    (move self (heading-to-thing self %target) speed)
+	    (progn
+	      (setf %target-distance (distance-between self %target))
+	      (move self (heading-to-thing2 self %target) speed)
+	      ;; check if distance is not decreasing
+	      (when (and %target-distance
+			 (< %target-distance (distance-between self %target)))
+		(when (has-method :damage %target)
+		  (damage thing 1))))
 	    (if seeking
 		(move self (heading-to-thing self kicker) speed)
 		(move self heading speed)))

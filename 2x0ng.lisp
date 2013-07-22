@@ -69,11 +69,16 @@
   
 ;;; Title screen
 
-(defresource "title.png")
+(defresource "title-sbcl.png")
+(defresource "title-ccl.png")
+
+(defun title-screen-image ()
+  #+sbcl "title-sbcl.png"
+  #+ccl "title-ccl.png")
 
 (define-buffer title 
   (quadtree-depth :initform 4)
-  (background-image :initform "title.png"))
+  (background-image :initform (title-screen-image)))
 
 (define-method start-playing title ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
