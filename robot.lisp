@@ -111,7 +111,7 @@
   (direction :initform :up)
   (kick-direction :initform :up)
   ;; timers
-  (retry-clock :initform (seconds->frames 8))
+  (retry-clock :initform (seconds->frames 5))
   (walk-clock :initform 0)
   (step-clock :initform 0)
   (kick-clock :initform 0)
