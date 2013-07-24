@@ -504,7 +504,11 @@
 
 (define-method bounce ball ()
   (decf %bounces)
-  (if (zerop %bounces)
+  (if (or (zerop %bounces)
+	  ;; keep from leaving map
+	  (not (bounding-box-contains 
+		(multiple-value-list (bounding-box (current-buffer)))
+		(multiple-value-list (bounding-box self)))))
       (progn (make-sparks %x %y "white")
 	     (setf *ball* nil)
 	     (paint %kicker %color)

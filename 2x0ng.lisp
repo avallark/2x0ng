@@ -21,7 +21,7 @@
 (in-package :2x0ng)
 
 (eval-when (:load-toplevel) 
-  (setf *window-title* "2x0ng v1.6")
+  (setf *window-title* "2x0ng v1.7")
   (setf *default-texture-filter* :nearest)
   (setf *use-antialiased-text* nil)
   (setf *current-directory*
@@ -135,7 +135,7 @@
 (defun 2x0ng (&optional (level 1))
   (setf *level* level)
   (setf *retries* *initial-retries*)
-  (setf *window-title* "2x0ng v1.6")
+  (setf *window-title* "2x0ng v1.7")
   (setf *screen-width* 1280)
   (setf *screen-height* 720)
   (setf *nominal-screen-width* 1280)
