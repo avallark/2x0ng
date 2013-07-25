@@ -470,6 +470,7 @@
   :kicker nil
   :target nil
   :target-distance nil
+  :kicker-distance nil
   :seeking nil
   :height *ball-size* :width *ball-size*
   :color "white"
@@ -565,7 +566,16 @@
 		(when (has-method :damage %target)
 		  (damage thing 1))))
 	    (if seeking
-		(move self (heading-to-thing self kicker) speed)
+		;; return to player
+		(progn
+		  (setf %kicker-distance (distance-between self kicker))
+		  (move self (heading-to-thing self kicker) speed)
+		  ;; return to kicker if distance did not decrease
+		  (when (and %kicker-distance
+			     (< %kicker-distance (distance-between self kicker)))
+		    (multiple-value-bind (x y) (center-point kicker)
+		      (move-to self x y))))
+		;; just move forward
 		(move self heading speed)))
 	(setf %seeking nil))))
 
