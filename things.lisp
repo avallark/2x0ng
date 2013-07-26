@@ -564,7 +564,7 @@
 	      (when (and %target-distance
 			 (< %target-distance (distance-between self %target)))
 		(when (has-method :damage %target)
-		  (damage thing 1))))
+		  (damage %target 1))))
 	    (if seeking
 		;; return to player
 		(progn
