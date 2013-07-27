@@ -346,6 +346,7 @@
 
 (define-method retry-maybe robot ()
   (when (and (not %alive)
+	     (humanp self)
 	     (zerop %retry-clock)
 	     (plusp *retries*))
     (decf *retries*)
