@@ -890,6 +890,8 @@
     (destroy self)))
 
 (define-method collide reactor (thing)
+  (when (brickp thing)
+    (decay thing))
   (when (or (brickp thing) (barrierp thing) (wallp thing))
     (restore-location self)
     (setf %counter 3)

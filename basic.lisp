@@ -99,20 +99,20 @@
   '((:difficulty 0 :colors 2 :hazards nil :wildcards nil)
     ;; 1
     (:difficulty 1 :colors 2 :hazards nil :wildcards nil) 
-    (:difficulty 1 :colors 3 :hazards (hole paddle) :wildcards nil)
-    (:difficulty 2 :colors 3 :hazards (hole hole paddle tracer) :wildcards nil)
+    (:difficulty 2 :colors 3 :hazards (hole paddle) :wildcards nil)
+    (:difficulty 3 :colors 3 :hazards (hole hole paddle tracer) :wildcards nil)
     (:difficulty 3 :colors 3 :hazards (hole tracer paddle) :wildcards (ghost thief nil))
     ;; 5
-    (:difficulty 3 :colors 3 :hazards (hole hole tracer) :wildcards (biclops))
-    (:difficulty 3 :colors 3 :hazards (tracer paddle hole) :wildcards (thief ghost))
+    (:difficulty 4 :colors 3 :hazards (hole hole tracer) :wildcards (biclops))
+    (:difficulty 4 :colors 3 :hazards (tracer paddle hole) :wildcards (thief ghost))
     (:difficulty 4 :colors 4 :hazards (hole hole paddle) :wildcards (wave nil))
-    (:difficulty 4 :colors 3 :hazards (hole hole paddle) :wildcards (thief biclops))
-    (:difficulty 4 :colors 3 :hazards (paddle tracer) :wildcards (rook))
+    (:difficulty 5 :colors 3 :hazards (hole hole paddle) :wildcards (thief biclops))
+    (:difficulty 5 :colors 3 :hazards (paddle tracer) :wildcards (rook))
     ;; 10
-    (:difficulty 4 :colors 4 :hazards (wave paddle hole) :wildcards nil)
-    (:difficulty 5 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
-    (:difficulty 5 :colors 3 :hazards (base paddle tracer) :wildcards (ghost wave biclops))
-    (:difficulty 5 :colors 4 :hazards (base paddle wave) :wildcards (rook))
+    (:difficulty 5 :colors 4 :hazards (wave paddle hole) :wildcards (wave tracer))
+    (:difficulty 6 :colors 3 :hazards (paddle hole hole) :wildcards (ghost thief))
+    (:difficulty 6 :colors 3 :hazards (base paddle tracer) :wildcards (ghost wave biclops))
+    (:difficulty 6 :colors 4 :hazards (base paddle wave) :wildcards (rook))
     (:difficulty 6 :colors 3 :hazards (base hole wave) :wildcards nil)
     ;; 15
     (:difficulty 6 :colors 4 :hazards (paddle tracer wave) :wildcards (ghost rook))
@@ -162,7 +162,7 @@
 	(let ((hazard (random-choose hazards)))
 	  (when hazard 
 	    (if (eq 'tracer hazard) 
-		(new (random-choose '(paddle paddle paddle paddle tracer)))
+		(new (random-choose '(paddle paddle paddle tracer)))
 		(new hazard))))
 	(nothing))))
 

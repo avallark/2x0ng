@@ -284,6 +284,7 @@
 
 (define-block brick 
   :tags '(:brick :colored)
+  :hits 10
   :collision-type :passive
   :color "gray50")
 
@@ -306,6 +307,11 @@
 				   (find-texture (solid-hash-image hash))
 				   :vertex-color color)
 	  (draw-box x y width height :color color)))))
+
+(define-method decay brick ()
+  (decf %hits)
+  (unless (plusp %hits)
+    (damage self 1)))
 
 (defun slap (thing)
   (when (and (blockyp thing)
@@ -471,6 +477,8 @@
   :target nil
   :target-distance nil
   :kicker-distance nil
+  :last-target nil
+  :last-target-hits 0
   :seeking nil
   :height *ball-size* :width *ball-size*
   :color "white"
@@ -503,6 +511,13 @@
 (defresource "newball.wav" :volume 20)
 (defresource "return.wav" :volume 20)
 
+(define-method explode ball ()
+  (make-sparks %x %y "white")
+  (setf *ball* nil)
+  (paint %kicker %color)
+  (play-sample "error.wav")
+  (destroy self))
+
 (define-method bounce ball ()
   (decf %bounces)
   (if (or (zerop %bounces)
@@ -510,11 +525,7 @@
 	  (not (bounding-box-contains 
 	  	(multiple-value-list (bounding-box (current-buffer)))
 	  	(multiple-value-list (bounding-box self)))))
-      (progn (make-sparks %x %y "white")
-	     (setf *ball* nil)
-	     (paint %kicker %color)
-	     (play-sample "error.wav")
-	     (destroy self))
+      (explode self)
       (progn
 	(play-sound self (random-choose *bounce-sounds*))
 	(unless (zerop %last-x)
@@ -584,6 +595,16 @@
        (object-eq cursor %kicker)))
     
 (define-method collide ball (thing)
+  ;; avoid hitting any single enemy too many times in a row
+  (when (enemyp thing)
+    (if (and %last-target
+	     (object-eq %last-target thing))
+	(incf %last-target-hits)
+	(setf %last-target thing
+	      %last-target-hits 1))
+    (when (> %last-target-hits 3)
+      (explode self)))
+  ;;
   (cond 
     ((glitchp thing)
      (setf *ball* nil)
