@@ -1,5 +1,5 @@
 (asdf:defsystem #:2x0ng
-  :depends-on (:blocky)
+  :depends-on (:xelf)
   :components ((:file "package")
 	       (:file "basic" :depends-on ("package"))
                (:file "things" :depends-on ("basic"))

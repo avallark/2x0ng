@@ -168,6 +168,7 @@
     (start-session)))
 
 (define-buffer 2x0ng
+  (layered :initform nil)
   (bubble :initform nil)
   (retrying :initform nil)
   (default-events 
@@ -213,7 +214,7 @@
 (define-method alternate-tap 2x0ng (x y))
 
 (define-method quit-game 2x0ng ()
-  (at-next-update (blocky:quit t)))
+  (at-next-update (xelf:quit t)))
 
 ;;; Various toggles
 
@@ -290,6 +291,6 @@
 
 (define-method draw 2x0ng ()
   (buffer%draw self)
-  (when (blockyp %bubble) (draw %bubble)))
+  (when (xelfp %bubble) (draw %bubble)))
 
 ;;; 2x0ng.lisp ends here

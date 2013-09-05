@@ -1,13 +1,13 @@
 (in-package :2x0ng)
 
 (defun holep (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :hole)))
 
 ;;; Positronic death filament
 
 (defun trailp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :trail)))
 
 (define-block trail
@@ -87,7 +87,7 @@
 ;;; Moving barriers
 
 (defun barrierp (thing)
-  (and (blockyp thing) (has-tag thing :barrier)))
+  (and (xelfp thing) (has-tag thing :barrier)))
 
 (define-block barrier 
   :tags '(:enemy :barrier) 
@@ -330,7 +330,7 @@
 (defresource "death-alien.wav" :volume 50)
 
 (defun ghostp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :ghost)))
 
 (define-block ghost 
@@ -555,7 +555,7 @@
   :image "vent.png")
 
 (defun cloudp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :cloud)))
 
 (define-method draw cloud ()
@@ -936,7 +936,7 @@
     (destroy self)))
 
 (defun biclopsp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :biclops)))
 
 (define-block biclops

@@ -195,11 +195,11 @@
 	   a b))
 
 (defun bordered (x) 
-  (assert (blockyp x))
+  (assert (xelfp x))
   (with-border *puzzle-border* x))
 
 (defun singleton (x) 
-  (assert (blockyp x))
+  (assert (xelfp x))
   (bordered (with-new-buffer (drop-object (current-buffer) x) (trim (current-buffer)))))
 
 (defun gated (color buf) (wrap (new 'gate color) buf))

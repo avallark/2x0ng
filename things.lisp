@@ -1,15 +1,15 @@
 (in-package :2x0ng)
 
 (defun glitchp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :glitch)))
 
 (defun robotp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :robot)))
 
 (defun bubblep (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :bubble)))
 
 (define-block bubble 
@@ -45,11 +45,11 @@
       (move-to self x y))))
 
 (defun targetp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :target)))
 
 (defun enemyp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :enemy)))
 
 (defresource "go.wav" :volume 60)
@@ -314,16 +314,16 @@
     (damage self 1)))
 
 (defun slap (thing)
-  (when (and (blockyp thing)
+  (when (and (xelfp thing)
 	     (has-method :damage thing))
     (damage thing 1)))
 
 (defun brickp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :brick)))
 
 (defun coloredp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :colored)))
 
 (defun color-of (thing)
@@ -351,7 +351,7 @@
     (resize self width height)))
 
 (defun wallp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :wall)))
 
 (define-method damage wall (points) 
@@ -424,7 +424,7 @@
 (defresource "error.wav" :volume 70)
 
 (defun gatep (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :gate)))
 
 (define-block (gate :super brick)
@@ -463,7 +463,7 @@
 (defparameter *ball-size* (truncate (units 1.2)))
 
 (defun ballp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :ball)))
 
 (defparameter *ball-normal-speed* (units 0.88))
@@ -542,7 +542,7 @@
   (let ((enemies
 	  (loop for thing being the hash-values of (%objects (current-buffer))
 		when (and 
-		      (blockyp thing)
+		      (xelfp thing)
 		      (enemyp thing)
 		      (has-tag thing :target)
 		      (not (trailp thing))
@@ -557,7 +557,7 @@
       (first enemies))))
 
 (define-method update ball ()
-  (when (not (blockyp %target)) 
+  (when (not (xelfp %target)) 
     (setf %target nil)
     (setf %target-distance nil))
   (when (plusp %kick-clock)
@@ -685,7 +685,7 @@
   (image :initform "exit2.png"))
 
 (defun bossp (thing)
-  (and (blockyp thing)
+  (and (xelfp thing)
        (has-tag thing :boss)))
 
 (defun boss-remaining-p ()
