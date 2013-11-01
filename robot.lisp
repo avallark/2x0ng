@@ -306,9 +306,13 @@
       (drop-object (current-buffer) 
 		   (new 'bubble 
 			(if (= *retries* 0)
-			    (format nil "You died on level ~A. GAME OVER. Press Control-R to reset at level 1." *level*)
-			    (format nil "You died on level ~A. You have ~A retries remaining. Retrying..." *level* *retries*))
-			"sans-mono-bold-16")))
+			    (format nil "レベル ~A でゲームオーバー。CTRL+Rでレベル１に戻ります。" *level*)
+			    (format nil "レベル ~A で死亡。残り回数 ~A。リトライ・・・" *level* *retries*)))))
+		   ;; (new 'bubble 
+		   ;; 	(if (= *retries* 0)
+		   ;; 	    (format nil "You died on level ~A. GAME OVER. Press Control-R to reset at level 1." *level*)
+		   ;; 	    (format nil "You died on level ~A. You have ~A retries remaining. Retrying..." *level* *retries*))
+		   ;; 	"sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
     (setf %alive nil)))

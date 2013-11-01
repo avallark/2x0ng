@@ -28,6 +28,8 @@
 	(make-pathname
 	 :directory (pathname-directory #.#P"./"))))
 
+(defresource (:name "sazanami" :type :ttf :file "sazanami-gothic.ttf" :properties (:size 14)))
+
 ;;; "Now loading..." screen
 
 (defresource "loading.png")
@@ -71,10 +73,11 @@
 
 (defresource "title-sbcl.png")
 (defresource "title-ccl.png")
+(defresource "title-jp.png")
 
-(defun title-screen-image ()
-  #+sbcl "title-sbcl.png"
-  #+ccl "title-ccl.png")
+(defun title-screen-image () #+sbcl "title-jp.png")
+  ;; #+sbcl "title-sbcl.png"
+  ;; #+ccl "title-ccl.png")
 
 (define-buffer title 
   (quadtree-depth :initform 4)
@@ -86,7 +89,7 @@
 
 ;;; Ending screen
 
-(defresource "ending.png")
+(defresource "ending-jp.png")
 
 (defparameter *ending-scroll-speed* 0.4)
 
@@ -96,7 +99,7 @@
   (height :initform 720)
   (background-color :initform "black"))
 
-(define-block scroll :image "ending.png")
+(define-block scroll :image "ending-jp.png")
 
 (define-method update scroll ()
   (when (plusp %y)
@@ -111,12 +114,12 @@
 
 ;;; Help screen
 
-(defresource "help.png")
+(defresource "help-jp.png")
 
 (define-buffer help-screen
   (quadtree-depth :initform 3)
   (game :initform nil)
-  (background-image :initform "help.png"))
+  (background-image :initform "help-jp.png"))
 
 (define-method resume-playing help-screen ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
@@ -152,7 +155,7 @@
   
   (disable-key-repeat) 
   
-  (setf *font* "sans-mono-bold-11") 
+  (setf *font* "sazanami")
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
 
@@ -224,8 +227,12 @@
   (drop (cursor) 
 	(new 'bubble 
 	     (if *red-green-color-blindness*
-		 "Red/green color blindness support ON. Full effect requires game reset (Control-R)."
-		 "Red/green color blindness support OFF. Full effect requires game reset (Control-R)."))))
+		 "色覚サポートON　再起動する必要があります。（CTRL+R）"
+		 "色覚サポートOFF　再起動する必要があります。（CTRL+R）")
+	     "sazanami")))
+
+		 ;; "Red/green color blindness support ON. Full effect requires game reset (Control-R)."
+		 ;; "Red/green color blindness support OFF. Full effect requires game reset (Control-R)."))))
 
 (defvar *music-toggled* nil)
 
@@ -243,7 +250,8 @@
 	(i *joystick-device-number*))
     (reset-joystick (mod (1+ i) n))
     (drop (cursor) 
-	  (new 'bubble (format nil "Choosing joystick number ~D" *joystick-device-number*)))))
+	  (new 'bubble (format nil "ジョイスティック番号 ~D" *joystick-device-number*)))))
+;;	  (new 'bubble (format nil "Choosing joystick number ~D" *joystick-device-number*)))))
 
 (define-method regenerate 2x0ng () (reset-level))
 
@@ -252,14 +260,17 @@
   (drop (cursor) 
 	(new 'bubble 
 	     (if *joystick-enabled* 
-		 "Joystick support on."
-		 "Joystick support off."))))
+		 "ジョイスティック　オン"
+		 "ジョイスティック　オフ"))))
+		 ;; "Joystick support on."
+		 ;; "Joystick support off."))))
       
 (define-method toggle-pause 2x0ng ()
   (when (not %paused)
     (drop (cursor) 
 	  (new 'bubble 
-	       "Game paused. Press Control-P to resume play.")))
+	       "一時停止中。CTRL+P で解除してください。")))
+;;	       "Game paused. Press Control-P to resume play.")))
   (transport-toggle-play self)
   (when (not %paused)
     (loop for thing being the hash-keys of %objects do

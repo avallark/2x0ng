@@ -17,7 +17,7 @@
   (text :initform nil) 
   (collision-type :initform nil))
 
-(define-method initialize bubble (text &optional (font "sans-mono-bold-16"))
+(define-method initialize bubble (text &optional (font "sazanami"))
   (block%initialize self)
   (setf %text text)
   (setf %font font)
@@ -51,6 +51,7 @@
 (defun enemyp (thing)
   (and (xelfp thing)
        (has-tag thing :enemy)))
+
 
 (defresource "go.wav" :volume 60)
 (defresource "shield.wav" :volume 60)
@@ -642,7 +643,8 @@
 	      (not (field-value :carrying thing)))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
-		    (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
+		    (new 'bubble "ボールゲット！")
+		    ;; (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; barriers

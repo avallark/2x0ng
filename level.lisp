@@ -2,9 +2,9 @@
 
 ;; Greeting
 
-(defresource "greeting.png")
+(defresource "greeting-jp.png")
 
-(define-block greeting :image "greeting.png" :collision-type nil)
+(define-block greeting :image "greeting-jp.png" :collision-type nil)
 
 ;; Making walls
 
@@ -159,16 +159,17 @@
     (with-new-buffer 
       (paste-into (current-buffer) buffer amount 0) 
       (resize (current-buffer)
-	      (+ width amount *extra-padding*)
-	      height))))
+	      height
+	      (+ width amount *extra-padding*)))))
+
 
 (defun with-vpadding (amount buffer)
   (with-field-values (height width) buffer
     (with-new-buffer 
       (paste-into (current-buffer) buffer 0 amount) 
       (resize (current-buffer)
-	      width
-	      (+ height amount *extra-padding*)))))
+	      (+ height amount *extra-padding*)
+	      width))))
 
 (defun with-automatic-padding (buffer)
   (with-border (units 2)
@@ -645,8 +646,10 @@
       (if (= *level* 1)
 	  (drop-object (current-buffer) (new 'greeting) (units 8) (units 2.8))
 	  (drop robot
-		(new 'bubble (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*)
-		     "sans-mono-bold-16")))
+		(new 'bubble (format nil "レベル： ~S        残り回数： ~S " *level* *retries*))))
+	  ;; (drop robot
+	  ;; 	(new 'bubble (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*)
+	  ;; 	     "sans-mono-bold-16")))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))
       	(play-music (random-choose (level-music)) :loop t))
