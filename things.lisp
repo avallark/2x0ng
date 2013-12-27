@@ -17,12 +17,12 @@
   (text :initform nil) 
   (collision-type :initform nil))
 
-(define-method initialize bubble (text &optional (font "sazanami"))
-  (block%initialize self)
-  (setf %text text)
-  (setf %font font)
-  (set-buffer-bubble self)
-  (later 12.0 (destroy self)))
+(define-method initialize bubble (&rest args)
+  (call-next-method self)
+  (let ((text (first args)))
+    (setf %text text)
+    (set-buffer-bubble self)
+    (later 12.0 (destroy self))))
 
 (define-method destroy bubble ()
   (set-buffer-bubble nil)
@@ -51,7 +51,6 @@
 (defun enemyp (thing)
   (and (xelfp thing)
        (has-tag thing :enemy)))
-
 
 (defresource "go.wav" :volume 60)
 (defresource "shield.wav" :volume 60)
@@ -155,9 +154,10 @@
     (damage thing 1)
     (destroy self)))
 
-(define-method initialize spark (color)
-  (setf %color color)
-  (later 0.3 (destroy self)))
+(define-method initialize spark (&rest args)
+  (let ((color (first args)))
+    (setf %color color)
+    (later 0.3 (destroy self))))
 
 (define-method draw spark ()
   (set-blending-mode :additive)
@@ -268,18 +268,19 @@
 	 (damage thing 1)
 	 (destroy self)))))
 
-(define-method initialize bullet (heading &key tags speed radius timer)
-  (initialize%super self)
-  (setf %heading heading)
-  (when speed (setf %speed speed))
-  (when timer (setf %timer timer))
-  (when radius (setf %radius radius))
-  (setf %height 
-	(setf %width
-	      (* 1.8 %radius)))
-  (when tags
-    (dolist (tag tags)
-      (add-tag self tag))))
+(define-method initialize bullet (&rest args)
+  (destructuring-bind (heading &key tags speed radius timer) args
+    (call-next-method self)
+    (setf %heading heading)
+    (when speed (setf %speed speed))
+    (when timer (setf %timer timer))
+    (when radius (setf %radius radius))
+    (setf %height 
+	  (setf %width
+		(* 1.8 %radius)))
+    (when tags
+      (dolist (tag tags)
+	(add-tag self tag)))))
 
 ;; Breakable colored bricks
 
@@ -294,10 +295,11 @@
     (make-sparks x y %color)
     (destroy self)))
 
-(define-method initialize brick (&optional color)
-  (initialize%super self)
-  (resize self (units 3) (units 2))
-  (when color (setf %color color)))
+(define-method initialize brick (&rest args)
+  (destructuring-bind (&optional color) args
+    (call-next-method self)
+    (resize self (units 3) (units 2))
+    (when color (setf %color color))))
 
 (define-method draw brick ()
   (with-fields (x y z width height color) self
@@ -347,9 +349,10 @@
   (tags :initform '(:brick :wall))
   (color :initform (wall-color)))
 
-(define-method initialize wall (&optional width height)
-  (when (and (numberp height) (numberp width))
-    (resize self width height)))
+(define-method initialize wall (&rest args)
+  (destructuring-bind (&optional width height) args
+    (when (and (numberp height) (numberp width))
+      (resize self width height))))
 
 (defun wallp (thing)
   (and (xelfp thing)
@@ -494,12 +497,12 @@
     (play-sample (random-choose *color-sounds*)))
   (setf %color color))
 
-(define-method initialize ball (&optional color)
-  (initialize%super self)
-;  (report-database)
-  (setf *ball* self)
-  (resize self *ball-size* *ball-size*)
-  (when color (setf %color color)))
+(define-method initialize ball (&rest args)
+  (destructuring-bind (&optional color) args
+    (call-next-method self)
+    (setf *ball* self)
+    (resize self *ball-size* *ball-size*)
+    (when color (setf %color color))))
 
 (defun make-ball (&optional (color "white"))
   (setf *ball* (new 'ball color)))

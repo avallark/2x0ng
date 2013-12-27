@@ -62,8 +62,8 @@
 
 (define-block paddle :tags '(:enemy :paddle) :heading (random-choose (list pi 0.0)))
 
-(define-method initialize paddle ()
-  (initialize%super self)
+(define-method initialize paddle (&rest args)
+  (call-next-method self) 
   (resize self 60 12))
 
 (define-method draw paddle ()
@@ -94,8 +94,8 @@
   :speed (random-choose (list 3 4))
   :heading (random-choose (list pi 0.0)))
 
-(define-method initialize barrier ()
-  (initialize%super self)
+(define-method initialize barrier (&rest args)
+  (call-next-method self)
   (resize self 200 16))
 
 (define-method draw barrier ()
@@ -141,52 +141,52 @@
 (defresource (:name "munch1.wav" :type :sample :file "munch1.wav" :properties (:volume 60)))
 (defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 40)))
 
-(define-block glitch
-  (tags :initform '(:enemy :glitch))
-  (clock :initform nil)
-  (heading :initform (random (* pi 2)))
-  (image :initform (random-choose *corruption-images*))
-  (speed :initform (random-choose '(1 1.1 1.2)))
-  (overlay-color :initform nil))
+;; (define-block glitch
+;;   (tags :initform '(:enemy :glitch))
+;;   (clock :initform nil)
+;;   (heading :initform (random (* pi 2)))
+;;   (image :initform (random-choose *corruption-images*))
+;;   (speed :initform (random-choose '(1 1.1 1.2)))
+;;   (overlay-color :initform nil))
 
-(define-method initialize glitch (&optional (depth 4))
-  (setf %clock 30)
-  (resize self 30 30)
-  (initialize%super self)
-  (setf %depth depth))
+;; (define-method initialize glitch (&optional (depth 4))
+;;   (setf %clock 30)
+;;   (resize self 30 30)
+;;   (initialize%super self)
+;;   (setf %depth depth))
 
-(define-method damage glitch (points)
-  (play-sound self (random-choose *corruption-sounds*))
-  (destroy self))
+;; (define-method damage glitch (points)
+;;   (play-sound self (random-choose *corruption-sounds*))
+;;   (destroy self))
 
-(define-method collide glitch (thing)
-  (when (brickp thing)
-    (restore-location self))
-  (when (robotp thing)
-    (die thing)))
+;; (define-method collide glitch (thing)
+;;   (when (brickp thing)
+;;     (restore-location self))
+;;   (when (robotp thing)
+;;     (die thing)))
 
-(define-method set-overlay glitch ()
-  (setf %overlay-color (random-choose '("cyan" "magenta" "yellow" "orange"))))
+;; (define-method set-overlay glitch ()
+;;   (setf %overlay-color (random-choose '("cyan" "magenta" "yellow" "orange"))))
 
-(define-method clear-overlay glitch ()
-  (setf %overlay-color nil))
+;; (define-method clear-overlay glitch ()
+;;   (setf %overlay-color nil))
 
-(define-method update glitch ()
-  (move self %heading %speed)
-  (incf %heading (radian-angle 0.8)) 
-  (percent-of-time 6 
-    (change-image self (random-choose *corruption-images*))))
-  ;; (percent-of-time 3 
-  ;;   (set-overlay self)
-  ;;   (later 20 (clear-overlay self))))
+;; (define-method update glitch ()
+;;   (move self %heading %speed)
+;;   (incf %heading (radian-angle 0.8)) 
+;;   (percent-of-time 6 
+;;     (change-image self (random-choose *corruption-images*))))
+;;   ;; (percent-of-time 3 
+;;   ;;   (set-overlay self)
+;;   ;;   (later 20 (clear-overlay self))))
       
-(define-method draw glitch ()
-  (draw%super self)
-  (set-blending-mode :additive2)
-  (when %overlay-color
-    (draw-box %x %y %width %height
-     :alpha 0.3
-     :color %overlay-color)))
+;; (define-method draw glitch ()
+;;   (draw%super self)
+;;   (set-blending-mode :additive2)
+;;   (when %overlay-color
+;;     (draw-box %x %y %width %height
+;;      :alpha 0.3
+;;      :color %overlay-color)))
 
 ;;; The "monitor", a roving enemy 
 
@@ -340,8 +340,8 @@
   :timer 0
   :fleeing nil)
 
-(define-method initialize ghost ()
-  (initialize%super self)
+(define-method initialize ghost (&rest args)
+  (call-next-method)
   (resize self 140 140))
 
 (define-method damage ghost (points)
@@ -578,9 +578,10 @@
 		  :color (random-choose '("white" "magenta"))
 		  :alpha 0.7)))))
 
-(define-method initialize cloud (&optional (size (+ 16 (random 32))))
-  (initialize%super self)
-  (resize self size size))
+(define-method initialize cloud (&rest args)
+  (destructuring-bind (&optional (size (+ 16 (random 32)))) args
+    (call-next-method) 
+    (resize self size size)))
 
 (define-method update cloud ()
   (forward self 1)
@@ -688,11 +689,12 @@
   (make-explosion self)
   (destroy self))
 
-(define-method initialize bomb (heading &key origin)
-  (initialize%super self)
-;  (setf %image "bomb4.png")
-  (setf %origin origin)
-  (setf %heading heading))
+(define-method initialize bomb (&rest args)
+  (destructuring-bind (heading &key origin) args
+    (call-next-method
+					;  (setf %image "bomb4.png")
+     (setf %origin origin)
+     (setf %heading heading))))
 
 (define-method collide bomb (thing)
   (cond 
@@ -852,7 +854,7 @@
   (fire-heading :initform (random (* 2 pi)))
   (counter :initform 0))
 
-(define-method initialize reactor ()
+(define-method initialize reactor (&rest args)
   (initialize%super self)
   (resize self 80 80))
 
@@ -920,9 +922,10 @@
   :speed (+ 1 (random 2.5))
   :image (random-choose *wreckage-images*))
 
-(define-method initialize wreckage (&optional (heading (random (* 2 pi))))
-  (initialize%super self)
-  (setf %heading heading))
+(define-method initialize wreckage (&rest args)
+  (destructuring-bind (&optional (heading (random (* 2 pi)))) args
+    (call-next-method)
+    (setf %heading heading)))
 
 (define-method update wreckage ()
   (unless %stopped

@@ -151,7 +151,6 @@
 ;; Squareball! Prepare for pixellation! There is no Gold in the
 ;; color of the glorious Tomorrow we are building here in Two Zong Town!"))
 
-
 (provide 'speech)
 ;;; speech.el ends here
 

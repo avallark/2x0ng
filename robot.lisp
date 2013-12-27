@@ -4,72 +4,72 @@
 
 (defparameter *retries* *initial-retries*)
 
-;;; Dialogue
+;; ;;; Dialogue
 
-(defresource "robot-talk-1.png")
-(defresource "robot-talk-2.png")
-(defresource "robot-talk-3.png")
-(defresource "robot-talk-4.png")
+;; (defresource "robot-talk-1.png")
+;; (defresource "robot-talk-2.png")
+;; (defresource "robot-talk-3.png")
+;; (defresource "robot-talk-4.png")
 
-(defparameter *talking-images* 
-  '("robot-talk-1.png" "robot-talk-2.png" "robot-talk-3.png" "robot-talk-4.png")) 
+;; (defparameter *talking-images* 
+;;   '("robot-talk-1.png" "robot-talk-2.png" "robot-talk-3.png" "robot-talk-4.png")) 
 
-(defresource "balloon.png")
-(defresource "balloon2.png")
+;; (defresource "balloon.png")
+;; (defresource "balloon2.png")
 
-(defparameter *balloon-images* 
-  '("balloon.png" "balloon2.png"))
+;; (defparameter *balloon-images* 
+;;   '("balloon.png" "balloon2.png"))
 
-(defvar *dialogue* nil)
+;; (defvar *dialogue* nil)
 
-(defvar *actor* nil)
+;; (defvar *actor* nil)
 
-(defvar *dialogue-channel* nil)
+;; (defvar *dialogue-channel* nil)
 
-(defun talkingp (thing) 
-  (and (robotp thing)
-       (field-value :talking thing))) 
+;; (defun talkingp (thing) 
+;;   (and (robotp thing)
+;;        (field-value :talking thing))) 
 
-(defun robot-talk-image ()
-  (random-choose *talking-images*))
+;; (defun robot-talk-image ()
+;;   (random-choose *talking-images*))
 
-(defun dialogue-playing-p () 
-  (and *dialogue* (integerp *dialogue-channel*)))
+;; (defun dialogue-playing-p () 
+;;   (and *dialogue* (integerp *dialogue-channel*)))
 
-(defun say (actor line) 
-  (setf *dialogue*
-	(append *dialogue* (list (list actor line)))))
+;; (defun say (actor line) 
+;;   (setf *dialogue*
+;; 	(append *dialogue* (list (list actor line)))))
 
-(defun act (actor method) 
-  (setf *dialogue*
-	(append *dialogue* (list (list actor method)))))
+;; (defun act (actor method) 
+;;   (setf *dialogue*
+;; 	(append *dialogue* (list (list actor method)))))
 
-(defun stop-dialogue ()
-  (setf *dialogue* nil)
-  (halt-sample *dialogue-channel*)
-  (setf *dialogue-channel* nil)
-  (setf *actor* nil))
+;; (defun stop-dialogue ()
+;;   (setf *dialogue* nil)
+;;   (halt-sample *dialogue-channel*)
+;;   (setf *dialogue-channel* nil)
+;;   (setf *actor* nil))
 
-(defun play-dialogue ()
-  (if (null *dialogue*)
-      (stop-dialogue)
-      (destructuring-bind (actor line) (pop *dialogue*)
-	(when (xelfp *actor*)
-	  (stop-talking *actor*))
-	(setf *actor* actor)
-	;; is it an audio line or an action?
-	(etypecase line
-	  (string 
-	   (begin-talking *actor* line)
-	   (setf *dialogue-channel* 
-		 (play-sample line)))
-	  (keyword 
-	   (send line *actor*))))))
+;; (defun play-dialogue ()
+;;   (if (null *dialogue*)
+;;       (stop-dialogue)
+;;       (destructuring-bind (actor line) (pop *dialogue*)
+;; 	(when (xelfp *actor*)
+;; 	  (stop-talking *actor*))
+;; 	(setf *actor* actor)
+;; 	;; is it an audio line or an action?
+;; 	(etypecase line
+;; 	  (string 
+;; 	   (begin-talking *actor* line)
+;; 	   (setf *dialogue-channel* 
+;; 		 (play-sample line)))
+;; 	  (keyword 
+;; 	   (send line *actor*))))))
 
-(defun update-dialogue ()
-  (when (and (dialogue-playing-p)
-	     (not (sdl-mixer:sample-playing-p *dialogue-channel*)))
-    (play-dialogue)))
+;; (defun update-dialogue ()
+;;   (when (and (dialogue-playing-p)
+;; 	     (not (sdl-mixer:sample-playing-p *dialogue-channel*)))
+;;     (play-dialogue)))
 
 ;;; Waypoint 
 
@@ -121,9 +121,10 @@
 
 (defparameter *robot-colors* '("gold" "olive drab" "RoyalBlue3" "dark orchid"))
 
-(define-method initialize robot (&optional color)
-  (initialize%super self)
-  (when color (setf %body-color color)))
+(define-method initialize robot (&rest args)
+  (destructuring-bind (&optional color) args
+    (call-next-method self)
+    (when color (setf %body-color color))))
 
 (define-method raise-shield robot ()
   (play-sound self "go.wav")
@@ -357,7 +358,7 @@
     (setf (field-value :retrying (current-buffer)) t)))
 
 (define-method update robot ()
-  (when (dialogue-playing-p) (update-dialogue))
+;;  (when (dialogue-playing-p) (update-dialogue))
   (decf *waypoint-clock*)
   (unless (plusp *waypoint-clock*)
     (drop-waypoint-maybe self))
