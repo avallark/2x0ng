@@ -26,7 +26,7 @@
 
 (define-method destroy bubble ()
   (set-buffer-bubble nil)
-  (block%destroy self))
+  (call-next-method self))
 
 (define-method draw bubble ()
   (multiple-value-bind (top left right bottom)
@@ -705,7 +705,7 @@
 
 (defun find-exit ()
   (loop for thing being the hash-keys of (%objects (current-buffer))
-	when (exitp thing) return thing))
+	when (exitp thing) return (find-object thing)))
 
 (defun exitp (thing) (is-a 'exit thing))
 

@@ -148,13 +148,13 @@
 (defun bulkhead ()
   (new 'wall 200 20))
 
-(define-block nothing)
+;; (define-block nothing)
 
-(define-method draw nothing () nil)
-(define-method update nothing () (destroy self))
+;; (define-method draw nothing () nil)
+;; (define-method update nothing () (destroy self))
 
-(defun nothing ()
-  (new 'nothing))
+;; (defun nothing ()
+;;   (new 'nothing))
 
 (defun make-hazard ()
   (let ((hazards (level-hazards)))
@@ -164,7 +164,7 @@
 	    (if (eq 'tracer hazard) 
 		(new (random-choose '(paddle paddle paddle tracer)))
 		(new hazard))))
-	(nothing))))
+	(bulkhead))))
 
 (defun make-wildcard ()
   (let ((wildcards (level-wildcards)))

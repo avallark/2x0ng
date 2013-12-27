@@ -30,109 +30,6 @@
 
 (defresource (:name "sazanami" :type :ttf :file "sazanami-gothic.ttf" :properties (:size 14)))
 
-;;; "Now loading..." screen
-
-(defresource "loading.png")
-
-(define-buffer loading-screen
-  (width :initform 1280)
-  (height :initform 720)
-  (level :initform 1)
-  (clock :initform 20)
-  (quadtree-depth :initform 4)
-  (background-image :initform "loading.png"))
-
-(defun loading-screen (&optional (level 1))
-  (let ((screen (new 'loading-screen)))
-    (setf (field-value :level screen) level)
-    screen))
-
-(define-method update loading-screen ()
-  (decf %clock)
-  (when (zerop %clock)
-    (switch-to-buffer (2x0ng-level %level))))
-
-(defun begin-game (level)   
-  (stop-dialogue)
-  ;; either win game or go to next level
-  (let ((old-buffer (current-buffer)))
-    (if (> level 16)
-	(show-ending)
-	(progn 
-	  (switch-to-buffer (loading-screen level))
-	  (at-next-update (destroy old-buffer))
-	  (play-sample "newball.wav")))))
-  
-(defun reset-level ()
-  (begin-game *level*))
-
-(defun next-level ()
-  (begin-game (1+ *level*)))
-  
-;;; Title screen
-
-(defresource "title-sbcl.png")
-(defresource "title-ccl.png")
-(defresource "title-jp.png")
-
-(defun title-screen-image () #+sbcl "title-jp.png")
-  ;; #+sbcl "title-sbcl.png"
-  ;; #+ccl "title-ccl.png")
-
-(define-buffer title 
-  (quadtree-depth :initform 4)
-  (background-image :initform (title-screen-image)))
-
-(define-method start-playing title ()
-  (sleep 0.2) ;; allow time for human to remove finger from spacebar
-  (begin-game *level*))
-
-;;; Ending screen
-
-(defresource "ending-jp.png")
-
-(defparameter *ending-scroll-speed* 0.4)
-
-(define-buffer ending-screen
-  (quadtree-depth :initform 4)
-  (width :initform 1280)
-  (height :initform 720)
-  (background-color :initform "black"))
-
-(define-block scroll :image "ending-jp.png")
-
-(define-method update scroll ()
-  (when (plusp %y)
-    (move-toward self :up *ending-scroll-speed*)))
-
-(defun show-ending ()
-  (switch-to-buffer (new 'ending-screen))
-  (let ((scroll (new 'scroll)))
-    (insert scroll 0 720)
-    (resize scroll 1280 720))
-  (play-music "theme.ogg" :loop t))
-
-;;; Help screen
-
-(defresource "help-jp.png")
-
-(define-buffer help-screen
-  (quadtree-depth :initform 3)
-  (game :initform nil)
-  (background-image :initform "help-jp.png"))
-
-(define-method resume-playing help-screen ()
-  (sleep 0.2) ;; allow time for human to remove finger from spacebar
-  (switch-to-buffer %game))
-
-(defun help-buffer ()
-  (let ((buffer (new 'help-screen)))
-    (setf (field-value :game buffer) (current-buffer))
-    (bind-event buffer '(:h :control) :resume-playing)
-    (bind-event buffer '(:escape) :resume-playing)
-    (bind-event buffer '(:space) :resume-playing)
-    buffer))
-
 ;;; Main program
 
 (defun 2x0ng (&optional (level 1))
@@ -281,14 +178,14 @@
   (begin-game level))
 
 (define-method update 2x0ng ()
-  (buffer%update self)
+  (call-next-method)
   (when %retrying (begin-game *level*)))
 
 (defresource "boss-tag.png")
 (defresource "boss-tag2.png")
 
 (define-method after-draw-object 2x0ng (thing)
-  (when (has-tag thing :boss) 
+  (when (has-tag (find-object thing) :boss)
     (with-fields (x y width) thing
       (draw-image 
        (random-choose '("boss-tag.png" "boss-tag2.png"))
@@ -301,7 +198,7 @@
   (drop-waypoint-maybe (cursor) :force))
 
 (define-method draw 2x0ng ()
-  (buffer%draw self)
-  (when (xelfp %bubble) (draw %bubble)))
+  (call-next-method)
+  (when (xelfp %bubble) (draw (find-object %bubble))))
 
 ;;; 2x0ng.lisp ends here

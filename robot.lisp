@@ -453,7 +453,7 @@
     (restore-location self)))
 
 (define-method draw player-1-robot ()
-  (robot%draw self)
+  (call-next-method)
   ;; possibly draw held ball 
   (when (and %alive (null *ball*))
     (multiple-value-bind (x y) (serve-location self)
