@@ -2,13 +2,13 @@
 
 (defun holep (thing)
   (and (xelfp thing)
-       (has-tag thing :hole)))
+       (has-tag (find-object thing) :hole)))
 
 ;;; Positronic death filament
 
 (defun trailp (thing)
   (and (xelfp thing)
-       (has-tag thing :trail)))
+       (has-tag (find-object thing) :trail)))
 
 (define-block trail
   (tags :initform '(:trail :enemy))
@@ -87,7 +87,7 @@
 ;;; Moving barriers
 
 (defun barrierp (thing)
-  (and (xelfp thing) (has-tag thing :barrier)))
+  (and (xelfp thing) (has-tag (find-object thing) :barrier)))
 
 (define-block barrier 
   :tags '(:enemy :barrier) 
@@ -331,7 +331,7 @@
 
 (defun ghostp (thing)
   (and (xelfp thing)
-       (has-tag thing :ghost)))
+       (has-tag (find-object thing) :ghost)))
 
 (define-block ghost 
   :image "ghost2.png" 
@@ -556,7 +556,7 @@
 
 (defun cloudp (thing)
   (and (xelfp thing)
-       (has-tag thing :cloud)))
+       (has-tag (find-object thing) :cloud)))
 
 (define-method draw cloud ()
   (with-field-values (x y width height image) self
@@ -625,7 +625,7 @@
 ;;; Sticky bombs
 
 (defun bombp (thing)
-  (has-tag thing :bomb))
+  (has-tag (find-object thing) :bomb))
 
 (defresource 
     (:name "bomb1.png" :type :image :file "bomb1.png")
@@ -771,7 +771,7 @@
     (:name "rook3.png" :type :image :file "rook3.png"))
 
 (defun is-rook (thing)
-  (has-tag thing :rook))
+  (has-tag (find-object thing) :rook))
 
 (define-block rook 
   :image "rook2.png" 
@@ -940,7 +940,7 @@
 
 (defun biclopsp (thing)
   (and (xelfp thing)
-       (has-tag thing :biclops)))
+       (has-tag (find-object thing) :biclops)))
 
 (define-block biclops
   (tags :initform '(:enemy :biclops :boss))

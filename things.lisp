@@ -2,17 +2,18 @@
 
 (defun glitchp (thing)
   (and (xelfp thing)
-       (has-tag thing :glitch)))
+       (has-tag (find-object thing) :glitch)))
 
 (defun robotp (thing)
   (and (xelfp thing)
-       (has-tag thing :robot)))
+       (has-tag (find-object thing) :robot)))
 
 (defun bubblep (thing)
   (and (xelfp thing)
-       (has-tag thing :bubble)))
+       (has-tag (find-object thing) :bubble)))
 
-(define-block bubble 
+(define-block bubble
+  (font :initform "sans-bold-12")
   (tags :initform '(:bubble))
   (text :initform nil) 
   (collision-type :initform nil))
@@ -46,11 +47,11 @@
 
 (defun targetp (thing)
   (and (xelfp thing)
-       (has-tag thing :target)))
+       (has-tag (find-object thing) :target)))
 
 (defun enemyp (thing)
   (and (xelfp thing)
-       (has-tag thing :enemy)))
+       (has-tag (find-object thing) :enemy)))
 
 (defresource "go.wav" :volume 60)
 (defresource "shield.wav" :volume 60)
@@ -146,7 +147,7 @@
   :collision-type :passive)
 
 (defun sparkp (thing)
-  (has-tag thing :spark))
+  (has-tag (find-object thing) :spark))
 
 ;; DISABLED
 (define-method collide spark (thing)
@@ -182,11 +183,11 @@
 ;;; Versatile bullets
 
 (defun bulletp (thing)
-  (has-tag thing :bullet))
+  (has-tag (find-object thing) :bullet))
 
 (defun player-bullet-p (thing)
   (and (bulletp thing)
-       (has-tag thing :player)))
+       (has-tag (find-object thing) :player)))
 
 (defun enemy-bullet-p (thing)
   (and (bulletp thing)
@@ -225,7 +226,7 @@
     ((barrierp thing)
      (destroy self))
     ;; let bullets pass through clouds
-    ((has-tag thing :cloud)
+    ((has-tag (find-object thing) :cloud)
      nil)
     ;; ;; let enemy bullets pass through barriers
     ;; ((and (is-barrier thing)
@@ -323,11 +324,11 @@
 
 (defun brickp (thing)
   (and (xelfp thing)
-       (has-tag thing :brick)))
+       (has-tag (find-object thing) :brick)))
 
 (defun coloredp (thing)
   (and (xelfp thing)
-       (has-tag thing :colored)))
+       (has-tag (find-object thing) :colored)))
 
 (defun color-of (thing)
   (or (when (coloredp thing)
@@ -356,7 +357,7 @@
 
 (defun wallp (thing)
   (and (xelfp thing)
-       (has-tag thing :wall)))
+       (has-tag (find-object thing) :wall)))
 
 (define-method damage wall (points) 
   ;; TODO flash and/or make a cool (themeable) sound 
@@ -429,7 +430,7 @@
 
 (defun gatep (thing)
   (and (xelfp thing)
-       (has-tag thing :gate)))
+       (has-tag (find-object thing) :gate)))
 
 (define-block (gate :super brick)
   (tags :initform '(:brick :colored :gate))
@@ -468,7 +469,7 @@
 
 (defun ballp (thing)
   (and (xelfp thing)
-       (has-tag thing :ball)))
+       (has-tag (find-object thing) :ball)))
 
 (defparameter *ball-normal-speed* (units 0.88))
 
@@ -548,15 +549,15 @@
 		when (and 
 		      (xelfp thing)
 		      (enemyp thing)
-		      (has-tag thing :target)
+		      (has-tag (find-object thing) :target)
 		      (not (trailp thing))
 		      (not (object-eq thing2 thing))
-		      (colliding-with-rectangle thing 
+		      (colliding-with-rectangle (find-object thing)
 						(- %y range)
 						(- %x range)
 						(* 2 range)
 						(* 2 range)))
-		  collect thing)))
+		  collect (find-object thing))))
     (when (consp enemies)
       (first enemies))))
 
@@ -646,8 +647,7 @@
 	      (not (field-value :carrying thing)))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
-		    (new 'bubble "ボールゲット！")
-		    ;; (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
+		    (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; barriers
@@ -691,11 +691,11 @@
 
 (defun bossp (thing)
   (and (xelfp thing)
-       (has-tag thing :boss)))
+       (has-tag (find-object thing) :boss)))
 
 (defun boss-remaining-p ()
   (loop for thing being the hash-keys of (%objects (current-buffer))
-	when (bossp thing) return thing))
+	when (bossp (find-object thing)) return thing))
 
 (define-method update exit ()
   (with-fields (image open) self

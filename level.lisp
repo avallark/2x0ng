@@ -44,9 +44,9 @@
 (defresource "title-ccl.png")
 (defresource "title-jp.png")
 
-(defun title-screen-image () #+sbcl "title-jp.png")
-  ;; #+sbcl "title-sbcl.png"
-  ;; #+ccl "title-ccl.png")
+(defun title-screen-image () 
+  #+sbcl "title-sbcl.png"
+  #+ccl "title-ccl.png")
 
 (define-buffer title 
   (quadtree-depth :initform 4)
@@ -58,7 +58,7 @@
 
 ;;; Ending screen
 
-(defresource "ending-jp.png")
+(defresource "ending.png")
 
 (defparameter *ending-scroll-speed* 0.4)
 
@@ -68,7 +68,7 @@
   (height :initform 720)
   (background-color :initform "black"))
 
-(define-block scroll :image "ending-jp.png")
+(define-block scroll :image "ending.png")
 
 (define-method update scroll ()
   (when (plusp %y)
@@ -83,12 +83,12 @@
 
 ;;; Help screen
 
-(defresource "help-jp.png")
+(defresource "help.png")
 
 (define-buffer help-screen
   (quadtree-depth :initform 3)
   (game :initform nil)
-  (background-image :initform "help-jp.png"))
+  (background-image :initform "help.png"))
 
 (define-method resume-playing help-screen ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
@@ -104,9 +104,9 @@
 
 ;; Greeting
 
-(defresource "greeting-jp.png")
+(defresource "greeting.png")
 
-(define-block greeting :image "greeting-jp.png" :collision-type nil)
+(define-block greeting :image "greeting.png" :collision-type nil)
 
 ;; Making walls
 
@@ -748,10 +748,8 @@
       (if (= *level* 1)
 	  (drop-object (current-buffer) (new 'greeting) (units 8) (units 2.8))
 	  (drop robot
-		(new 'bubble (format nil "レベル： ~S        残り回数： ~S " *level* *retries*))))
-	  ;; (drop robot
-	  ;; 	(new 'bubble (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*)
-	  ;; 	     "sans-mono-bold-16")))
+	  	(new 'bubble (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*)
+	  	     "sans-mono-bold-16")))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))
       	(play-music (random-choose (level-music)) :loop t))
