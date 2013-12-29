@@ -12,18 +12,17 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :bubble)))
 
-(define-block bubble
+(defblock bubble
   (font :initform "sans-bold-12")
   (tags :initform '(:bubble))
   (text :initform nil) 
   (collision-type :initform nil))
 
-(define-method initialize bubble (&rest args)
-  (call-next-method self)
-  (let ((text (first args)))
-    (setf %text text)
-    (set-buffer-bubble self)
-    (later 12.0 (destroy self))))
+(defmethod initialize :after ((self bubble) &key text font)
+  (setf (field-value :text self) text)
+  (when font (setf (field-value :font self) font))
+  (set-buffer-bubble self)
+  (later 12.0 (destroy self)))
 
 (define-method destroy bubble ()
   (set-buffer-bubble nil)
@@ -141,7 +140,7 @@
 
 ;;; Sparkle explosion cloud fx
 
-(define-block spark 
+(defblock spark 
   :tags '(:spark)
   :width 3 :height 3 :color nil
   :collision-type :passive)
@@ -155,10 +154,9 @@
     (damage thing 1)
     (destroy self)))
 
-(define-method initialize spark (&rest args)
-  (let ((color (first args)))
-    (setf %color color)
-    (later 0.3 (destroy self))))
+(defmethod initialize :after ((self spark) &key color)
+  (setf (field-value :color self) color)
+  (later 0.3 (destroy self)))
 
 (define-method draw spark ()
   (set-blending-mode :additive)
@@ -177,7 +175,7 @@
 (defun make-sparks (x y &optional color)
   (dotimes (z 5)
     (drop-object (current-buffer)
-		 (new 'spark color) 
+		 (new 'spark :color color) 
 		 (+ x (random 30)) (+ y (random 30)))))
 
 ;;; Versatile bullets
@@ -193,7 +191,7 @@
   (and (bulletp thing)
        (not (player-bullet-p thing))))
 
-(define-block bullet 
+(defblock bullet 
   :radius 3
   :speed 7.2
   :timer 200
@@ -269,23 +267,21 @@
 	 (damage thing 1)
 	 (destroy self)))))
 
-(define-method initialize bullet (&rest args)
-  (destructuring-bind (heading &key tags speed radius timer) args
-    (call-next-method self)
-    (setf %heading heading)
-    (when speed (setf %speed speed))
-    (when timer (setf %timer timer))
-    (when radius (setf %radius radius))
-    (setf %height 
-	  (setf %width
-		(* 1.8 %radius)))
+(defmethod initialize :after ((self bullet) &key heading tags speed radius timer)
+    (setf (field-value :heading self) heading)
+    (when speed (setf (field-value :speed self) speed))
+    (when timer (setf (field-value :timer self) timer))
+    (when radius (setf (field-value :radius self) radius))
+    (setf (field-value :height self)
+	  (setf (field-value :width self)
+		(* 1.8 (field-value :radius self))))
     (when tags
       (dolist (tag tags)
-	(add-tag self tag)))))
+	(add-tag self tag))))
 
 ;; Breakable colored bricks
 
-(define-block brick 
+(defblock brick 
   :tags '(:brick :colored)
   :hits 10
   :collision-type :passive
@@ -296,11 +292,9 @@
     (make-sparks x y %color)
     (destroy self)))
 
-(define-method initialize brick (&rest args)
-  (destructuring-bind (&optional color) args
-    (call-next-method self)
-    (resize self (units 3) (units 2))
-    (when color (setf %color color))))
+(defmethod initialize :after ((self brick) &key color)
+  (resize self (units 3) (units 2))
+  (when color (setf (field-value :color self) color)))
 
 (define-method draw brick ()
   (with-fields (x y z width height color) self
@@ -346,14 +340,13 @@
 
 (defparameter *wall-color* "gray50")
 
-(define-block (wall :super brick)
+(defblock (wall :super brick)
   (tags :initform '(:brick :wall))
   (color :initform (wall-color)))
 
-(define-method initialize wall (&rest args)
-  (destructuring-bind (&optional width height) args
-    (when (and (numberp height) (numberp width))
-      (resize self width height))))
+(defmethod initialize :after ((self wall) &key width height)
+  (when (and (numberp height) (numberp width))
+    (resize self width height)))
 
 (defun wallp (thing)
   (and (xelfp thing)
@@ -432,7 +425,7 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :gate)))
 
-(define-block (gate :super brick)
+(defblock (gate :super brick)
   (tags :initform '(:brick :colored :gate))
   (color :initform "white"))
 
@@ -477,7 +470,7 @@
 
 (defparameter *ball-deceleration* (units 0.0))
 
-(define-block ball 
+(defblock ball 
   :kicker nil
   :target nil
   :target-distance nil
@@ -498,18 +491,16 @@
     (play-sample (random-choose *color-sounds*)))
   (setf %color color))
 
-(define-method initialize ball (&rest args)
-  (destructuring-bind (&optional color) args
-    (call-next-method self)
-    (setf *ball* self)
-    (resize self *ball-size* *ball-size*)
-    (when color (setf %color color))))
+(defmethod initialize :after ((self ball) &key color)
+  (setf *ball* self)
+  (resize self *ball-size* *ball-size*)
+  (when color (setf (field-value :color self) color)))
 
 (defun make-ball (&optional (color "white"))
-  (setf *ball* (new 'ball color)))
+  (setf *ball* (new 'ball :color color)))
 
 (define-method after-deserialize ball ()
-  (after-deserialize%super self)
+  (call-next-method)
   (setf *ball* self))
 
 (defresource "bounce.wav" :volume 10)
@@ -647,7 +638,7 @@
 	      (not (field-value :carrying thing)))
        (play-sample "alarm.wav")
        (drop-object (current-buffer) 
-		    (new 'bubble "I GOT THE BALL!!" "sans-mono-bold-20")
+		    (new 'bubble :text "I GOT THE BALL!!" :font "sans-mono-bold-20")
 		    %x %y))
      (setf (field-value :carrying thing) t))
     ;; barriers
@@ -685,7 +676,7 @@
 (defresource "exit1.png")
 (defresource "exit2.png")
 
-(define-block exit
+(defblock exit
   (open :initform nil)
   (image :initform "exit2.png"))
 

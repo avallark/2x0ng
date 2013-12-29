@@ -122,14 +122,9 @@
   (setf *red-green-color-blindness* 
 	(if *red-green-color-blindness* nil t))
   (drop (cursor) 
-	(new 'bubble 
-	     (if *red-green-color-blindness*
-		 "色覚サポートON　再起動する必要があります。（CTRL+R）"
-		 "色覚サポートOFF　再起動する必要があります。（CTRL+R）")
-	     "sazanami")))
-
-		 ;; "Red/green color blindness support ON. Full effect requires game reset (Control-R)."
-		 ;; "Red/green color blindness support OFF. Full effect requires game reset (Control-R)."))))
+	(new 'bubble :text
+	     "Red/green color blindness support ON. Full effect requires game reset (Control-R)."
+	     "Red/green color blindness support OFF. Full effect requires game reset (Control-R).")))
 
 (defvar *music-toggled* nil)
 
@@ -147,31 +142,25 @@
 	(i *joystick-device-number*))
     (reset-joystick (mod (1+ i) n))
     (drop (cursor) 
-	  (new 'bubble (format nil "ジョイスティック番号 ~D" *joystick-device-number*)))))
-;;	  (new 'bubble (format nil "Choosing joystick number ~D" *joystick-device-number*)))))
+	  (new 'bubble :text (format nil "Choosing joystick number ~D" *joystick-device-number*)))))
 
 (define-method regenerate 2x0ng () (reset-level))
 
 (define-method toggle-joystick 2x0ng ()
   (setf *joystick-enabled* (if *joystick-enabled* nil t))
   (drop (cursor) 
-	(new 'bubble 
-	     (if *joystick-enabled* 
-		 "ジョイスティック　オン"
-		 "ジョイスティック　オフ"))))
-		 ;; "Joystick support on."
-		 ;; "Joystick support off."))))
+	(new 'bubble :text
+	     (if *joystick-enabled* "Joystick support on." "Joystick support off."))))
       
 (define-method toggle-pause 2x0ng ()
   (when (not %paused)
     (drop (cursor) 
-	  (new 'bubble 
-	       "一時停止中。CTRL+P で解除してください。")))
-;;	       "Game paused. Press Control-P to resume play.")))
+	  (new 'bubble :text
+	       "Game paused. Press Control-P to resume play.")))
   (transport-toggle-play self)
   (when (not %paused)
     (loop for thing being the hash-keys of %objects do
-      (when (bubblep thing) (destroy thing)))))
+      (when (bubblep thing) (destroy (find-object thing))))))
 
 (define-method reset-game 2x0ng (&optional (level 1))
   (setf *retries* *initial-retries*)

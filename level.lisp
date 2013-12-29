@@ -68,7 +68,7 @@
   (height :initform 720)
   (background-color :initform "black"))
 
-(define-block scroll :image "ending.png")
+(defblock scroll :image "ending.png")
 
 (define-method update scroll ()
   (when (plusp %y)
@@ -106,14 +106,14 @@
 
 (defresource "greeting.png")
 
-(define-block greeting :image "greeting.png" :collision-type nil)
+(defblock greeting :image "greeting.png" :collision-type nil)
 
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))
   (labels ((unit (&rest summands)
 	     (* *unit* (reduce #'+ summands :initial-value 0))))
-    (let ((wall (new thing (wall-color))))
+    (let ((wall (new thing :color (wall-color))))
       (drop-object (current-buffer) wall (unit x) (unit y))
       (resize wall (unit width) (unit height)))))
 
@@ -137,7 +137,7 @@
 (defparameter *fat-brick-height* 1.3)
 
 (defun make-fat-brick (&optional color)
-  (let ((brick (new 'brick color)))
+  (let ((brick (new 'brick :color color)))
     (prog1 brick
       (resize brick (* *unit* *fat-brick-width*) (* *unit* *fat-brick-height*)))))
 
@@ -251,7 +251,7 @@
        (with-new-buffer (add-object (current-buffer) 
 				    (setf *exit* (new 'exit)))))
       ((consp colors)
-       (wrap (new 'gate (first colors))
+       (wrap (new 'gate :color (first colors))
 	     (make-exit (rest colors)))))))
 
 (defvar *extra-padding* 0)
@@ -305,7 +305,7 @@
   (assert (xelfp x))
   (bordered (with-new-buffer (drop-object (current-buffer) (find-object x)) (trim (current-buffer)))))
 
-(defun gated (color buf) (wrap (new 'gate color) buf))
+(defun gated (color buf) (wrap (new 'gate :color color) buf))
 
 (defun random-color () (random-choose (theme-colors)))
 
@@ -375,14 +375,14 @@
 (defun horizontal-bulkhead (width)		   
   (let ((u (/ width 5)))
     (with-new-buffer
-      (drop-object (current-buffer) (new 'wall (* 2 u) (units 1)) 0 0)
-      (drop-object (current-buffer) (new 'wall (* 2 u) (units 1)) (* 3 u) 0))))
+      (drop-object (current-buffer) (new 'wall :width (* 2 u) :height (units 1)) 0 0)
+      (drop-object (current-buffer) (new 'wall :width (* 2 u) :height (units 1)) (* 3 u) 0))))
 
 (defun vertical-bulkhead (width)		   
   (let ((u (/ width 5)))
     (with-new-buffer
-      (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 0)
-      (drop-object (current-buffer) (new 'wall (units 1) (* 2 u)) 0 (* 3 u)))))
+      (drop-object (current-buffer) (new 'wall :width (units 1) :height (* 2 u)) 0 0)
+      (drop-object (current-buffer) (new 'wall :width (units 1) :height (* 2 u)) 0 (* 3 u)))))
 
 (defun make-bulkhead-buffer (horizontal size)
   (if horizontal
@@ -705,7 +705,7 @@
 (defun 2x0ng-level (&optional (level 1))
   (configure-level level)
   (setf *ball* nil)
-  (let ((robot (new 'player-1-robot "gold"))
+  (let ((robot (new 'player-1-robot :color "gold"))
 	(buffer (new '2x0ng))
 	(puzzle (pad-to-window
 		 (with-border (units 8)
@@ -748,7 +748,7 @@
       (if (= *level* 1)
 	  (drop-object (current-buffer) (new 'greeting) (units 8) (units 2.8))
 	  (drop robot
-	  	(new 'bubble (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*)
+	  	(new 'bubble :text (format nil "LEVEL: ~S        RETRIES: ~S " *level* *retries*) :font
 	  	     "sans-mono-bold-16")))
       (when (or (null *music-toggled*) 
       		(sdl-mixer:music-playing-p))

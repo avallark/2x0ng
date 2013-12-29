@@ -10,7 +10,7 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :trail)))
 
-(define-block trail
+(defblock trail
   (tags :initform '(:trail :enemy))
   (color :initform (random-choose '("cyan" "orchid" "magenta" "yellow")))
   (counter :initform 190)
@@ -32,7 +32,7 @@
 
 (defresource "tracer.png")
 
-(define-block tracer
+(defblock tracer
   (speed :initform 1.5)
   (tags :initform '(:enemy))
   (image :initform "tracer.png")
@@ -60,10 +60,9 @@
 
 ;;; Electric death paddles!
 
-(define-block paddle :tags '(:enemy :paddle) :heading (random-choose (list pi 0.0)))
+(defblock paddle :tags '(:enemy :paddle) :heading (random-choose (list pi 0.0)))
 
-(define-method initialize paddle (&rest args)
-  (call-next-method self) 
+(defmethod initialize :after ((self paddle) &key)
   (resize self 60 12))
 
 (define-method draw paddle ()
@@ -89,13 +88,12 @@
 (defun barrierp (thing)
   (and (xelfp thing) (has-tag (find-object thing) :barrier)))
 
-(define-block barrier 
+(defblock barrier 
   :tags '(:enemy :barrier) 
   :speed (random-choose (list 3 4))
   :heading (random-choose (list pi 0.0)))
 
-(define-method initialize barrier (&rest args)
-  (call-next-method self)
+(defmethod initialize :after ((self barrier) &key)
   (resize self 200 16))
 
 (define-method draw barrier ()
@@ -141,52 +139,52 @@
 (defresource (:name "munch1.wav" :type :sample :file "munch1.wav" :properties (:volume 60)))
 (defresource (:name "bigboom.wav" :type :sample :file "bigboom.wav" :properties (:volume 40)))
 
-;; (define-block glitch
-;;   (tags :initform '(:enemy :glitch))
-;;   (clock :initform nil)
-;;   (heading :initform (random (* pi 2)))
-;;   (image :initform (random-choose *corruption-images*))
-;;   (speed :initform (random-choose '(1 1.1 1.2)))
-;;   (overlay-color :initform nil))
+(defblock glitch
+  (tags :initform '(:enemy :glitch))
+  (clock :initform nil)
+  (heading :initform (random (* pi 2)))
+  (image :initform (random-choose *corruption-images*))
+  (speed :initform (random-choose '(1 1.1 1.2)))
+  (overlay-color :initform nil))
 
-;; (define-method initialize glitch (&optional (depth 4))
-;;   (setf %clock 30)
-;;   (resize self 30 30)
-;;   (initialize%super self)
-;;   (setf %depth depth))
+(defmethod initialize ((self glitch) &key (depth 4))
+  (with-local-fields
+    (setf %clock 30)
+    (resize self 30 30)
+    (setf %depth depth)))
 
-;; (define-method damage glitch (points)
-;;   (play-sound self (random-choose *corruption-sounds*))
-;;   (destroy self))
+(define-method damage glitch (points)
+  (play-sound self (random-choose *corruption-sounds*))
+  (destroy self))
 
-;; (define-method collide glitch (thing)
-;;   (when (brickp thing)
-;;     (restore-location self))
-;;   (when (robotp thing)
-;;     (die thing)))
+(define-method collide glitch (thing)
+  (when (brickp thing)
+    (restore-location self))
+  (when (robotp thing)
+    (die thing)))
 
-;; (define-method set-overlay glitch ()
-;;   (setf %overlay-color (random-choose '("cyan" "magenta" "yellow" "orange"))))
+(define-method set-overlay glitch ()
+  (setf %overlay-color (random-choose '("cyan" "magenta" "yellow" "orange"))))
 
-;; (define-method clear-overlay glitch ()
-;;   (setf %overlay-color nil))
+(define-method clear-overlay glitch ()
+  (setf %overlay-color nil))
 
-;; (define-method update glitch ()
-;;   (move self %heading %speed)
-;;   (incf %heading (radian-angle 0.8)) 
-;;   (percent-of-time 6 
-;;     (change-image self (random-choose *corruption-images*))))
-;;   ;; (percent-of-time 3 
-;;   ;;   (set-overlay self)
-;;   ;;   (later 20 (clear-overlay self))))
+(define-method update glitch ()
+  (move self %heading %speed)
+  (incf %heading (radian-angle 0.8)) 
+  (percent-of-time 6 
+    (change-image self (random-choose *corruption-images*))))
+  ;; (percent-of-time 3 
+  ;;   (set-overlay self)
+  ;;   (later 20 (clear-overlay self))))
       
-;; (define-method draw glitch ()
-;;   (draw%super self)
-;;   (set-blending-mode :additive2)
-;;   (when %overlay-color
-;;     (draw-box %x %y %width %height
-;;      :alpha 0.3
-;;      :color %overlay-color)))
+(define-method draw glitch ()
+  (call-next-method)
+  (set-blending-mode :additive2)
+  (when %overlay-color
+    (draw-box %x %y %width %height
+     :alpha 0.3
+     :color %overlay-color)))
 
 ;;; The "monitor", a roving enemy 
 
@@ -196,7 +194,7 @@
     (:name "monitor3" :type :image :file "monitor3.png")
     (:name "monitor4" :type :image :file "monitor4.png"))
 
-(define-block monitor 
+(defblock monitor 
   (hp :initform 3) fleeing growing
   (direction :initform (random-choose '(:up :down)))
   (tags :initform '(:monitor :enemy :target))
@@ -310,7 +308,7 @@
 
 (define-method fire monitor (heading)
   (multiple-value-bind (x y) (center-point self)
-    (drop self (new 'bullet heading :timer 40))))
+    (drop self (new 'bullet :heading heading :timer 40))))
 
 ;;; Ghost 
 
@@ -333,16 +331,15 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :ghost)))
 
-(define-block ghost 
+(defblock ghost 
   :image "ghost2.png" 
   :hp 5
   :tags '(:ghost :enemy :target)
   :timer 0
   :fleeing nil)
 
-(define-method initialize ghost (&rest args)
-  (call-next-method)
-  (resize self 140 140))
+(defmethod initialize :after ((self ghost) &key) 
+   (resize self 140 140))
 
 (define-method damage ghost (points)
   (decf %hp)
@@ -354,7 +351,7 @@
 
 (define-method fire ghost (heading)
   (multiple-value-bind (x y) (center-point self)
-    (drop self (new 'bullet heading :timer 40))))
+    (drop self (new 'bullet :heading heading :timer 40))))
 
 (defun ghost-image (hp)
   (case hp
@@ -392,7 +389,7 @@
 	 (aim self (- %heading 0.03))
 	 (percent-of-time (with-difficulty 1 2 2 2 3 3 4 5)
 	   (play-sound self "magenta-alert.wav")
-	   (drop self (new 'bullet (heading-to-cursor self)) 14 14))
+	   (drop self (new 'bullet :heading (heading-to-cursor self)) 14 14))
 	 (forward self 3))
 	;; otherwise do nothing
 	))))
@@ -407,7 +404,7 @@
 
 ;;; Swarming Shockers
 
-(define-block shocker
+(defblock shocker
   (hp :initform 2)
   (tags :initform '(:shocker :enemy :target))
   (image :initform "shocker.png"))
@@ -446,7 +443,7 @@
 (defresource "hole1.png")
 (defresource "hole2.png")
 
-(define-block hole 
+(defblock hole 
   (tags :initform '(:hole))
   (clock :initform 40)
   (image :initform "hole1.png"))
@@ -475,7 +472,7 @@
 
 ;;; Starbase 
 
-(define-block base 
+(defblock base 
   (tags :initform '(:base :enemy))
   (clock :initform 120)
   (image :initform "resonator.png")
@@ -511,7 +508,7 @@
 
 ;;; Shockwaves
 
-(define-block wave :image "corruption-horz2.png" :tags '(:enemy :wave) :heading (random-choose (list (/ pi 2) (/ pi -2))))
+(defblock wave :image "corruption-horz2.png" :tags '(:enemy :wave) :heading (random-choose (list (/ pi 2) (/ pi -2))))
 
 (define-method update wave ()
   (let ((speed
@@ -548,7 +545,7 @@
 
 (defparameter *vent-images* '("vent.png" "vent2.png" "vent3.png" "vent4.png" "vent5.png"))
 
-(define-block cloud 
+(defblock cloud 
   :timer 230
   :collision-type :passive
   :tags '(:cloud)
@@ -578,10 +575,8 @@
 		  :color (random-choose '("white" "magenta"))
 		  :alpha 0.7)))))
 
-(define-method initialize cloud (&rest args)
-  (destructuring-bind (&optional (size (+ 16 (random 32)))) args
-    (call-next-method) 
-    (resize self size size)))
+(defmethod initialize :after ((self cloud) &key (size (+ 16 (random 32))))
+  (resize self size size))
 
 (define-method update cloud ()
   (forward self 1)
@@ -600,7 +595,7 @@
 
 (defparameter *vent-hole-images* '("vent-hole1.png" "vent-hole2.png" "vent-hole3.png"))
 
-(define-block vent 
+(defblock vent 
   :image "vent-hole1.png" :tags '(:enemy :vent) 
   :timer 0)
 
@@ -647,7 +642,7 @@
 (defparameter *explosion-images*
 '("bomb-flash1.png" "bomb-flash2.png" "bomb-flash3.png" "explosion.png" "explosion2.png"))
 
-(define-block explosion :tags '(:enemy) :timer (+ 20 (random 12)) :image "explosion.png")
+(defblock explosion :tags '(:enemy) :timer (+ 20 (random 12)) :image "explosion.png")
 
 (define-method update explosion ()
   (decf %timer)
@@ -679,7 +674,7 @@
     (:name "countdown.wav" :type :sample :file "countdown.wav" :properties (:volume 30))
     (:name "explode.wav" :type :sample :file "explode.wav" :properties (:volume 50)))
 
-(define-block bomb :timer 0 :countdown 5 
+(defblock bomb :timer 0 :countdown 5 
   :tags '(:enemy :target :bomb)
   :image "bomb4.png" :target nil
   :stopped nil :speed 5
@@ -689,12 +684,9 @@
   (make-explosion self)
   (destroy self))
 
-(define-method initialize bomb (&rest args)
-  (destructuring-bind (heading &key origin) args
-    (call-next-method
-					;  (setf %image "bomb4.png")
-     (setf %origin origin)
-     (setf %heading heading))))
+(defmethod initialize :after ((self bomb) &key heading origin)
+  (setf (field-value :origin self) origin)
+  (setf (field-value :heading self) heading))
 
 (define-method collide bomb (thing)
   (cond 
@@ -773,7 +765,7 @@
 (defun is-rook (thing)
   (has-tag (find-object thing) :rook))
 
-(define-block rook 
+(defblock rook 
   :image "rook2.png" 
   :hp 12
   :tags '(:rook :enemy :target :boss)
@@ -794,7 +786,7 @@
     (destroy self)))
 
 (define-method fire rook (heading)
-  (drop self (new 'bomb heading :origin self)))
+  (drop self (new 'bomb :heading heading :origin self)))
 
 (define-method update rook ()
   (percent-of-time 20 (setf %image (random-choose '("rook.png" "rook2.png" "rook3.png"))))
@@ -825,7 +817,7 @@
 	 (aim self (- %heading 0.03))
 	 (percent-of-time (with-difficulty 0 1.0 1.3) 
 	   (play-sample "magenta-alert.wav")
-	   (drop self (new 'bullet (heading-to-cursor self)) 14 14)))
+	   (drop self (new 'bullet :heading (heading-to-cursor self)) 14 14)))
 	 ;;(forward self 3))
 	;; otherwise do nothing
 	))))
@@ -844,7 +836,7 @@
 
 (defparameter *reactor-speed* 1)
 
-(define-block reactor 
+(defblock reactor 
   (tags :initform '(:enemy :boss))
   (image :initform "reactor1.png")
   (angle :initform (radian-angle 10))
@@ -854,8 +846,7 @@
   (fire-heading :initform (random (* 2 pi)))
   (counter :initform 0))
 
-(define-method initialize reactor (&rest args)
-  (initialize%super self)
+(defmethod initialize :after ((self reactor) &key)
   (resize self 80 80))
 
 (define-method draw reactor ()
@@ -875,7 +866,7 @@
       (setf image-index 
 	    (mod (1- image-index) 
 		 (length *reactor-images*)))
-      (percent-of-time 20 (drop self (new 'bullet fire-heading)
+      (percent-of-time 20 (drop self (new 'bullet :heading fire-heading)
 				(/ width 2) (/ height 2)))
       (incf fire-heading %angle)
       (incf heading (radian-angle 2))
@@ -915,17 +906,15 @@
 
 (defparameter *wreckage-images* '("wreckage1.png" "wreckage2.png" "wreckage4.png" "wreckage3.png"))
 
-(define-block wreckage
+(defblock wreckage
   :tags '(:enemy)
   :stopped nil
   :heading (random (* 2 pi))
   :speed (+ 1 (random 2.5))
   :image (random-choose *wreckage-images*))
 
-(define-method initialize wreckage (&rest args)
-  (destructuring-bind (&optional (heading (random (* 2 pi)))) args
-    (call-next-method)
-    (setf %heading heading)))
+(defmethod initialize :after ((self wreckage) &key (heading (random (* 2 pi))))
+  (setf (field-value :heading self) heading))
 
 (define-method update wreckage ()
   (unless %stopped
@@ -942,7 +931,7 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :biclops)))
 
-(define-block biclops
+(defblock biclops
   (tags :initform '(:enemy :biclops :boss))
   (direction :initform (random-choose '(:up :down :left :right)))
   (clock :initform 5)
@@ -955,7 +944,7 @@
   (unless (plusp %clock)
     (when (> (with-difficulty 300 400 500) (distance-to-cursor self))
       (percent-of-time (with-difficulty 0.6 0.8 1 1.1 1.3 1.5)
-	(drop self (new 'wreckage (heading-to-cursor self)) 10 2)))
+	(drop self (new 'wreckage :heading (heading-to-cursor self)) 10 2)))
     (percent-of-time 3 (setf %direction (random-direction)))
     (move-toward self %direction (with-difficulty 1 1.8 2.5 3))))
 

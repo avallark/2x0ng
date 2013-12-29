@@ -73,7 +73,7 @@
 
 ;;; Waypoint 
 
-(define-block waypoint :image "waypoint.png" :counter 35 :collision-type :passive)
+(defblock waypoint :image "waypoint.png" :counter 35 :collision-type :passive)
 
 (defparameter *waypoint-interval* (seconds->frames 12))
 
@@ -97,7 +97,7 @@
 
 ;;; A player, either AI or human controlled
 
-(define-block robot 
+(defblock robot 
   (leave-direction :initform nil)
   (alive :initform t)
   (talking :initform nil)
@@ -114,17 +114,15 @@
   (retry-clock :initform (seconds->frames 5))
   (walk-clock :initform 0)
   (step-clock :initform 0)
-  (kick-clock :initform 0)
-  ;; we want to catch the beginning of firing, even if the input
-  ;; polling in `update' misses it. (see below)
-  (default-events :initform '(((:space) (strong-kick)))))
+  (kick-clock :initform 0))
+  ;; ;; we want to catch the beginning of firing, even if the input
+  ;; ;; polling in `update' misses it. (see below)
+  ;; (default-events :initform '(((:space) (strong-kick)))))
 
 (defparameter *robot-colors* '("gold" "olive drab" "RoyalBlue3" "dark orchid"))
 
-(define-method initialize robot (&rest args)
-  (destructuring-bind (&optional color) args
-    (call-next-method self)
-    (when color (setf %body-color color))))
+(defmethod initialize :after ((self robot) &key color)
+  (when color (setf (field-value :body-color self) color)))
 
 (define-method raise-shield robot ()
   (play-sound self "go.wav")
@@ -305,11 +303,11 @@
       (play-sample "analog-death.wav")
       (play-music "nexttime.ogg")
       (drop-object (current-buffer) 
-		   (new 'bubble 
+		   (new 'bubble :text
 		   	(if (= *retries* 0)
 		   	    (format nil "You died on level ~A. GAME OVER. Press Control-R to reset at level 1." *level*)
 		   	    (format nil "You died on level ~A. You have ~A retries remaining. Retrying..." *level* *retries*))
-		   	"sans-mono-bold-16")))
+		   	:font "sans-mono-bold-16")))
     (make-sparks %x %y %color)
     (change-image self "skull.png")
     (setf %alive nil)))
@@ -413,12 +411,12 @@
 	    ;; yes, do it
 	    (kick self %kick-direction kick-button)))))))
 
-(define-block (thief :super robot)
+(defblock (thief :super robot)
   (body-color :initform "deep pink"))
 
 ;; Player 1 drives the logic with the arrows/numpad and spacebar
 
-(define-block (player-1-robot :super robot)
+(defblock (player-1-robot :super robot)
   (body-color :initform "white"))
 
 (defun holding-space ()

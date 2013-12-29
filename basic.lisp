@@ -146,9 +146,9 @@
   (getf (nth-level level) :wildcards))
 
 (defun bulkhead ()
-  (new 'wall 200 20))
+  (new 'wall :width 200 :height 20))
 
-(define-block nothing)
+(defblock nothing)
 
 (define-method draw nothing () nil)
 (define-method update nothing () (destroy self))
