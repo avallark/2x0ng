@@ -108,6 +108,9 @@
 
 (defblock greeting :image "greeting.png" :collision-type nil)
 
+(defmethod initialize :after ((self xblock) &key)
+  (resize-to-image self))
+
 ;; Making walls
 
 (defun wall-at (x y width height &optional (thing 'wall))

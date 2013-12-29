@@ -28,8 +28,6 @@
 	(make-pathname
 	 :directory (pathname-directory #.#P"./"))))
 
-(defresource (:name "sazanami" :type :ttf :file "sazanami-gothic.ttf" :properties (:size 14)))
-
 ;;; Main program
 
 (defun 2x0ng (&optional (level 1))
@@ -52,7 +50,6 @@
   
   (disable-key-repeat) 
   
-  (setf *font* "sazanami")
   (with-session 
       (load-project "2x0ng" '(:with-database nil))
 
