@@ -52,6 +52,9 @@
   (quadtree-depth :initform 4)
   (background-image :initform (title-screen-image)))
 
+(defmethod initialize :after ((title title) &key)
+  (resize-to-background-image title))
+
 (define-method start-playing title ()
   (sleep 0.2) ;; allow time for human to remove finger from spacebar
   (begin-game *level*))

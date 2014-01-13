@@ -340,7 +340,7 @@
 
 (defparameter *wall-color* "gray50")
 
-(defblock (wall :super brick)
+(defblock (wall brick)
   (tags :initform '(:brick :wall))
   (color :initform (wall-color)))
 
@@ -425,7 +425,7 @@
   (and (xelfp thing)
        (has-tag (find-object thing) :gate)))
 
-(defblock (gate :super brick)
+(defblock (gate brick)
   (tags :initform '(:brick :colored :gate))
   (color :initform "white"))
 

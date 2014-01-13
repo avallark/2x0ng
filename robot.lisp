@@ -411,12 +411,12 @@
 	    ;; yes, do it
 	    (kick self %kick-direction kick-button)))))))
 
-(defblock (thief :super robot)
+(defblock (thief robot)
   (body-color :initform "deep pink"))
 
 ;; Player 1 drives the logic with the arrows/numpad and spacebar
 
-(defblock (player-1-robot :super robot)
+(defblock (player-1-robot robot)
   (body-color :initform "white"))
 
 (defun holding-space ()
