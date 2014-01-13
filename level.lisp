@@ -103,6 +103,7 @@
     (bind-event buffer '(:h :control) :resume-playing)
     (bind-event buffer '(:escape) :resume-playing)
     (bind-event buffer '(:space) :resume-playing)
+    (resize-to-background-image buffer)
     buffer))
 
 ;; Greeting
