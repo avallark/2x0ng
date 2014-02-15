@@ -61,7 +61,7 @@
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
     (play-music "rekall.ogg" :loop t)
-    (bind-event (current-buffer)  '(:space) :start-playing)
+    (bind-event (current-buffer)  '(:space) 'start-playing)
     (start-session)))
 
 (define-buffer 2x0ng
