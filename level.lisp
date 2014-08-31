@@ -100,9 +100,9 @@
 (defun help-buffer ()
   (let ((buffer (find-object (new 'help-screen))))
     (setf (field-value :game buffer) (current-buffer))
-    (bind-event buffer '(:h :control) :resume-playing)
-    (bind-event buffer '(:escape) :resume-playing)
-    (bind-event buffer '(:space) :resume-playing)
+    (bind-event buffer '(:h :control) 'resume-playing)
+    (bind-event buffer '(:escape) 'resume-playing)
+    (bind-event buffer '(:space) 'resume-playing)
     (resize-to-background-image buffer)
     buffer))
 

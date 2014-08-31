@@ -61,7 +61,7 @@
     (setf *soundtrack* (derange *soundtrack*))
     (switch-to-buffer (new 'title))
     (play-music "rekall.ogg" :loop t)
-    (bind-event (current-buffer)  '(:space) 'start-playing)
+    (bind-event (current-buffer) '(:space) 'start-playing)
     (start-session)))
 
 (define-buffer 2x0ng
@@ -70,20 +70,20 @@
   (retrying :initform nil)
   (default-events 
      :initform
-     '(((:r :control) :reset-game)
-       ((:q :control) :quit-game)
-       ((:y :control) :show-waypoint)
-       ((:h :control) :help)
-       ((:m :control) :toggle-music) 
-       ((:p :control) :toggle-pause)
-       ((:leftbracket) :toggle-red-green-color-blindness)
-       ((:j :control) :toggle-joystick)
+     '(((:r :control) reset-game)
+       ((:q :control) quit-game)
+       ((:y :control) show-waypoint)
+       ((:h :control) help)
+       ((:m :control) toggle-music) 
+       ((:p :control) toggle-pause)
+       ((:leftbracket) toggle-red-green-color-blindness)
+       ((:j :control) toggle-joystick)
        ;;       ((:f8) :cheat)
-       ((:n :control) :next-joystick)
+       ((:n :control) next-joystick)
        ;;
        ;; ((:x :alt) :command-prompt)
        ;; ((:g :control) :escape)
-       ((:f6 :control) :regenerate))))
+       ((:f6 :control) regenerate))))
        ;;
        ;; ((:x :alt) :command-prompt)
        ;; ((:x :control) :edit-cut)
@@ -162,6 +162,9 @@
 (define-method reset-game 2x0ng (&optional (level 1))
   (setf *retries* *initial-retries*)
   (begin-game level))
+
+(defmethod initialize :after ((2x0ng 2x0ng) &key) 
+  (bind-any-default-events 2x0ng))
 
 (define-method update 2x0ng ()
   (call-next-method)
